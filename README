@@ -8,9 +8,14 @@ pistache is a pi-Calculus internal DSL for Scala.
 
 DEPENDENCIES
 
-In order to build this software, you'll need the following dependencies:
+In order to run the tests for this software, you'll need the following dependencies:
 
 scalatest
 http://www.scalatest.org/download
 Tested with version 1.0.
 Place scalatest-1.0.jar as scalatest.jar in libs/.
+
+Mockito
+http://mockito.org/
+Tested with version 1.8.2.
+Place mockito-all-1.8.2.jar as mockito.jar in libs/.
