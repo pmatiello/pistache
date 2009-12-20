@@ -4,8 +4,10 @@
  * Spec runner.
  */
 
+import pistache.names._
+
 object SpecRunner extends Application {
 
-	// new SomethingSpec execute
+	 new NameSpec execute
   
 }
