@@ -23,9 +23,8 @@ class NameSpec extends Spec {
 		}
   
 		it ("should autounbox the stored value") {
-			val name = Name(10)
-			
-			assert(name + 10 == 20)
+			val name = Name("abcde")
+			assert(name.indexOf("d") == 3)
 		}
   
 	}
