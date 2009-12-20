@@ -8,6 +8,8 @@ import pistache.names._
 
 object SpecRunner extends Application {
 
+	 new LinkSpec execute
+    
 	 new NameSpec execute
   
 }

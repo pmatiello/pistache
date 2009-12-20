@@ -14,6 +14,11 @@ class NameSpec extends Spec {
   
 	describe ("Name") {
 	  
+		it ("should be instantiable without a value") {
+			val name = Name[Int]
+			assert(true)
+		}
+	  
 		it ("should store an arbitrary value") {
 			assert(Name(144).storedValue == 144)
 		}
@@ -25,6 +30,11 @@ class NameSpec extends Spec {
 		it ("should autounbox the stored value") {
 			val name = Name("abcde")
 			assert(name.indexOf("d") == 3)
+		}
+  
+  		it ("should autobox a value") {
+			val name:Name[String] = "String"
+			assert(true)	// We're ok if no exceptions are reaised
 		}
   
 	}
