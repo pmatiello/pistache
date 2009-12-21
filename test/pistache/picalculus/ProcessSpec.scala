@@ -17,10 +17,12 @@ class ProcessSpec extends Spec {
 	describe ("Process") {
   
 		it ("should be written as a concatenation of Atomic Processes") {
-			val ap1 = mock(classOf[AtomicProcess])
-			val ap2 = mock(classOf[AtomicProcess])
-			val ap3 = mock(classOf[AtomicProcess])
-			val process:Process = Process(ap1 :: ap2 :: ap3 :: Nil)
+			object P extends Process {
+				val ap1 = mock(classOf[AtomicProcess])
+				val ap2 = mock(classOf[AtomicProcess])
+				val ap3 = mock(classOf[AtomicProcess])
+				val description = ap1 :: ap2 :: ap3 :: Nil
+			}
 			assert(true)
 		}
 	  
