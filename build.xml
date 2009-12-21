@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== 
+     Dec 20, 2009 8:48:24 PM                                                        
+
+     pistache    
+     A pi-Calculus internal DSL for Scala
+
+     ====================================================================== -->
+<project name="pistache" default="build">
+    <description>
+        A pi-Calculus internal DSL for Scala
+    </description>
+
+    <!-- ================================= 
+          build configuration              
+         ================================= -->
+	<property name="src.dir" value="src/" />
+	<property name="test.dir" value="test/" />
+	<property name="lib.dir" value="lib/" />
+	<property name="build.dir" value="bin/" />
+	<property name="scala.home" value="/usr/share/scala/" />
+	<property name="scala-compiler.jar" value="${scala.home}/lib/scala-compiler.jar"/>
+	<property name="scala-library.jar" value="${scala.home}/lib/scala-library.jar"/>
+	
+	<path id="scala.classpath">
+		<pathelement location="${scala-compiler.jar}"/>
+		<pathelement location="${scala-library.jar}"/>
+	</path>
+	
+	<path id="project.classpath">
+		<path refid="scala.classpath"/>
+		<pathelement location="${build.dir}"/>
+		<fileset dir="${lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${build.dir}">
+			<include name="**/*.class" />
+		</fileset>
+	</path>
+	
+	<taskdef resource="scala/tools/ant/antlib.xml">
+		<classpath refid="scala.classpath"/>
+	</taskdef>
+	
+    <!-- =================================
+          target: default
+         ================================= -->
+    <target name="default" description="default target: do nothing" />
+	<target name="build" depends="compile" description="build distribution" />
+	
+    <!-- =================================
+          target: compile
+         ================================= -->
+    <target name="compile" description="compile source classes">
+		<mkdir dir="${build.dir}" />
+    	<scalac srcdir="${src.dir}" destdir="${build.dir}">
+    		<include name="**/*.scala"/>
+    	</scalac>
+    </target>
+	
+	<!-- =================================
+          target: compile-test
+         ================================= -->
+    <target name="compile-test" depends="compile" description="compile test classes">
+    	<scalac srcdir="${test.dir}" destdir="${build.dir}" classpathref="project.classpath">
+    		<include name="**/*.scala"/>
+    	</scalac>
+    </target>
+	
+	<!-- =================================
+          target: test
+         ================================= -->
+    <target name="test" depends="compile-test" description="run tests">
+    	<java classname="SpecRunner" classpathref="project.classpath" />
+    </target>
+	
+	<!-- =================================
+          target: clean
+         ================================= -->
+    <target name="clean" description="compile test classes">
+    	<delete dir="${build.dir}" />
+    </target>
+	
+</project>
