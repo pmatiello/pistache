@@ -6,12 +6,6 @@
 
 package pistache.picalculus
 
-//object Process {
-//
-//	def apply(description:List[AtomicProcess]) = new Process(description) 
-//  
-//}
-
 abstract class Process {
 	 val description:List[AtomicProcess]
 }
