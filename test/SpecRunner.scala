@@ -4,12 +4,14 @@
  * Spec runner.
  */
 
-import pistache.names._
+import pistache.picalculus._
 
 object SpecRunner extends Application {
 
 	 new LinkSpec execute
     
 	 new NameSpec execute
+    
+	 new ProcessSpec execute
   
 }

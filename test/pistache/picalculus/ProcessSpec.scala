@@ -1,0 +1,26 @@
+/* 
+ * Copyright (c) 2009-2010 Pedro Matiello <pmatiello@gmail.com>
+ * 
+ * Spec for Process trait and companion classes.
+ */
+
+package pistache.picalculus
+
+import org.scalatest.Spec
+import org.mockito.Mockito.mock
+
+class ProcessSpec extends Spec {
+  
+	describe ("Process") {
+  
+		it ("should be written as a concatenation of Atomic Processes") {
+			val ap1 = mock(classOf[AtomicProcess])
+			val ap2 = mock(classOf[AtomicProcess])
+			val ap3 = mock(classOf[AtomicProcess])
+			val process:Process = Process(ap1 :: ap2 :: ap3 :: Nil)
+			assert(true)
+		}
+	  
+	}
+
+}

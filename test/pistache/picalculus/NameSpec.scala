@@ -4,7 +4,7 @@
  * Spec for Name class.
  */
 
-package pistache.names
+package pistache.picalculus
 
 import org.scalatest.Spec
 

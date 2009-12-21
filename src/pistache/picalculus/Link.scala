@@ -4,7 +4,7 @@
  * Link class and companion object.
  */
 
-package pistache.names
+package pistache.picalculus
 
 import Name._
 
@@ -16,8 +16,8 @@ object Link {
 
 class Link[T] {
   
-	def ^(name:Name[T]) {}
+	def ^(name:Name[T]) = new LinkProcess(this, name)
  
-	def apply(name:Name[T]) {}
+	def apply(name:Name[T]) = new LinkProcess(this, name)
 
 }

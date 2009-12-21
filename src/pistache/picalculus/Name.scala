@@ -4,7 +4,7 @@
  * Name class and companion object.
  */
 
-package pistache.names
+package pistache.picalculus
 
 object Name {
   

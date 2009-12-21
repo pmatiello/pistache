@@ -4,12 +4,10 @@
  * Spec for Link class.
  */
 
-package pistache.names
+package pistache.picalculus
 
-import org.scalatest.Spec
-
-import Link._
 import Name._
+import org.scalatest.Spec
 
 class LinkSpec extends Spec {
   
@@ -31,6 +29,20 @@ class LinkSpec extends Spec {
 			link(name)
 			assert(true)	// We're ok if no exceptions are reaised
 		}
+  
+		it ("should return a LinkProcess when ^ (send) is called") {
+			val link = Link[Int]
+			val name = Name(5)
+			val process:LinkProcess[Int] = link^name
+			assert(process == LinkProcess(link, name))
+		}
+  
+  		it ("should return a LinkProcess when apply (receive) is called") {
+			val link = Link[Int]
+			val name = Name[Int]
+			val process:LinkProcess[Int] = link(name)
+			assert(process == LinkProcess[Int](link, name))
+  		}
   
 	}
 
