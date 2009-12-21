@@ -10,6 +10,11 @@ DEPENDENCIES
 
 In order to run the tests for this software, you'll need the following dependencies:
 
+JUnit
+http://www.junit.org/
+Tested with version 4.5.
+Place junit4-4.5 as junit4.jar in libs/.
+
 scalatest
 http://www.scalatest.org/download
 Tested with version 1.0.

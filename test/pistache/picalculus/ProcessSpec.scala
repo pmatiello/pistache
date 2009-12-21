@@ -7,8 +7,11 @@
 package pistache.picalculus
 
 import org.scalatest.Spec
+import org.scalatest.junit.JUnitRunner
+import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
 
+@RunWith(classOf[JUnitRunner])
 class ProcessSpec extends Spec {
   
 	describe ("Process") {

@@ -7,9 +7,11 @@
 package pistache.picalculus
 
 import org.scalatest.Spec
-
+import org.scalatest.junit.JUnitRunner
+import org.junit.runner.RunWith
 import Name._
 
+@RunWith(classOf[JUnitRunner])
 class NameSpec extends Spec {
   
 	describe ("Name") {
