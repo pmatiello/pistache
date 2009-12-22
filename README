@@ -13,14 +13,11 @@ In order to run the tests for this software, you'll need the following dependenc
 JUnit
 http://www.junit.org/
 Tested with version 4.5.
-Place junit4-4.5 as junit4.jar in libs/.
 
 scalatest
-http://www.scalatest.org/download
+http://www.scalatest.org/
 Tested with version 1.0.
-Place scalatest-1.0.jar as scalatest.jar in libs/.
 
 Mockito
 http://mockito.org/
 Tested with version 1.8.2.
-Place mockito-all-1.8.2.jar as mockito.jar in libs/.

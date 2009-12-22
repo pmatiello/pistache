@@ -75,6 +75,19 @@
     </target>
 	
 	<!-- =================================
+          target: download-deps
+         ================================= -->
+    <target name="download-deps" description="download dependencies">
+    	<mkdir dir="${lib.dir}" />
+    	<get src="http://sourceforge.net/projects/junit/files/junit/4.5/junit-4.5.jar/download"
+    		 dest="${lib.dir}/junit4.jar" />
+    	<get src="http://www.scala-tools.org/repo-releases/org/scalatest/scalatest/1.0/scalatest-1.0.jar"
+    	     dest="${lib.dir}/scalatest.jar" />
+    	<get src="http://mockito.googlecode.com/files/mockito-all-1.8.2.jar"
+    	   	 dest="${lib.dir}/mockito.jar" />
+    </target>
+	
+	<!-- =================================
           target: clean
          ================================= -->
     <target name="clean" description="compile test classes">
