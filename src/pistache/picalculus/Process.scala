@@ -7,5 +7,5 @@
 package pistache.picalculus
 
 abstract class Process {
-	 val description:List[AtomicProcess]
+	 val description:List[Process]
 }

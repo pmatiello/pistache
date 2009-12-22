@@ -6,6 +6,8 @@
 
 package pistache.picalculus
 
-trait AtomicProcess
+trait AtomicProcess extends Process {
+	val description = Nil 
+}
 
 case class LinkProcess[T](link:Link[T], name:Name[T]) extends AtomicProcess

@@ -33,17 +33,17 @@ class LinkSpec extends Spec {
 			assert(true)	// We're ok if no exceptions are reaised
 		}
   
-		it ("should return a LinkProcess when ^ (send) is called") {
+		it ("should return a Process when ^ (send) is called") {
 			val link = Link[Int]
 			val name = Name(5)
-			val process:LinkProcess[Int] = link^name
+			val process:Process = link^name
 			assert(process == LinkProcess(link, name))
 		}
   
-  		it ("should return a LinkProcess when apply (receive) is called") {
+  		it ("should return a Process when apply (receive) is called") {
 			val link = Link[Int]
 			val name = Name[Int]
-			val process:LinkProcess[Int] = link(name)
+			val process:Process = link(name)
 			assert(process == LinkProcess[Int](link, name))
   		}
   
