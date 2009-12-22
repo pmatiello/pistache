@@ -23,7 +23,15 @@ class ProcessSpec extends Spec {
 				val ap3 = mock(classOf[Process])
 				val description = ap1 :: ap2 :: ap3 :: Nil
 			}
-			assert(true)
+			assert(P.toString != null)	// force instantiation of object
+		}
+  
+		it ("should be self-embeddable") {
+			object P extends Process {
+				val ap1 = mock(classOf[Process])
+				val description = ap1 :: this :: Nil
+			}
+			assert(P.toString != null)	// force instantiation of object
 		}
 	  
 	}
