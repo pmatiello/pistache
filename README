@@ -21,3 +21,6 @@ Tested with version 1.0.
 Mockito
 http://mockito.org/
 Tested with version 1.8.2.
+
+You can easily download them all by running:
+	ant download-deps

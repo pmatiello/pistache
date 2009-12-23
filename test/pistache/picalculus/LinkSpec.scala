@@ -37,14 +37,14 @@ class LinkSpec extends Spec {
 			val link = Link[Int]
 			val name = Name(5)
 			val process:Process = link^name
-			assert(process == LinkProcess(link, name))
+			assert(process == LinkProcess(link, Link.Action.Send, name))
 		}
   
   		it ("should return a Process when apply (receive) is called") {
 			val link = Link[Int]
 			val name = Name[Int]
 			val process:Process = link(name)
-			assert(process == LinkProcess[Int](link, name))
+			assert(process == LinkProcess[Int](link, Link.Action.Receive, name))
   		}
   
 	}
