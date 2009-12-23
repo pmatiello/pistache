@@ -9,7 +9,7 @@ package pistache.picalculus
 abstract class Process {
 	val description:Process
   
-	def ::(other:Process):Process = new ConcatenationProcess(other, this)
+	def *(other:Process):Process = new ConcatenationProcess(this, other)
   
 	def +(other:Process):Process = new SumProcess(this, other)
 }

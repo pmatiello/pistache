@@ -14,13 +14,13 @@ import org.mockito.Mockito.mock
 @RunWith(classOf[JUnitRunner])
 class ProcessSpec extends Spec {
   
-	object R extends Process {
+	object Q extends Process {
 		val description = null 
 	}
-	object S extends Process {
+	object R extends Process {
 		val description = null
 	}
-	object T extends Process {
+	object S extends Process {
 		val description = null
 	}
   
@@ -28,18 +28,18 @@ class ProcessSpec extends Spec {
   
 		it ("should be written as a concatenation of Processes") {
 			object P extends Process {
-				val description = R :: S :: T
+				val description = Q * R * S
 			}
 			
 			P.description match {
-			  case ConcatenationProcess(R, ConcatenationProcess(S, T)) => assert(true)
+			  case ConcatenationProcess(ConcatenationProcess(Q, R), S) => assert(true)
 			  case _ => assert(false)
 			}
 		}
   
 		it ("should be self-embeddable") {
 			object P extends Process {
-				val description = R :: this
+				val description = R * this
 			}
  
 			P.description match {
@@ -49,21 +49,23 @@ class ProcessSpec extends Spec {
 		}
   
 		it ("should have a sum operator") {
-			object Q extends Process {
-				val description = R + S
-			}
 			object P extends Process {
-				val ap = mock(classOf[Process])
-				val description = ap :: Q + R + S
+				val description = Q + R + S
 			}
-			
-			Q.description match {
-			  case SumProcess(R, S) => assert(true)
+
+			P.description match {
+			  case SumProcess(SumProcess(Q, R), S) => assert(true)
 			  case _ => assert(false)
 			}
-			
+		}
+  
+		it ("should be so that concatenation has precedence over sum") {
+			object P extends Process {
+				val description = Q*R + Q*S
+			}
+
 			P.description match {
-			  case ConcatenationProcess(ap, SumProcess(SumProcess(Q, R), S)) => assert(true)
+			  case SumProcess(ConcatenationProcess(Q, R), ConcatenationProcess(Q, S)) => assert(true)
 			  case _ => assert(false)
 			}
 		}
