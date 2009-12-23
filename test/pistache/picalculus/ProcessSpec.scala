@@ -69,6 +69,28 @@ class ProcessSpec extends Spec {
 			  case _ => assert(false)
 			}
 		}
+  
+  		it ("should have a composition operator") {
+			object P extends Process {
+				val description = Q | R | S
+			}
+
+			P.description match {
+			  case CompositionProcess(CompositionProcess(Q, R), S) => assert(true)
+			  case _ => assert(false)
+			}
+		}
+  
+		it ("should be so that concatenation has precedence over composition") {
+			object P extends Process {
+				val description = Q*R | Q*S
+			}
+			
+			P.description match {
+			  case CompositionProcess(ConcatenationProcess(Q, R), ConcatenationProcess(Q, S)) => assert(true)
+			  case _ => assert(false)
+			}
+		}
 	  
 	}
 

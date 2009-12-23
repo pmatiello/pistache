@@ -12,6 +12,8 @@ abstract class Process {
 	def *(other:Process):Process = new ConcatenationProcess(this, other)
   
 	def +(other:Process):Process = new SumProcess(this, other)
+ 
+ 	def |(other:Process):Process = new CompositionProcess(this, other)
 }
 
 case class ConcatenationProcess(P:Process, Q:Process) extends Process {
@@ -19,5 +21,9 @@ case class ConcatenationProcess(P:Process, Q:Process) extends Process {
 }
 
 case class SumProcess(P:Process, Q:Process) extends Process {
+	val description = null
+}
+
+case class CompositionProcess(P:Process, Q:Process) extends Process {
 	val description = null
 }
