@@ -7,11 +7,17 @@
 package pistache.picalculus
 
 abstract class Process {
-	 val description:List[Process]
+	val description:Process
   
-	 def +(process:Process):Process = new SumProcess(this, process)
+	def ::(other:Process):Process = new ConcatenationProcess(other, this)
+  
+	def +(other:Process):Process = new SumProcess(this, other)
 }
 
-class SumProcess(P:Process, Q:Process) extends Process {
-	val description = P :: Q :: Nil
+case class ConcatenationProcess(P:Process, Q:Process) extends Process {
+	val description = null
+}
+
+case class SumProcess(P:Process, Q:Process) extends Process {
+	val description = null
 }

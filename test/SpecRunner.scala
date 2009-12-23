@@ -8,10 +8,10 @@ import pistache.picalculus._
 
 object SpecRunner extends Application {
 
-	 new LinkSpec execute
+	new LinkSpec execute
     
-	 new NameSpec execute
+	new NameSpec execute
     
-	 new ProcessSpec execute
+	new ProcessSpec execute
   
 }

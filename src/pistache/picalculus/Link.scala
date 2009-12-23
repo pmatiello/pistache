@@ -30,6 +30,6 @@ import Link.Action._
 
 case class LinkProcess[T](link:Link[T], action:Action, name:Name[T]) extends Process {
   
-	val description = this :: Nil
+	val description = this
   
 }
