@@ -45,5 +45,8 @@ object Name {
  *  through links.
  */
 class Name[T](value:T) { 
+	
+	/** The value stored by the Name object.
+	*/
 	val storedValue = value
 }
