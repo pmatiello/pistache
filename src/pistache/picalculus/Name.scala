@@ -6,17 +6,44 @@
 
 package pistache.picalculus
 
+/** An object providing methods to create new names, and
+ *  implicit conversions for autoboxing and autounboxing.
+ */
 object Name {
   
-	 def apply[T](value:T) = new Name(value)
-	 def apply[T] = new Name(null)
+	/** Create a name containing the given value.
+	 * 
+	 *  @param value the value to be stored.
+	 *  @return the name containing the given value. 
+     */
+	def apply[T](value:T) = new Name(value)
+ 
+	/** Create an empty name.
+	 *
+	 *  @return the name containing <code>null</code> as value.
+	 */
+	def apply[T] = new Name(null)
 
-	 implicit def unbox[T](name:Name[T]) = name.storedValue
-  
-	 implicit def box[T](value:T) = Name(value)
+	/** Implicit conversion from names to their stored values.
+	*
+	*  @param name the name.
+	*  @return the value stored by the given name.
+	*/
+	implicit def unbox[T](name:Name[T]) = name.storedValue
+
+	/** Implicit conversion from arbitrary values to names.
+	*
+	*  @param value the value.
+	*  @return the name storing the given value.
+	*/
+	implicit def box[T](value:T) = Name(value)
   
 }
 
+/** A class representing a pi-Calculus name. Names store
+ *  a reference to an arbitrary value and can be passed
+ *  through links.
+ */
 class Name[T](value:T) { 
 	val storedValue = value
 }
