@@ -52,8 +52,18 @@ class Link[T] {
 
 import Link.Action._
 
+/** A class representing an action over a link as an atomic
+ *  pi-Calculus process.
+ * 
+ *  @param link the link where the action took place.
+ *  @param action the type of action.
+ *  @param name the name involved in the transference.
+ */
 case class LinkProcess[T](link:Link[T], action:Action, name:Name[T]) extends Process {
-  
+	
+	/** Process description.
+	 *
+	 *  This process is a leaf node on the process tree. 
+	 */
 	val description = this
-  
 }
