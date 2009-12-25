@@ -7,12 +7,13 @@
 package pistache.picalculus
 
 import org.scalatest.Spec
+import org.scalatest.matchers.MustMatchers
 import org.scalatest.junit.JUnitRunner
 import org.junit.runner.RunWith
 import Name._
 
 @RunWith(classOf[JUnitRunner])
-class LinkSpec extends Spec {
+class LinkSpec extends Spec with MustMatchers {
   
 	describe ("Link") {
 	  
@@ -37,14 +38,14 @@ class LinkSpec extends Spec {
 			val link = Link[Int]
 			val name = Name(5)
 			val process:Process = link^name
-			assert(process == LinkProcess(link, Link.Action.Send, name))
+			process must equal (LinkProcess(link, Link.Action.Send, name))
 		}
   
   		it ("should return a Process when apply (receive) is called") {
 			val link = Link[Int]
 			val name = Name[Int]
 			val process:Process = link(name)
-			assert(process == LinkProcess[Int](link, Link.Action.Receive, name))
+			process must equal (LinkProcess[Int](link, Link.Action.Receive, name))
   		}
   
 	}

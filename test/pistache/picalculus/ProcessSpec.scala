@@ -7,12 +7,13 @@
 package pistache.picalculus
 
 import org.scalatest.Spec
+import org.scalatest.matchers.MustMatchers
 import org.scalatest.junit.JUnitRunner
 import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
 
 @RunWith(classOf[JUnitRunner])
-class ProcessSpec extends Spec {
+class ProcessSpec extends Spec with MustMatchers {
   
 	val Q = new Process {
 		val description = null 
@@ -31,10 +32,7 @@ class ProcessSpec extends Spec {
 				val description = Q * R * S
 			}
 			
-			P.description match {
-			  case ConcatenationProcess(ConcatenationProcess(Q, R), S) => assert(true)
-			  case _ => assert(false)
-			}
+			P.description must equal (ConcatenationProcess(ConcatenationProcess(Q, R), S))
 		}
   
 		it ("should be self-embeddable") {
@@ -42,10 +40,7 @@ class ProcessSpec extends Spec {
 				val description = R * this
 			}
  
-			P.description match {
-			  case ConcatenationProcess(R, P) => assert(true)
-			  case _ => assert(false)
-			}
+			P.description must equal (ConcatenationProcess(R, P))
 		}
   
 		it ("should have a sum operator") {
@@ -53,10 +48,7 @@ class ProcessSpec extends Spec {
 				val description = Q + R + S
 			}
 
-			P.description match {
-			  case SumProcess(SumProcess(Q, R), S) => assert(true)
-			  case _ => assert(false)
-			}
+			P.description must equal (SumProcess(SumProcess(Q, R), S))
 		}
   
 		it ("should be so that concatenation has precedence over sum") {
@@ -64,10 +56,7 @@ class ProcessSpec extends Spec {
 				val description = Q*R + Q*S
 			}
 
-			P.description match {
-			  case SumProcess(ConcatenationProcess(Q, R), ConcatenationProcess(Q, S)) => assert(true)
-			  case _ => assert(false)
-			}
+			P.description must equal (SumProcess(ConcatenationProcess(Q, R), ConcatenationProcess(Q, S)))
 		}
   
   		it ("should have a composition operator") {
@@ -75,10 +64,7 @@ class ProcessSpec extends Spec {
 				val description = Q | R | S
 			}
 
-			P.description match {
-			  case CompositionProcess(CompositionProcess(Q, R), S) => assert(true)
-			  case _ => assert(false)
-			}
+			P.description must equal (CompositionProcess(CompositionProcess(Q, R), S))
 		}
   
 		it ("should be so that concatenation has precedence over composition") {
@@ -86,10 +72,7 @@ class ProcessSpec extends Spec {
 				val description = Q*R | Q*S
 			}
 			
-			P.description match {
-			  case CompositionProcess(ConcatenationProcess(Q, R), ConcatenationProcess(Q, S)) => assert(true)
-			  case _ => assert(false)
-			}
+			P.description must equal (CompositionProcess(ConcatenationProcess(Q, R), ConcatenationProcess(Q, S)))
 		}
 	  
 	}

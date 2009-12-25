@@ -7,12 +7,13 @@
 package pistache.picalculus
 
 import org.scalatest.Spec
+import org.scalatest.matchers.MustMatchers
 import org.scalatest.junit.JUnitRunner
 import org.junit.runner.RunWith
 import Name._
 
 @RunWith(classOf[JUnitRunner])
-class NameSpec extends Spec {
+class NameSpec extends Spec with MustMatchers {
   
 	describe ("Name") {
 	  
@@ -22,16 +23,16 @@ class NameSpec extends Spec {
 		}
 	  
 		it ("should store an arbitrary value") {
-			assert(Name(144).storedValue == 144)
+			Name(144).storedValue must equal (144)
 		}
   
 		it ("should keep the type of the stored value") {
-			assert(Name("144").storedValue.getClass == classOf[String])
+			Name("144").storedValue.getClass must equal (classOf[String])
 		}
   
 		it ("should autounbox the stored value") {
 			val name = Name("abcde")
-			assert(name.indexOf("d") == 3)
+			name.indexOf("d") must equal (3)
 		}
   
   		it ("should autobox a value") {
