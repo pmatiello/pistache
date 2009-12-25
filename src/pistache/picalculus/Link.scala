@@ -33,8 +33,19 @@ object Link {
  */
 class Link[T] {
   
+	/** Send a name through this link.
+	 * 
+	 *  @param name the name to be sent through the link.
+	 *  @return the process representing this action.
+     */
 	def ^(name:Name[T]) = new LinkProcess(this, Link.Action.Send, name)
- 
+	
+	/** Receive a name through this link.
+	 * 
+	 *  @param name the name to be used as storage of the
+	 *  object received through the link.
+	 *  @return the process representing this action.
+     */
 	def apply(name:Name[T]) = new LinkProcess(this, Link.Action.Receive, name)
 
 }
