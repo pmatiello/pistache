@@ -106,6 +106,7 @@
          ================================= -->
     <target name="clean" description="compile test classes">
     	<delete dir="${build.dir}" />
+    	<delete dir="${docs.dir}" />
     </target>
 	
 </project>
