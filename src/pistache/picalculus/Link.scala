@@ -61,9 +61,6 @@ import Link.Action._
  */
 case class LinkProcess[T](link:Link[T], action:Action, name:Name[T]) extends Process {
 	
-	/** Process description.
-	 *
-	 *  This process is a leaf node on the process tree. 
-	 */
+	/** Process description.*/
 	val description = this
 }
