@@ -72,7 +72,8 @@ class ProcessSpec extends Spec with MustMatchers {
 				val description = Q*R | Q*S
 			}
 			
-			P.description must equal (CompositionProcess(ConcatenationProcess(Q, R), ConcatenationProcess(Q, S)))
+			P.description must equal (CompositionProcess(ConcatenationProcess(Q, R),
+                                                		 ConcatenationProcess(Q, S)))
 		}
 	  
 	}
