@@ -14,20 +14,20 @@ import org.mockito.Mockito.mock
 @RunWith(classOf[JUnitRunner])
 class ProcessSpec extends Spec {
   
-	object Q extends Process {
+	val Q = new Process {
 		val description = null 
 	}
-	object R extends Process {
+	val R = new Process {
 		val description = null
 	}
-	object S extends Process {
+	val S = new Process {
 		val description = null
 	}
   
 	describe ("Process") {
   
 		it ("should be written as a concatenation of Processes") {
-			object P extends Process {
+			val P = new Process {
 				val description = Q * R * S
 			}
 			
@@ -38,7 +38,7 @@ class ProcessSpec extends Spec {
 		}
   
 		it ("should be self-embeddable") {
-			object P extends Process {
+			val P = new Process {
 				val description = R * this
 			}
  
@@ -49,7 +49,7 @@ class ProcessSpec extends Spec {
 		}
   
 		it ("should have a sum operator") {
-			object P extends Process {
+			val P = new Process {
 				val description = Q + R + S
 			}
 
@@ -60,7 +60,7 @@ class ProcessSpec extends Spec {
 		}
   
 		it ("should be so that concatenation has precedence over sum") {
-			object P extends Process {
+			val P = new Process {
 				val description = Q*R + Q*S
 			}
 
@@ -71,7 +71,7 @@ class ProcessSpec extends Spec {
 		}
   
   		it ("should have a composition operator") {
-			object P extends Process {
+			val P = new Process {
 				val description = Q | R | S
 			}
 
@@ -82,7 +82,7 @@ class ProcessSpec extends Spec {
 		}
   
 		it ("should be so that concatenation has precedence over composition") {
-			object P extends Process {
+			val P = new Process {
 				val description = Q*R | Q*S
 			}
 			
