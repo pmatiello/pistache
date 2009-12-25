@@ -18,6 +18,7 @@
 	<property name="test.dir" value="test/" />
 	<property name="lib.dir" value="lib/" />
 	<property name="build.dir" value="bin/" />
+	<property name="docs.dir" value="docs/" />
 	<property name="scala.home" value="/usr/share/scala/" />
 	<property name="scala-compiler.jar" value="${scala.home}/lib/scala-compiler.jar"/>
 	<property name="scala-library.jar" value="${scala.home}/lib/scala-library.jar"/>
@@ -72,6 +73,16 @@
          ================================= -->
     <target name="test" depends="compile-test" description="run tests">
     	<java classname="SpecRunner" classpathref="project.classpath" />
+    </target>
+	
+    <!-- =================================
+          target: docs
+         ================================= -->
+    <target name="docs" description="generate documentation (scaladoc)">
+		<mkdir dir="${docs.dir}" />
+    	<scaladoc srcdir="${src.dir}" destdir="${docs.dir}">
+    		<include name="**/*.scala"/>
+    	</scaladoc>
     </target>
 	
 	<!-- =================================
