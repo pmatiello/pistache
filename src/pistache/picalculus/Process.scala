@@ -19,7 +19,7 @@ abstract class Process {
 	 *  @return the process constructed by concatenation of this
 	 *  process and the given process.
 	 */
-	def *(other:Process):Process = new ConcatenationProcess(this, other)
+	def *(other:Process) = new ConcatenationProcess(this, other)
   
 	/** Summation operator.
 	 *
@@ -27,7 +27,7 @@ abstract class Process {
 	 *  @return the process formed by summation of this
 	 *  process and the given process.
 	 */
- 	def +(other:Process):Process = new SumProcess(this, other)
+ 	def +(other:Process) = new SumProcess(this, other)
  
  	/** Composition operator.
 	 *
@@ -35,7 +35,7 @@ abstract class Process {
 	 *  @return the process constructed by parallel composition of this
 	 *  process and the given process.
 	 */
-  	def |(other:Process):Process = new CompositionProcess(this, other)
+  	def |(other:Process) = new CompositionProcess(this, other)
 }
 
 /** A class representing a process constructed by the concatenation
@@ -45,7 +45,7 @@ abstract class Process {
  *  @param Q the second process.
  *  @return the constructed process.
  */
-case class ConcatenationProcess(P:Process, Q:Process) extends Process {
+protected case class ConcatenationProcess(P:Process, Q:Process) extends Process {
 
 	/** Process description.*/
 	val description = null
@@ -58,7 +58,7 @@ case class ConcatenationProcess(P:Process, Q:Process) extends Process {
  *  @param Q the second process.
  *  @return the constructed process.
  */
-case class SumProcess(P:Process, Q:Process) extends Process {
+protected case class SumProcess(P:Process, Q:Process) extends Process {
 
 	/** Process description.*/
 	val description = null
@@ -71,7 +71,7 @@ case class SumProcess(P:Process, Q:Process) extends Process {
  *  @param Q the second process.
  *  @return the constructed process.
  */
-case class CompositionProcess(P:Process, Q:Process) extends Process {
+protected case class CompositionProcess(P:Process, Q:Process) extends Process {
 
 	/** Process description.*/
 	val description = null

@@ -31,7 +31,7 @@ object Link {
 /** A class representing a pi-Calculus link. Links can be used
  *  to send names between processes.
  */
-class Link[T] {
+protected class Link[T] {
   
 	/** Send a name through this link.
 	 * 
@@ -59,7 +59,7 @@ import Link.Action._
  *  @param action the type of action.
  *  @param name the name involved in the transference.
  */
-case class LinkProcess[T](link:Link[T], action:Action, name:Name[T]) extends Process {
+protected case class LinkProcess[T](link:Link[T], action:Action, name:Name[T]) extends Process {
 	
 	/** Process description.*/
 	val description = this
