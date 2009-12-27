@@ -13,5 +13,7 @@ object SpecRunner extends Application {
 	new NameSpec execute
     
 	new ProcessSpec execute
+   
+	new TransitionSpec execute
   
 }
