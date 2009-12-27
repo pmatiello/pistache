@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- ====================================================================== 
-     Dec 20, 2009 8:48:24 PM                                                        
 
+<!-- ====================================================================== 
      pistache    
      A pi-Calculus internal DSL for Scala
-
      ====================================================================== -->
+
 <project name="pistache" default="build">
     <description>
         A pi-Calculus internal DSL for Scala
