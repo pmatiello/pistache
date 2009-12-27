@@ -12,9 +12,11 @@ object Transition {
   
 }
 
-protected class Transition(action: => Unit) {
+protected class Transition(action: => Unit) extends Process {
 	
 	private val procedure = action _;
+ 
+	val description = null;
  
 	def run = procedure.apply
   

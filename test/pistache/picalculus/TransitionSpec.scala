@@ -25,6 +25,13 @@ class TransitionSpec extends Spec with MustMatchers {
 			transition.run
 			executed must be (1)
 		}
+  
+		it ("should be a process") {
+			val process:Process = Transition(
+				fail()	// must not be run
+			)
+			assert(true)
+		}
 	   
 	 }
   
