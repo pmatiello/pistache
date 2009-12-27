@@ -23,11 +23,11 @@ class NameSpec extends Spec with MustMatchers {
 		}
 	  
 		it ("should store an arbitrary value") {
-			Name(144).storedValue must equal (144)
+			Name(144).value must equal (144)
 		}
   
 		it ("should keep the type of the stored value") {
-			Name("144").storedValue.getClass must equal (classOf[String])
+			Name("144").value.getClass must equal (classOf[String])
 		}
   
 		it ("should autounbox the stored value") {

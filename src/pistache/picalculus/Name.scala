@@ -29,7 +29,7 @@ object Name {
 	*  @param name the name.
 	*  @return the value stored by the given name.
 	*/
-	implicit def unbox[T](name:Name[T]) = name.storedValue
+	implicit def unbox[T](name:Name[T]) = name.value
 
 	/** Implicit conversion from arbitrary values to names.
 	*
@@ -44,9 +44,9 @@ object Name {
  *  a reference to an arbitrary value and can be passed
  *  through links.
  */
-protected class Name[T](value:T) { 
+protected class Name[T](valueObject:T) { 
 	
 	/** The value stored by the Name object.
 	*/
-	val storedValue = value
+	val value = valueObject
 }
