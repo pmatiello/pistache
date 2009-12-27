@@ -8,6 +8,8 @@ import pistache.picalculus._
 
 object SpecRunner extends Application {
 
+	new IfSpec execute
+  
 	new LinkSpec execute
     
 	new NameSpec execute
