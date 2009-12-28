@@ -3,7 +3,6 @@
  * 
  * Test program for calculating factorials.
  * 
- * Not really very pi-Calculus-ish yet, but it's enough to test the runner a bit.
  */
 
 package pistache.examples
@@ -24,8 +23,6 @@ object Factorial extends Application {
 	private val printResult = Transition(println(p))
 		
 	lazy val F:Process = Process(silent*(If (n>1) {F} Else {printResult}))
- 
-	
  
 	new SimpleRunner(F) start
   
