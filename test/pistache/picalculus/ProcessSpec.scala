@@ -15,65 +15,66 @@ import org.mockito.Mockito.mock
 @RunWith(classOf[JUnitRunner])
 class ProcessSpec extends Spec with MustMatchers {
   
-	val Q = new Process {
-		val description = null 
-	}
-	val R = new Process {
-		val description = null
-	}
-	val S = new Process {
-		val description = null
-	}
-  
+	val Q = new Process
+	val R = new Process
+	val S = new Process
+	
 	describe ("Process") {
   
 		it ("should be written as a concatenation of Processes") {
-			val P = new Process {
-				val description = Q * R * S
-			}
-			
-			P.description must equal (ConcatenationProcess(ConcatenationProcess(Q, R), S))
+			val P = Process(Q * R * S)
+			P.asInstanceOf[ConcatenationProcess].left.asInstanceOf[ConcatenationProcess].left must equal (Q)
+			P.asInstanceOf[ConcatenationProcess].left.asInstanceOf[ConcatenationProcess].right must equal (R)
+			P.asInstanceOf[ConcatenationProcess].right must equal (S)
 		}
   
 		it ("should be self-embeddable") {
-			val P = new Process {
-				val description = R * this
-			}
- 
-			P.description must equal (ConcatenationProcess(R, P))
+			lazy val P:Process = Process(R*P)
+			P.asInstanceOf[ConcatenationProcess].left must equal (R)
+			P.asInstanceOf[ConcatenationProcess].right must equal (P)
+		}
+  
+		it ("should allow cyclic references") {
+			lazy val P:Process = Process(R*Q)
+			lazy val Q:Process = Process(P)
+			P.asInstanceOf[ConcatenationProcess].left must equal(R)
+			P.asInstanceOf[ConcatenationProcess].right must equal(Q)
 		}
   
 		it ("should have a sum operator") {
-			val P = new Process {
-				val description = Q + R + S
-			}
+			val P = Process(Q + R + S)
 
-			P.description must equal (SumProcess(SumProcess(Q, R), S))
+			P.asInstanceOf[SumProcess].left.asInstanceOf[SumProcess].left must equal (Q)
+			P.asInstanceOf[SumProcess].left.asInstanceOf[SumProcess].right must equal (R)
+			P.asInstanceOf[SumProcess].right must equal (S)
 		}
   
 		it ("should be so that concatenation has precedence over sum") {
-			val P = new Process {
-				val description = Q*R + Q*S
-			}
+			val P:Process = Process(Q*R + Q*S)
 
-			P.description must equal (SumProcess(ConcatenationProcess(Q, R), ConcatenationProcess(Q, S)))
+			val PS = P.asInstanceOf[SumProcess]
+			PS.left.asInstanceOf[ConcatenationProcess].left must equal (Q)
+			PS.left.asInstanceOf[ConcatenationProcess].right must equal (R)
+			PS.right.asInstanceOf[ConcatenationProcess].left must equal (Q)
+			PS.right.asInstanceOf[ConcatenationProcess].right must equal (S)
 		}
   
   		it ("should have a composition operator") {
-			val P = new Process {
-				val description = Q | R | S
-			}
+			val P = Process(Q | R | S)
 
-			P.description must equal (CompositionProcess(CompositionProcess(Q, R), S))
+			P.asInstanceOf[CompositionProcess].left.asInstanceOf[CompositionProcess].left must equal (Q)
+			P.asInstanceOf[CompositionProcess].left.asInstanceOf[CompositionProcess].right must equal (R)
+			P.asInstanceOf[CompositionProcess].right must equal (S)
 		}
   
 		it ("should be so that concatenation has precedence over composition") {
-			val P = new Process {
-				val description = Q*R | Q*S
-			}
+			val P:Process = Process(Q*R | Q*S)
 			
-			P.description must equal (CompositionProcess(ConcatenationProcess(Q, R),
-                                                		 ConcatenationProcess(Q, S)))
+			val PC = P.asInstanceOf[CompositionProcess]
+			PC.left.asInstanceOf[ConcatenationProcess].left must equal (Q)
+			PC.left.asInstanceOf[ConcatenationProcess].right must equal (R)
+			PC.right.asInstanceOf[ConcatenationProcess].left must equal (Q)
+			PC.right.asInstanceOf[ConcatenationProcess].right must equal (S)
 		}
 	  
 	}

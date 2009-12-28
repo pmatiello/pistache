@@ -15,9 +15,7 @@ import Name._
 @RunWith(classOf[JUnitRunner])
 class LinkSpec extends Spec with MustMatchers {
   
- 	val P = new Process {
-		val description = null 
-	}
+ 	val P = new Process
   
 	describe ("Link") {
 	  
@@ -56,18 +54,20 @@ class LinkSpec extends Spec with MustMatchers {
   			val link = Link[Int]
   			val name = Name(5)
 			val process:Process = P * link~name * P
-			process must equal (ConcatenationProcess(
-									ConcatenationProcess(P, LinkProcess(link, Link.Action.Send, name)),
-									P))
+			val PC = process.asInstanceOf[ConcatenationProcess]
+			PC.left.asInstanceOf[ConcatenationProcess].left must equal (P)
+  			PC.left.asInstanceOf[ConcatenationProcess].right must equal (LinkProcess[Int](link, Link.Action.Send, name))
+  			PC.right must equal (P)
   		}
     
   		it ("should be so that receive has precedence over process concatenation") {
   			val link = Link[Int]
   			val name = Name[Int]
 			val process:Process = P * link(name) * P
-			process must equal (ConcatenationProcess(
-									ConcatenationProcess(P, LinkProcess[Int](link, Link.Action.Receive, name)),
-									P))
+			val PC = process.asInstanceOf[ConcatenationProcess]
+			PC.left.asInstanceOf[ConcatenationProcess].left must equal (P)
+  			PC.left.asInstanceOf[ConcatenationProcess].right must equal (LinkProcess[Int](link, Link.Action.Receive, name))
+  			PC.right must equal (P)
   		}
   
 	}

@@ -23,7 +23,4 @@ protected[pistache] class Transition(action: => Unit) extends Process {
 	/** Transition procedure. */
 	val procedure = action _;
  
-	/** Process description.*/
-	val description = null;
-  
 }

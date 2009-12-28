@@ -6,12 +6,23 @@
 
 package pistache.picalculus
 
+object Process {
+  
+	def apply(process: => Process):Process = {
+		lazy val proc = process
+		proc.self = proc
+		return proc
+	}
+
+}
+
+object self extends Process
+
 /** A class representing pi-Calculus processes.
  */
-abstract class Process {
-  
-	/** Process description. */
-	val description:Process
+protected[pistache] class Process {
+
+	var self:Process = null
   
 	/** Concatenation operator.
 	 *
@@ -19,7 +30,7 @@ abstract class Process {
 	 *  @return the process constructed by concatenation of this
 	 *  process and the given process.
 	 */
-	def *(other:Process) = new ConcatenationProcess(this, other)
+	def *(other: => Process) = new ConcatenationProcess(this, other)
   
 	/** Summation operator.
 	 *
@@ -27,7 +38,7 @@ abstract class Process {
 	 *  @return the process formed by summation of this
 	 *  process and the given process.
 	 */
- 	def +(other:Process) = new SumProcess(this, other)
+ 	def +(other: => Process) = new SumProcess(this, other)
  
  	/** Composition operator.
 	 *
@@ -35,7 +46,7 @@ abstract class Process {
 	 *  @return the process constructed by parallel composition of this
 	 *  process and the given process.
 	 */
-  	def |(other:Process) = new CompositionProcess(this, other)
+  	def |(other: => Process) = new CompositionProcess(this, other)
 }
 
 /** A class representing a process constructed by the concatenation
@@ -45,10 +56,9 @@ abstract class Process {
  *  @param Q the second process.
  *  @return the constructed process.
  */
-protected[pistache] case class ConcatenationProcess(P:Process, Q:Process) extends Process {
-
-	/** Process description.*/
-	val description = null
+protected[pistache] class ConcatenationProcess(P: => Process, Q: => Process) extends Process {
+	lazy val left = P
+	lazy val right = Q
 }
 
 /** A class representing a process constructed by the summation
@@ -58,10 +68,9 @@ protected[pistache] case class ConcatenationProcess(P:Process, Q:Process) extend
  *  @param Q the second process.
  *  @return the constructed process.
  */
-protected[pistache] case class SumProcess(P:Process, Q:Process) extends Process {
-
-	/** Process description.*/
-	val description = null
+protected[pistache] class SumProcess(P: => Process, Q: => Process) extends Process {
+	lazy val left = P
+	lazy val right = Q
 }
 
 /** A class representing a process constructed by the composition
@@ -71,8 +80,7 @@ protected[pistache] case class SumProcess(P:Process, Q:Process) extends Process 
  *  @param Q the second process.
  *  @return the constructed process.
  */
-protected[pistache] case class CompositionProcess(P:Process, Q:Process) extends Process {
-
-	/** Process description.*/
-	val description = null
+protected[pistache] class CompositionProcess(P: => Process, Q: => Process) extends Process {
+	lazy val left = P
+	lazy val right = Q
 }

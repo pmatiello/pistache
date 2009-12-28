@@ -23,9 +23,9 @@ protected[pistache] class IfProcess(cond: => Boolean, process:Process) extends P
 	val condition = cond _
  
 	/** Process to be executed if <code>condition</code> evaluates to <code>true</code>. */
-	val description = process	
+	val then = process	
 
-	def Else(process:Process) = new IfElseProcess(cond, description, process) 
+	def Else(process:Process) = new IfElseProcess(cond, then, process) 
 
 }
 
@@ -37,7 +37,7 @@ protected[pistache] class IfElseProcess(cond: => Boolean, yes:Process, no:Proces
 	val condition = cond _
  
 	/** Process to be executed if <code>condition</code> evaluates to <code>false</code>. */
-	val description = yes
-	val descriptionElse = no
+	val then = yes
+	val elseThen = no
 
 }

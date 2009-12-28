@@ -59,8 +59,4 @@ import Link.Action._
  *  @param action the type of action.
  *  @param name the name involved in the transference.
  */
-protected case class LinkProcess[T](link:Link[T], action:Action, name:Name[T]) extends Process {
-	
-	/** Process description.*/
-	val description = this
-}
+protected case class LinkProcess[T](link:Link[T], action:Action, name:Name[T]) extends Process

@@ -15,66 +15,52 @@ import org.mockito.Mockito.mock
 @RunWith(classOf[JUnitRunner])
 class IfSpec extends Spec with MustMatchers {
   
-	val Q = new Process {
-		val description = null 
-	}
-	val R = new Process {
-		val description = null
-		}
-	val S = new Process {
-		val description = null
-	}
+	val Q = new Process
+	val R = new Process
+	val S = new Process
   
 	describe ("If") {
 	  
 		it ("should express a conditional execution of a process") {
-			val P = new Process {
-				val description = If (1 > 0) {Q} 
-			}
-			P.description match {
+			val P = Process(If (1 > 0) {Q}) 
+			P match {
 				case proc:IfProcess => proc.condition.apply must equal (true)
-																proc.description must equal (Q)
+																proc.then must equal (Q)
 			}
 		}
   
 		it ("should possible to express a conditional process as part of another process") {
-			val P = new Process {
-				val description = Q * If (1 > 0) {R+S} * S
-			}
-			P.description match {
-				case ConcatenationProcess(ConcatenationProcess(Q, proc:IfProcess), S) =>
-				  										proc.condition.apply must equal (true)
-														proc.description must equal (SumProcess(R, S))
-				case _ => fail()
-			}
+			val P = Process(Q * If (1 > 0) {R} * S)
+			
+			val PC = P.asInstanceOf[ConcatenationProcess]
+			PC.left.asInstanceOf[ConcatenationProcess].left must equal(Q)
+			PC.left.asInstanceOf[ConcatenationProcess].right.asInstanceOf[IfProcess].condition.apply must equal (true)
+			PC.left.asInstanceOf[ConcatenationProcess].right.asInstanceOf[IfProcess].then must equal (R)
+			PC.right must equal (S)
 		}
 	}
 		
 	describe ("Else") {
 	  
 		it ("should express a conditional execution of a process") {
-			val P = new Process {
-				val description = If (1 > 0) {Q} Else {R}  
-			}
-			P.description match {
+			val P = Process(If (1 > 0) {Q} Else {R})  
+			P match {
 				case proc:IfElseProcess =>
 								proc.condition.apply must equal (true)
-								proc.description must equal (Q)
-								proc.descriptionElse must equal (R)
+								proc.then must equal (Q)
+								proc.elseThen must equal (R)
 			}	
 		}
   
 		it ("should possible to express a conditional process as part of another process") {
-			val P = new Process {
-				val description = Q * (If (1 > 0) {R} Else {S}) * Q
-			}
-			P.description match {
-				case ConcatenationProcess(ConcatenationProcess(Q, proc:IfElseProcess), Q) =>
-				  								proc.condition.apply must equal (true)
-												proc.description must equal (R)
-				  								proc.descriptionElse must equal (S)
-				case _ => fail()
-			}
+			val P = Process(Q * (If (1 > 0) {R} Else {S}) * Q)
+			
+			val PC = P.asInstanceOf[ConcatenationProcess]
+			PC.left.asInstanceOf[ConcatenationProcess].left must equal(Q)
+			PC.left.asInstanceOf[ConcatenationProcess].right.asInstanceOf[IfElseProcess].condition.apply must equal (true)
+			PC.left.asInstanceOf[ConcatenationProcess].right.asInstanceOf[IfElseProcess].then must equal (R)
+			PC.left.asInstanceOf[ConcatenationProcess].right.asInstanceOf[IfElseProcess].elseThen must equal (S)
+			PC.right must equal (Q)
 		}
 	  
 	}
