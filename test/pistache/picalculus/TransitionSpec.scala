@@ -22,7 +22,7 @@ class TransitionSpec extends Spec with MustMatchers {
 				executed = executed + 1
 			)
 			executed must be (0)
-			transition.run
+			transition.procedure.apply
 			executed must be (1)
 		}
   

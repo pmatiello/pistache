@@ -1,7 +1,7 @@
 /* 
  * Copyright (c) 2009-2010 Pedro Matiello <pmatiello@gmail.com>
  * 
- * Spec for Process trait and companion classes.
+ * Spec for If object.
  */
 
 package pistache.picalculus
