@@ -6,8 +6,15 @@
 
 package pistache.picalculus
 
+/** An object providing methods to create pi-Calculus
+ *  processes.
+ */
 object Process {
   
+	/** Create a process.
+	 *
+	 *  @param process the process. 
+	 */
 	def apply(process: => Process):Process = process
 
 }
@@ -15,8 +22,6 @@ object Process {
 /** A class representing pi-Calculus processes.
  */
 protected[pistache] class Process {
-
-	var self:Process = null
   
 	/** Concatenation operator.
 	 *
