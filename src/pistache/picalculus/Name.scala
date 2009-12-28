@@ -50,5 +50,9 @@ class Name[T](valueObject:T) {
 	*/
 	var value = valueObject
  
+	/** Update the stored value.
+	 *
+	 *  @param value the new stored value. 
+	 */
 	def :=(value:T) { this.value = value }
 }
