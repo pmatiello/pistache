@@ -40,14 +40,22 @@ class LinkSpec extends Spec with MustMatchers {
 			val link = Link[Int]
 			val name = Name(5)
 			val process:Process = link~name
-			process must equal (LinkProcess(link, Link.Action.Send, name))
+			process match {
+				case pp:LinkProcess[_] => pp.link must equal (link.value)
+										  pp.action must equal (Link.Action.Send)
+										  (pp.name == name) must equal (true)
+			}
 		}
   
   		it ("should return a Process when apply (receive) is called") {
 			val link = Link[Int]
 			val name = Name[Int]
 			val process:Process = link(name)
-			process must equal (LinkProcess[Int](link, Link.Action.Receive, name))
+			process match {
+				case pp:LinkProcess[_] => pp.link must equal (link.value)
+										  pp.action must equal (Link.Action.Receive)
+										  (pp.name == name) must equal (true)
+			}
   		}
     
   		it ("should be so that send has precedence over process concatenation") {
@@ -58,7 +66,11 @@ class LinkSpec extends Spec with MustMatchers {
 				case p:ConcatenationProcess => {
 					p.left match {
 						case pp:ConcatenationProcess => pp.left must equal (P)
-														pp.right must equal (LinkProcess[Int](link, Link.Action.Send, name))
+														pp.right match {
+															case pr:LinkProcess[_] => pr.link must equal (link.value)
+																					  pr.action must equal (Link.Action.Send)
+																					  (pr.name == name) must equal (true)
+															}
 					}
 					p.right must equal (P)
 				}
@@ -74,7 +86,11 @@ class LinkSpec extends Spec with MustMatchers {
 				case p:ConcatenationProcess => {
 					p.left match {
 						case pp:ConcatenationProcess => pp.left must equal (P)
-														pp.right must equal (LinkProcess[Int](link, Link.Action.Receive, name))
+														pp.right match {
+															case pr:LinkProcess[_] => pr.link must equal (link.value)
+																					  pr.action must equal (Link.Action.Receive)
+																					  (pr.name == name) must equal (true)
+															}
 					}
 					p.right must equal (P)
 				}

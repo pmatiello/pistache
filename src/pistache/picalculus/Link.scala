@@ -55,8 +55,12 @@ import Link.Action._
 /** A class representing an action over a link as an atomic
  *  pi-Calculus process.
  * 
- *  @param link the link where the action took place.
- *  @param action the type of action.
- *  @param name the name involved in the transference.
+ *  @param linkObj the link where the action took place.
+ *  @param actionType the type of action.
+ *  @param nameObj the name involved in the transference.
  */
-protected case class LinkProcess[T](link:Link[T], action:Action, name:Name[T]) extends Process
+protected class LinkProcess[T](linkObj:Link[T], actionType:Action, nameObj:Name[T]) extends Process {
+	val link = linkObj;
+	val action = actionType
+	val name = nameObj
+}
