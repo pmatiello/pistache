@@ -20,7 +20,7 @@ object Factorial extends Application {
 	private val subtract = Transition(n = n - 1)
 	private val printResult = Transition(println(p))
 		
-	val F = Process(makeProduct*subtract*(If (n>1) {self} Else {printResult}))
+	lazy val F:Process = Process(makeProduct*subtract*(If (n>1) {F} Else {printResult}))
  
 	new SimpleRunner(F) start
   

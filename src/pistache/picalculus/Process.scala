@@ -8,15 +8,9 @@ package pistache.picalculus
 
 object Process {
   
-	def apply(process: => Process):Process = {
-		lazy val proc = process
-		proc.self = proc
-		return proc
-	}
+	def apply(process: => Process):Process = process
 
 }
-
-object self extends Process
 
 /** A class representing pi-Calculus processes.
  */
