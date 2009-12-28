@@ -22,7 +22,7 @@ object Name {
 	 *
 	 *  @return the name containing <code>null</code> as value.
 	 */
-	def apply[T] = new Name(null)
+	def apply[T] = new Name(null.asInstanceOf[T])
 
 	/** Implicit conversion from names to their stored values.
 	*
@@ -44,7 +44,7 @@ object Name {
  *  a reference to an arbitrary value and can be passed
  *  through links.
  */
-protected class Name[T](valueObject:T) { 
+class Name[T](valueObject:T) { 
 	
 	/** The value stored by the Name object.
 	*/
