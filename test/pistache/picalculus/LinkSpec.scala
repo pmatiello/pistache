@@ -54,20 +54,31 @@ class LinkSpec extends Spec with MustMatchers {
   			val link = Link[Int]
   			val name = Name(5)
 			val process:Process = P * link~name * P
-			val PC = process.asInstanceOf[ConcatenationProcess]
-			PC.left.asInstanceOf[ConcatenationProcess].left must equal (P)
-  			PC.left.asInstanceOf[ConcatenationProcess].right must equal (LinkProcess[Int](link, Link.Action.Send, name))
-  			PC.right must equal (P)
+			process match {
+				case p:ConcatenationProcess => {
+					p.left match {
+						case pp:ConcatenationProcess => pp.left must equal (P)
+														pp.right must equal (LinkProcess[Int](link, Link.Action.Send, name))
+					}
+					p.right must equal (P)
+				}
+			}
   		}
     
   		it ("should be so that receive has precedence over process concatenation") {
   			val link = Link[Int]
   			val name = Name[Int]
 			val process:Process = P * link(name) * P
-			val PC = process.asInstanceOf[ConcatenationProcess]
-			PC.left.asInstanceOf[ConcatenationProcess].left must equal (P)
-  			PC.left.asInstanceOf[ConcatenationProcess].right must equal (LinkProcess[Int](link, Link.Action.Receive, name))
-  			PC.right must equal (P)
+   
+			process match {
+				case p:ConcatenationProcess => {
+					p.left match {
+						case pp:ConcatenationProcess => pp.left must equal (P)
+														pp.right must equal (LinkProcess[Int](link, Link.Action.Receive, name))
+					}
+					p.right must equal (P)
+				}
+			}
   		}
   
 	}

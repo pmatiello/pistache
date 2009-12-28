@@ -32,12 +32,21 @@ class IfSpec extends Spec with MustMatchers {
 		it ("should possible to express a conditional process as part of another process") {
 			val P = Process(Q * If (1 > 0) {R} * S)
 			
-			val PC = P.asInstanceOf[ConcatenationProcess]
-			PC.left.asInstanceOf[ConcatenationProcess].left must equal(Q)
-			PC.left.asInstanceOf[ConcatenationProcess].right.asInstanceOf[IfProcess].condition.apply must equal (true)
-			PC.left.asInstanceOf[ConcatenationProcess].right.asInstanceOf[IfProcess].then must equal (R)
-			PC.right must equal (S)
-		}
+			P match {
+				case pp:ConcatenationProcess => {
+					pp.left match {
+						case pl:ConcatenationProcess => {
+							pl.left must equal (Q)
+							pl.right match {
+								case pi:IfProcess => pi.condition.apply must equal (true)
+													 pi.then must equal (R)
+							}
+						}
+					}
+					pp.right must equal (S)
+				}
+			}
+   		}
 	}
 		
 	describe ("Else") {
@@ -55,12 +64,21 @@ class IfSpec extends Spec with MustMatchers {
 		it ("should possible to express a conditional process as part of another process") {
 			val P = Process(Q * (If (1 > 0) {R} Else {S}) * Q)
 			
-			val PC = P.asInstanceOf[ConcatenationProcess]
-			PC.left.asInstanceOf[ConcatenationProcess].left must equal(Q)
-			PC.left.asInstanceOf[ConcatenationProcess].right.asInstanceOf[IfElseProcess].condition.apply must equal (true)
-			PC.left.asInstanceOf[ConcatenationProcess].right.asInstanceOf[IfElseProcess].then must equal (R)
-			PC.left.asInstanceOf[ConcatenationProcess].right.asInstanceOf[IfElseProcess].elseThen must equal (S)
-			PC.right must equal (Q)
+			P match {
+				case pp:ConcatenationProcess => {
+					pp.left match {
+						case pl:ConcatenationProcess => {
+							pl.left must equal (Q)
+							pl.right match {
+								case pi:IfElseProcess => pi.condition.apply must equal (true)
+														 pi.then must equal (R)
+														 pi.elseThen must equal (S)
+							}
+						}
+					}
+					pp.right must equal (Q)
+				}
+			}
 		}
 	  
 	}
