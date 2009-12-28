@@ -16,11 +16,16 @@ object Factorial extends Application {
 	private var p = 1
 	private var n = 10
   
-	private val makeProduct = Transition(p = p * n)
-	private val subtract = Transition(n = n - 1)
+	private val silent = Transition{
+		p = p*n
+		n = n-1
+	}
+ 
 	private val printResult = Transition(println(p))
 		
-	lazy val F:Process = Process(makeProduct*subtract*(If (n>1) {F} Else {printResult}))
+	lazy val F:Process = Process(silent*(If (n>1) {F} Else {printResult}))
+ 
+	
  
 	new SimpleRunner(F) start
   
