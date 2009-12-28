@@ -17,7 +17,7 @@ object If {
 
 /** A class representing pi-Calculus conditional operator If.
  */
-protected class IfProcess(cond: => Boolean, process:Process) extends Process {
+protected[pistache] class IfProcess(cond: => Boolean, process:Process) extends Process {
 	
 	/** Condition. */
 	val condition = cond _
@@ -25,18 +25,19 @@ protected class IfProcess(cond: => Boolean, process:Process) extends Process {
 	/** Process to be executed if <code>condition</code> evaluates to <code>true</code>. */
 	val description = process	
 
-	def Else(process:Process) = ConcatenationProcess(this, new ElseProcess(cond, process)) 
+	def Else(process:Process) = new IfElseProcess(cond, description, process) 
 
 }
 
 /** A class representing pi-Calculus conditional operator Else.
  */
-protected class ElseProcess(cond: => Boolean, process:Process) extends Process {
+protected[pistache] class IfElseProcess(cond: => Boolean, yes:Process, no:Process) extends Process {
 	
 	/** Condition. */
 	val condition = cond _
  
 	/** Process to be executed if <code>condition</code> evaluates to <code>false</code>. */
-	val description = process	
+	val description = yes
+	val descriptionElse = no
 
 }

@@ -45,7 +45,7 @@ abstract class Process {
  *  @param Q the second process.
  *  @return the constructed process.
  */
-protected case class ConcatenationProcess(P:Process, Q:Process) extends Process {
+protected[pistache] case class ConcatenationProcess(P:Process, Q:Process) extends Process {
 
 	/** Process description.*/
 	val description = null
@@ -58,7 +58,7 @@ protected case class ConcatenationProcess(P:Process, Q:Process) extends Process 
  *  @param Q the second process.
  *  @return the constructed process.
  */
-protected case class SumProcess(P:Process, Q:Process) extends Process {
+protected[pistache] case class SumProcess(P:Process, Q:Process) extends Process {
 
 	/** Process description.*/
 	val description = null
@@ -71,7 +71,7 @@ protected case class SumProcess(P:Process, Q:Process) extends Process {
  *  @param Q the second process.
  *  @return the constructed process.
  */
-protected case class CompositionProcess(P:Process, Q:Process) extends Process {
+protected[pistache] case class CompositionProcess(P:Process, Q:Process) extends Process {
 
 	/** Process description.*/
 	val description = null

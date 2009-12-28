@@ -18,7 +18,7 @@ object Transition {
  * 
  *  @param action the transition procedure.
  */
-protected class Transition(action: => Unit) extends Process {
+protected[pistache] class Transition(action: => Unit) extends Process {
 	
 	/** Transition procedure. */
 	val procedure = action _;

@@ -57,12 +57,10 @@ class IfSpec extends Spec with MustMatchers {
 				val description = If (1 > 0) {Q} Else {R}  
 			}
 			P.description match {
-				case ConcatenationProcess(yes:IfProcess, no:ElseProcess) =>
-				  												yes.condition.apply must equal (true)
-																yes.description must equal (Q)
-				  												no.condition.apply must equal (true)
-				  												no.description must equal (R)
-				case _ => fail()
+				case proc:IfElseProcess =>
+								proc.condition.apply must equal (true)
+								proc.description must equal (Q)
+								proc.descriptionElse must equal (R)
 			}	
 		}
   
@@ -71,13 +69,10 @@ class IfSpec extends Spec with MustMatchers {
 				val description = Q * (If (1 > 0) {R} Else {S}) * Q
 			}
 			P.description match {
-				case ConcatenationProcess(ConcatenationProcess
-                              				(Q, ConcatenationProcess(yes:IfProcess, no:ElseProcess)),
-                              				Q) =>
-				  								yes.condition.apply must equal (true)
-												yes.description must equal (R)
-				  								no.condition.apply must equal (true)
-				  								no.description must equal (S)
+				case ConcatenationProcess(ConcatenationProcess(Q, proc:IfElseProcess), Q) =>
+				  								proc.condition.apply must equal (true)
+												proc.description must equal (R)
+				  								proc.descriptionElse must equal (S)
 				case _ => fail()
 			}
 		}
