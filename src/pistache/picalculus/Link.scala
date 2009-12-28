@@ -59,7 +59,7 @@ import Link.Action._
  *  @param actionType the type of action.
  *  @param nameObj the name involved in the transference.
  */
-protected class LinkProcess[T](linkObj:Link[T], actionType:Action, nameObj:Name[T]) extends Process {
+protected[pistache] class LinkProcess[T](linkObj:Link[T], actionType:Action, nameObj:Name[T]) extends Process {
 	val link = linkObj;
 	val action = actionType
 	val name = nameObj
