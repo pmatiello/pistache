@@ -15,19 +15,19 @@ import org.mockito.Mockito.mock
 @RunWith(classOf[JUnitRunner])
 class IfSpec extends Spec with MustMatchers {
   
+	val Q = new Process {
+		val description = null 
+	}
+	val R = new Process {
+		val description = null
+		}
+	val S = new Process {
+		val description = null
+	}
+  
 	describe ("If") {
-	   	
-		val Q = new Process {
-			val description = null 
-		}
-		val R = new Process {
-			val description = null
-		}
-		val S = new Process {
-			val description = null
-		}	  
 	  
-		it ("should be possible to express conditions") {
+		it ("should express a conditional execution of a process") {
 			val P = new Process {
 				val description = If (1 > 0) {Q} 
 			}
@@ -37,7 +37,7 @@ class IfSpec extends Spec with MustMatchers {
 			}
 		}
   
-		it ("should possible to express conditions as part of a process") {
+		it ("should possible to express a conditional process as part of another process") {
 			val P = new Process {
 				val description = Q * If (1 > 0) {R+S} * S
 			}
@@ -48,7 +48,40 @@ class IfSpec extends Spec with MustMatchers {
 				case _ => fail()
 			}
 		}
-
+	}
+		
+	describe ("Else") {
+	  
+		it ("should express a conditional execution of a process") {
+			val P = new Process {
+				val description = If (1 > 0) {Q} Else {R}  
+			}
+			P.description match {
+				case ConcatenationProcess(yes:IfProcess, no:ElseProcess) =>
+				  												yes.condition.apply must equal (true)
+																yes.description must equal (Q)
+				  												no.condition.apply must equal (true)
+				  												no.description must equal (R)
+				case _ => fail()
+			}	
+		}
+  
+		it ("should possible to express a conditional process as part of another process") {
+			val P = new Process {
+				val description = Q * (If (1 > 0) {R} Else {S}) * Q
+			}
+			P.description match {
+				case ConcatenationProcess(ConcatenationProcess
+                              				(Q, ConcatenationProcess(yes:IfProcess, no:ElseProcess)),
+                              				Q) =>
+				  								yes.condition.apply must equal (true)
+												yes.description must equal (R)
+				  								no.condition.apply must equal (true)
+				  								no.description must equal (S)
+				case _ => fail()
+			}
+		}
+	  
 	}
 
 }
