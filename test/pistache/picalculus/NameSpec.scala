@@ -39,6 +39,12 @@ class NameSpec extends Spec with MustMatchers {
 			val name:Name[String] = "String"
 			assert(true)	// We're ok if no exceptions are reaised
 		}
+    
+  		it ("should be mutable") {
+  			val name = Name(0)
+  			name := 1
+  			name.value must equal (1)
+  		}
   
 	}
 

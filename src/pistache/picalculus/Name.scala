@@ -48,5 +48,7 @@ class Name[T](valueObject:T) {
 	
 	/** The value stored by the Name object.
 	*/
-	val value = valueObject
+	var value = valueObject
+ 
+	def :=(value:T) { this.value = value }
 }
