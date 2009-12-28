@@ -21,9 +21,9 @@ class TransitionSpec extends Spec with MustMatchers {
 			val transition = Transition(
 				executed = executed + 1
 			)
-			executed must be (0)
+			executed must equal (0)
 			transition.procedure.apply
-			executed must be (1)
+			executed must equal (1)
 		}
   
 		it ("should be a process") {
