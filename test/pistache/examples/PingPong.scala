@@ -1,9 +1,7 @@
 /* 
  * Copyright (c) 2009-2010 Pedro Matiello <pmatiello@gmail.com>
  * 
- * Test program for calculating factorials.
- * 
- * Not really very pi-Calculus-ish yet, but it's enough to test the runner a bit.
+ * Test program for message passing and composition.
  */
 
 package pistache.examples
