@@ -12,17 +12,49 @@ package pistache.runner
 import pistache.picalculus._
 import scala.collection.mutable.HashMap
 
+class LinkChannel(l:Link[_]) {
+	 val link = l
+	 private var isFilled = false
+	 private var value:Any = null
+	 var lock : AnyRef = new Object()
+  
+	 private def waitUntil(cond : => Boolean) {
+		 while (!cond) { lock.wait }
+	 }
+  
+	 def send(value:Any) {
+		lock.synchronized {
+			 waitUntil (!isFilled)
+			 isFilled = true
+			 this.value = value
+			 lock.notifyAll
+		}
+	 }
+  
+	 def recv() = {
+		lock.synchronized {
+			 waitUntil (isFilled)
+			 val temp = value
+			 isFilled = false
+			 lock.notifyAll
+			 temp
+		}
+	 }
+	 
+}
+
+
 class SimpleRunner(process:Process) {
   
 	val p = process
  
-	var links:HashMap[Link[_], Any] = null
+	var links:HashMap[Link[_], LinkChannel] = null
  
 	def start() {
-		continue(new HashMap[Link[_], Any])
+		continue(new HashMap[Link[_], LinkChannel])
 	}
  
-	def continue(links:HashMap[Link[_], Any]) {
+	def continue(links:HashMap[Link[_], LinkChannel]) {
 		this.links = links
 		run(p)
 	}
@@ -45,15 +77,12 @@ class SimpleRunner(process:Process) {
 			}
 			case pp:LinkProcess[_] => {	// obviously thread-unsafe
 				if (!links.keySet.contains(pp.link)) {
-					links += pp.link -> null
+					links += pp.link -> new LinkChannel(pp.link)
 				}
 				if (pp.action == Link.Action.Send) {
-					while (links(pp.link) != null) {}
-					links(pp.link) = pp.name.value
+					links(pp.link).send(pp.name.value)
 				} else {
-					while (links(pp.link) == null) {}
-					pp.asInstanceOf[LinkProcess[Any]].name := links(pp.link)
-					links(pp.link) = null
+					pp.asInstanceOf[LinkProcess[Any]].name := links(pp.link).recv
 				}
 			}
 		}
