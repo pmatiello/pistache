@@ -1,7 +1,7 @@
 /* 
  * Copyright (c) 2009-2010 Pedro Matiello <pmatiello@gmail.com>
  * 
- * Test program for calculating factorials.
+ * Test program for testing processes with restricted names.
  */
 
 package pistache.examples
