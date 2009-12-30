@@ -76,7 +76,7 @@ class SimpleRunner(process:Process) {
 					override def run() { new SimpleRunner(pp.right).continue (links) }
 				}.start
 			}
-			case pp:LinkProcess[_] => {	// obviously thread-unsafe
+			case pp:LinkProcess[_] => {
 				if (!links.keySet.contains(pp.link)) {
 					links += pp.link -> new LinkChannel(pp.link)
 				}
