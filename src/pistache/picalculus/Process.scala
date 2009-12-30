@@ -13,9 +13,24 @@ object Process {
   
 	/** Create a process.
 	 *
-	 *  @param process the process. 
+	 *  @param process the process.
+	 *  @return the process. 
 	 */
 	def apply(process: => Process):Process = process
+
+}
+
+/** An object providing methods to create pi-Calculus
+ *  processes with restricted names.
+ */
+object Restriction {
+  
+	/** Create a process.
+	 *
+	 *  @param process the process with restricted names.
+	 *  @return the process with restricted names.
+	 */
+	def apply(process: => Process) = new Restriction(process)
 
 }
 
@@ -46,6 +61,22 @@ protected[pistache] class Process {
 	 *  process and the given process.
 	 */
   	def |(other: => Process) = new CompositionProcess(this, other)
+}
+
+/** A class representing pi-Calculus processes with restricted
+ *  names.
+ * 
+ *  @param process the process.
+ */
+protected[pistache] class Restriction(P: => Process) extends Process {
+	
+	/** the process */
+	val process = P _
+ 
+	/** Create an instance of the process.
+	 */
+	def instantiate = process.apply 
+  
 }
 
 /** A class representing a process constructed by the concatenation
