@@ -10,6 +10,11 @@ package pistache.picalculus
  */
 object Transition {
   
+	/** Create a transition.
+	 *
+	 *  @param action the transition closure.
+	 *  @return the transition. 
+	 */
 	def apply(action: => Unit) = new Transition(action)
   
 }
