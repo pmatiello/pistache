@@ -44,7 +44,7 @@ object Name {
  *  a reference to an arbitrary value and can be passed
  *  through links.
  */
-class Name[T](valueObject:T) { 
+protected[pistache] class Name[T](valueObject:T) { 
 	
 	/** The value stored by the Name object.
 	*/

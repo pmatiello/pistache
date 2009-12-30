@@ -31,7 +31,7 @@ object Link {
 /** A class representing a pi-Calculus link. Links can be used
  *  to send names between processes.
  */
-class Link[T] {
+protected[pistache] class Link[T] {
   
 	/** Send a name through this link.
 	 * 
