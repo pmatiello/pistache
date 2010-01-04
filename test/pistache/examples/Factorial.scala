@@ -11,18 +11,23 @@ import pistache.runner.SimpleRunner
 
 object Factorial extends Application {
 
-	private var p = 1
-	private var n = 10
+	var n = 0
+	var p = 1
   
-	private val silent = Transition{
+	val step = Transition{
 		p = p*n
 		n = n-1
 	}
  
-	private val printResult = Transition(println(p))
-		
-	lazy val F:Process = Process(silent*(If (n>1) {F} Else {printResult}))
+	val init = Transition{
+		print("n=")
+		n = Console.readInt 
+	}
  
-	new SimpleRunner(F) start
+	val printResult = Transition(println(p))
+		
+	lazy val F:Process = Process(step*(If (n>1) {F} Else {printResult}))
+ 
+	new SimpleRunner(init*F) start
   
 }
