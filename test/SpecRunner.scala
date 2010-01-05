@@ -5,6 +5,7 @@
  */
 
 import pistache.picalculus._
+import pistache.runner._
 
 object SpecRunner extends Application {
 
@@ -17,5 +18,7 @@ object SpecRunner extends Application {
 	new ProcessSpec execute
    
 	new TransitionSpec execute
+   
+	new ThreadedRunnerSpec execute
   
 }

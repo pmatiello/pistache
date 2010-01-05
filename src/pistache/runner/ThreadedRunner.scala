@@ -1,0 +1,21 @@
+/* 
+ * Copyright (c) 2009-2010 Pedro Matiello <pmatiello@gmail.com>
+ * 
+ * A pi-Calculus specification runner using threads.
+ */
+
+package pistache.runner
+
+import pistache.picalculus._
+
+class ThreadedRunner(process:Process) {
+  
+	def start = run(process)
+  
+	def run(process:Process) {
+		process match {
+			case p:Transition => p.procedure apply
+		}
+	}
+  
+}
