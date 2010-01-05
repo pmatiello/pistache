@@ -10,7 +10,7 @@ package pistache.picalculus
  */
 object Action {
   
-	/** Create a transition.
+	/** Create a silent action.
 	 *
 	 *  @param function the transition procedure.
 	 *  @return the action. 
