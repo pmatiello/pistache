@@ -66,7 +66,7 @@ class SimpleRunner(process:Process) {
 		  									run(pp right)
 			case pp:IfProcess => if (pp.condition apply) run(pp then)
 			case pp:IfElseProcess => if (pp.condition apply) run(pp then) else run(pp elseThen)
-			case pp:Transition => pp.procedure apply
+			case pp:Action => pp.procedure apply
 			case pp:Restriction => run(pp.instantiate)
 			case pp:CompositionProcess => { // won't work in many cases
 				new Thread() {
@@ -80,7 +80,7 @@ class SimpleRunner(process:Process) {
 				if (!links.keySet.contains(pp.link)) {
 					links += pp.link -> new LinkChannel(pp.link)
 				}
-				if (pp.action == Link.Action.Send) {
+				if (pp.action == Link.ActionType.Send) {
 					links(pp.link).send(pp.name.value)
 				} else {
 					pp.asInstanceOf[LinkProcess[Any]].name := links(pp.link).recv

@@ -14,7 +14,7 @@ class ThreadedRunner(process:Process) {
   
 	def run(process:Process) {
 		process match {
-			case proc:Transition => proc.procedure apply
+			case proc:Action => proc.procedure apply
 			case proc:ConcatenationProcess => run(proc left)
 											  run(proc right)
 		}

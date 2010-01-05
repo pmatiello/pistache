@@ -11,11 +11,11 @@ import pistache.runner.SimpleRunner
 
 object PingPong {
 
-	val pingT = Transition{
+	val pingT = Action{
 		n1 := n1.value + 1
 		println("Ping! " + n1.value)
 	}
-	val pongT = Transition{
+	val pongT = Action{
 		println("Pong! " + n2.value)
 	}
 	

@@ -12,13 +12,13 @@ import org.scalatest.junit.JUnitRunner
 import org.junit.runner.RunWith
 
 @RunWith(classOf[JUnitRunner])
-class TransitionSpec extends Spec with MustMatchers {
+class ActionSpec extends Spec with MustMatchers {
 
-	 describe ("Transition") {
+	 describe ("Action") {
 	   
 		it ("should wrap a closure") {
 			var executed = 0;
-			val transition = Transition(
+			val transition = Action(
 				executed = executed + 1
 			)
 			executed must equal (0)
@@ -27,7 +27,7 @@ class TransitionSpec extends Spec with MustMatchers {
 		}
   
 		it ("should be a process") {
-			val process:Process = Transition(
+			val process:Process = Action(
 				fail()	// must not be run
 			)
 			assert(true)

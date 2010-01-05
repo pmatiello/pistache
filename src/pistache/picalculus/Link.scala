@@ -22,8 +22,8 @@ object Link {
 	/** Enumeration for representing the possible actions on a
 	 *  link: sending and receiving messages.
      */
-	object Action extends Enumeration {
-		type Action = Value
+	object ActionType extends Enumeration {
+		type ActionType = Value
 		val Send, Receive = Value
 	}
 }
@@ -38,7 +38,7 @@ protected[pistache] class Link[T] {
 	 *  @param name the name to be sent through the link.
 	 *  @return the process representing this action.
      */
-	def ~(name:Name[T]) = new LinkProcess(this, Link.Action.Send, name)
+	def ~(name:Name[T]) = new LinkProcess(this, Link.ActionType.Send, name)
 	
 	/** Receive a name through this link.
 	 * 
@@ -46,11 +46,11 @@ protected[pistache] class Link[T] {
 	 *  object received through the link.
 	 *  @return the process representing this action.
      */
-	def apply(name:Name[T]) = new LinkProcess(this, Link.Action.Receive, name)
+	def apply(name:Name[T]) = new LinkProcess(this, Link.ActionType.Receive, name)
 
 }
 
-import Link.Action._
+import Link.ActionType._
 
 /** A class representing an action over a link as an atomic
  *  pi-Calculus process.
@@ -59,7 +59,7 @@ import Link.Action._
  *  @param actionType the type of action.
  *  @param nameObj the name involved in the transference.
  */
-protected[pistache] class LinkProcess[T](linkObj:Link[T], actionType:Action, nameObj:Name[T]) extends Process {
+protected[pistache] class LinkProcess[T](linkObj:Link[T], actionType:ActionType, nameObj:Name[T]) extends Process {
 	val link = linkObj;
 	val action = actionType
 	val name = nameObj

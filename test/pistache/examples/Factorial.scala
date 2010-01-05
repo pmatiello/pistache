@@ -14,17 +14,17 @@ object Factorial extends Application {
 	var n = 0
 	var p = 1
   
-	val step = Transition{
+	val step = Action{
 		p = p*n
 		n = n-1
 	}
  
-	val init = Transition{
+	val init = Action{
 		print("n=")
 		n = Console.readInt 
 	}
  
-	val printResult = Transition(println(p))
+	val printResult = Action(println(p))
 		
 	lazy val F:Process = Process(step*(If (n>1) {F} Else {printResult}))
  

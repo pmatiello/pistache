@@ -13,7 +13,7 @@ object Restricted extends Application {
 
 	lazy val P:Process = Restriction{
 		var x = 0;
-		val printX = Transition{
+		val printX = Action{
 			println(x)
 			x = x+1
 		}

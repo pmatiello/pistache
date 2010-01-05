@@ -17,20 +17,20 @@ class ThreadedRunnerSpec extends Spec with MustMatchers {
   
 	describe ("ThreadedRunner") {
 		
-		it ("should run transitions") {
+		it ("should run actions") {
 			var executed = false
-			val transition = Transition(executed = true)
+			val transition = Action(executed = true)
 			new ThreadedRunner(transition).start
 			executed must equal (true)
 		}
   
-		it ("should run concatenated transitions") {
+		it ("should run concatenated actions") {
 			var executed1 = 0
-			val transition1 = Transition(executed1 = 1)
+			val transition1 = Action(executed1 = 1)
 			var executed2 = 1
-			val transition2 = Transition(executed2 = executed1+1)
+			val transition2 = Action(executed2 = executed1+1)
 			var executed3 = 2
-			val transition3 = Transition(executed3 = executed2+1)
+			val transition3 = Action(executed3 = executed2+1)
 			val process = Process(transition1*transition2*transition3)
 			new ThreadedRunner(process).start
 			executed1 must equal (1)

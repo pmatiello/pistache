@@ -42,7 +42,7 @@ class LinkSpec extends Spec with MustMatchers {
 			val process:Process = link~name
 			process match {
 				case pp:LinkProcess[_] => pp.link must equal (link.value)
-										  pp.action must equal (Link.Action.Send)
+										  pp.action must equal (Link.ActionType.Send)
 										  (pp.name == name) must equal (true)
 			}
 		}
@@ -53,7 +53,7 @@ class LinkSpec extends Spec with MustMatchers {
 			val process:Process = link(name)
 			process match {
 				case pp:LinkProcess[_] => pp.link must equal (link.value)
-										  pp.action must equal (Link.Action.Receive)
+										  pp.action must equal (Link.ActionType.Receive)
 										  (pp.name == name) must equal (true)
 			}
   		}
@@ -68,7 +68,7 @@ class LinkSpec extends Spec with MustMatchers {
 						case pp:ConcatenationProcess => pp.left must equal (P)
 														pp.right match {
 															case pr:LinkProcess[_] => pr.link must equal (link.value)
-																					  pr.action must equal (Link.Action.Send)
+																					  pr.action must equal (Link.ActionType.Send)
 																					  (pr.name == name) must equal (true)
 															}
 					}
@@ -88,7 +88,7 @@ class LinkSpec extends Spec with MustMatchers {
 						case pp:ConcatenationProcess => pp.left must equal (P)
 														pp.right match {
 															case pr:LinkProcess[_] => pr.link must equal (link.value)
-																					  pr.action must equal (Link.Action.Receive)
+																					  pr.action must equal (Link.ActionType.Receive)
 																					  (pr.name == name) must equal (true)
 															}
 					}
