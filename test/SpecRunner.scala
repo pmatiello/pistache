@@ -17,7 +17,7 @@ object SpecRunner extends Application {
     
 	new ProcessSpec execute
    
-	new TransitionSpec execute
+	new ActionSpec execute
    
 	new ThreadedRunnerSpec execute
   
