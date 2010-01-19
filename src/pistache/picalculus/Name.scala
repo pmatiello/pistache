@@ -47,7 +47,7 @@ object Name {
 protected[pistache] class Name[T](valueObject:T) { 
 	
 	/** The value stored by the Name object.
-	*/
+	 */
 	var value = valueObject
  
 	/** Update the stored value.
