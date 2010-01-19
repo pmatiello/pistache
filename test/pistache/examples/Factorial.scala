@@ -7,7 +7,7 @@
 package pistache.examples
 
 import pistache.picalculus._
-import pistache.runner.SimpleRunner
+import pistache.runner.ThreadedRunner
 
 object Factorial extends Application {
 
@@ -28,6 +28,6 @@ object Factorial extends Application {
 		
 	lazy val F:Process = Process(step*(If (n>1) {F} Else {printResult}))
  
-	new SimpleRunner(init*F) start
+	new ThreadedRunner(init*F) start
   
 }

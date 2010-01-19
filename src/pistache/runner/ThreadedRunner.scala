@@ -48,6 +48,10 @@ class ThreadedRunner(process:Process) {
             	rightThread.join
                
             }
+            
+            /* Execute processes conditionally */
+			case proc:IfProcess => if (proc.condition apply) run(proc then)
+			case proc:IfElseProcess => if (proc.condition apply) run(proc then) else run(proc elseThen)
 		}
 	}
   
