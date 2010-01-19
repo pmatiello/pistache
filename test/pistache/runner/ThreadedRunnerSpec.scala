@@ -24,13 +24,14 @@ class ThreadedRunnerSpec extends Spec with MustMatchers {
 			executed must equal (true)
 		}
   
-		it ("should run concatenated actions") {
+		it ("should run concatenation processes") {
+			var execOrder = 1;
 			var executed1 = 0
-			val transition1 = Action(executed1 = 1)
-			var executed2 = 1
-			val transition2 = Action(executed2 = executed1+1)
-			var executed3 = 2
-			val transition3 = Action(executed3 = executed2+1)
+			val transition1 = Action{executed1 = execOrder; execOrder += 1}
+			var executed2 = 0
+			val transition2 = Action{executed2 = execOrder; execOrder += 1}
+			var executed3 = 0
+			val transition3 = Action{executed3 = execOrder; execOrder += 1}
 			val process = Process(transition1*transition2*transition3)
 			new ThreadedRunner(process).start
 			executed1 must equal (1)
