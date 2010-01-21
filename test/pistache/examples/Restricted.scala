@@ -7,7 +7,7 @@
 package pistache.examples
 
 import pistache.picalculus._
-import pistache.runner.SimpleRunner
+import pistache.runner.ThreadedRunner
 
 object Restricted extends Application {
 
@@ -20,6 +20,6 @@ object Restricted extends Application {
 		Process(printX*P)
 	}
  
-	new SimpleRunner(P) start
+	new ThreadedRunner(P) start
   
 }

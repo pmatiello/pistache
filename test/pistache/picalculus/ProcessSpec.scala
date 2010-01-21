@@ -119,8 +119,8 @@ class ProcessSpec extends Spec with MustMatchers {
 				val l = Link[Object]
 				Process(l~x)
 			}
-			val inst1 = P.instantiate
-			val inst2 = P.instantiate
+			val inst1 = P.process.apply
+			val inst2 = P.process.apply
 			inst1 must not be theSameInstanceAs (inst2)
 			inst1.asInstanceOf[LinkProcess[Object]].link must not be theSameInstanceAs (inst2.asInstanceOf[LinkProcess[Object]].link)
 			inst1.asInstanceOf[LinkProcess[Object]].name must not be theSameInstanceAs (inst2.asInstanceOf[LinkProcess[Object]].name) 

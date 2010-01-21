@@ -99,6 +99,25 @@ class ThreadedRunnerSpec extends Spec with MustMatchers {
 			executedElse2 must be (true)
 		}
   
+		it ("should run processes with restricted names") {
+			var hasRan = false;
+			var finalValue = 0;
+			
+			lazy val process:Process = Restriction{
+				var local = 0;
+				val action = Action{
+				  local = local+1
+				  finalValue = local
+				  hasRan = true
+				}
+				
+				Process(If (!hasRan) {action * process} Else {action})
+			}
+   
+			new ThreadedRunner(process).start
+			finalValue must equal (1)
+		}
+  
 	}
 
 }

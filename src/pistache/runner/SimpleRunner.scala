@@ -67,7 +67,6 @@ class SimpleRunner(process:Process) {
 			case pp:IfProcess => if (pp.condition apply) run(pp then)
 			case pp:IfElseProcess => if (pp.condition apply) run(pp then) else run(pp elseThen)
 			case pp:Action => pp.procedure apply
-			case pp:Restriction => run(pp.instantiate)
 			case pp:CompositionProcess => { // won't work in many cases
 				new Thread() {
 					override def run() { new SimpleRunner(pp.left).continue (links) }

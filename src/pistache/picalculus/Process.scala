@@ -71,11 +71,7 @@ protected[pistache] class Process {
 protected[pistache] class Restriction(P: => Process) extends Process {
 	
 	/** the process */
-	val process = P _
- 
-	/** Create an instance of the process.
-	 */
-	def instantiate = process.apply 
+	val process = P _ 
   
 }
 

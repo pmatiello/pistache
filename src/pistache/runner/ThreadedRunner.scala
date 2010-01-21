@@ -52,6 +52,9 @@ class ThreadedRunner(process:Process) {
             /* Execute processes conditionally */
 			case proc:IfProcess => if (proc.condition apply) run(proc then)
 			case proc:IfElseProcess => if (proc.condition apply) run(proc then) else run(proc elseThen)
+   
+			/* Execute processes with restricted names */
+			case proc:Restriction => run(proc.process apply)
 		}
 	}
   
