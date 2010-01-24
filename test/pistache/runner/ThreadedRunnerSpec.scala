@@ -118,6 +118,18 @@ class ThreadedRunnerSpec extends Spec with MustMatchers {
 			finalValue must equal (1)
 		}
   
+		it ("should send and receive messages") {
+			val name2send = Name(true)
+			val name2recv = Name(false)
+			val link = Link[Boolean]
+			
+			val process = Process(link~name2send*link(name2recv))
+   
+			new ThreadedRunner(process).start
+   
+			name2send.value must equal (name2recv.value)
+		}
+  
 	}
 
 }

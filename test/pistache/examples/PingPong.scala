@@ -7,7 +7,7 @@
 package pistache.examples
 
 import pistache.picalculus._
-import pistache.runner.SimpleRunner
+import pistache.runner.ThreadedRunner
 
 object PingPong {
 
@@ -29,7 +29,7 @@ object PingPong {
 	val PingPong = Process(Ping | Pong)
   
 	 def main(args:Array[String]) {
-		new SimpleRunner(PingPong) start
+		new ThreadedRunner(PingPong) start
 	}
   
 }

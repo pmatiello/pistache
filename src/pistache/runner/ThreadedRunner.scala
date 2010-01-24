@@ -7,6 +7,63 @@
 package pistache.runner
 
 import pistache.picalculus._
+import scala.collection.mutable.HashMap
+import scala.collection.mutable.Map
+
+private object LinkStorage {
+  
+	class LinkImplementation {
+		private var isFilled = false
+		private var value:Any = null
+		private var lock:AnyRef = new Object
+		
+		private def waitUntil(cond : => Boolean) {
+			while (!cond) { lock.wait }
+		}
+  
+		def send(value:Any) {
+			lock.synchronized {
+				waitUntil (!isFilled)
+				isFilled = true
+				this.value = value
+				lock.notifyAll
+			}
+		}
+   
+		def recv:Any = {
+			lock.synchronized {
+				waitUntil (isFilled)
+				val temp = value
+				isFilled = false
+				lock.notifyAll
+				temp
+			}
+		}
+	}
+  
+	var links:Map[Link[_], LinkImplementation] = null
+  
+	def initialize() {
+		links = new HashMap[Link[_], LinkImplementation]
+	}
+  
+	private def ready[T](link:Link[T]) {
+		if (!links.keySet.contains(link)) {
+			links += link -> new LinkImplementation
+		}
+	}
+ 
+	def send[T](link:Link[T], name:Name[T]) {
+		ready(link)
+		links(link).send(name.value)
+	}
+ 
+	def recv[T](link:Link[T], name:Name[T]) {
+		ready(link)
+		name := links(link).recv.asInstanceOf[T]
+	}
+  
+}
 
 /** A local, multithreaded runner for pi-Calculus processes.
  * 
@@ -16,13 +73,16 @@ class ThreadedRunner(process:Process) {
   
 	/** Start the execution of the process.
 	 */
-	def start = run(process)
+	def start = {
+		LinkStorage.initialize
+		run(process)
+	}
   
 	/** Run a given process.
 	 *
 	 *  @param process the process to be executed.
 	 */
-	private def run(process:Process) {
+	def run(process:Process) {
 		process match {
 		  
 			/* Execute action */
@@ -36,10 +96,10 @@ class ThreadedRunner(process:Process) {
             case proc:CompositionProcess => {
               
             	val leftThread = new Thread() {
-            		override def run() { new ThreadedRunner(proc.left) start}
+            		override def run() { new ThreadedRunner(null) run (proc.left) }
             	}               
             	val rightThread = new Thread() {
-            		override def run() { new ThreadedRunner(proc.right) start}
+            		override def run() { new ThreadedRunner(null) run (proc.right) }
             	}
              
             	leftThread.start
@@ -55,6 +115,14 @@ class ThreadedRunner(process:Process) {
    
 			/* Execute processes with restricted names */
 			case proc:Restriction => run(proc.process apply)
+   
+			/* Send and receive messages through links */
+			case proc:LinkProcess[_] => {
+				proc.action match {
+					case Link.ActionType.Send => LinkStorage.send(proc.link, proc.name)
+					case Link.ActionType.Receive => LinkStorage.recv(proc.link, proc.name)
+				} 
+			}
 		}
 	}
   
