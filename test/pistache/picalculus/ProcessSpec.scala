@@ -51,37 +51,6 @@ class ProcessSpec extends Spec with MustMatchers {
 			}
 		}
   
-		it ("should have a sum operator") {
-			val P = Process(Q + R + S)
-
-			P match {
-				case pp:SumProcess => {
-					pp.left match {
-						case pl:SumProcess => pl.left must equal (Q)
-											  pl.right must equal (R)
-					}
-					pp.right must equal (S)
-				}
-			}
-		}
-  
-		it ("should be so that concatenation has precedence over sum") {
-			val P:Process = Process(Q*R + Q*S)
-
-			P match {
-				case pp:SumProcess => {
-					pp.left match {
-						case pl:ConcatenationProcess => pl.left must be (Q)
-														pl.right must be (R)
-					}
-					pp.right match {
-						case pr:ConcatenationProcess => pr.left must be (Q)
-														pr.right must be (S)
-					}
-				}
-			}
-		}
-  
   		it ("should have a composition operator") {
 			val P = Process(Q | R | S)
 

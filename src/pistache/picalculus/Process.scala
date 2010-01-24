@@ -45,14 +45,6 @@ protected[pistache] class Process {
 	 *  process and the given process.
 	 */
 	def *(other: => Process) = new ConcatenationProcess(this, other)
-  
-	/** Summation operator.
-	 *
-	 *  @param the other Other process.
-	 *  @return the process formed by summation of this
-	 *  process and the given process.
-	 */
- 	def +(other: => Process) = new SumProcess(this, other)
  
  	/** Composition operator.
 	 *
@@ -83,18 +75,6 @@ protected[pistache] class Restriction(P: => Process) extends Process {
  *  @return the constructed process.
  */
 protected[pistache] class ConcatenationProcess(P: => Process, Q: => Process) extends Process {
-	lazy val left = P
-	lazy val right = Q
-}
-
-/** A class representing a process constructed by the summation
- *  of two other processes.
- * 
- *  @param P the first process.
- *  @param Q the second process.
- *  @return the constructed process.
- */
-protected[pistache] class SumProcess(P: => Process, Q: => Process) extends Process {
 	lazy val left = P
 	lazy val right = Q
 }
