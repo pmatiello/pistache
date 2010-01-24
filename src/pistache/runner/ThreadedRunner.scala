@@ -107,12 +107,16 @@ class ThreadedRunner(process:Process) {
 		LinkStorage.initialize
 		run(process)
 	}
+ 
+	/** Run the process.
+	 */
+	private def run { run(process) }
   
 	/** Run a given process.
 	 *
 	 *  @param process the process to be executed.
 	 */
-	def run(process:Process) {
+	private def run(process:Process) {
 		process match {
 		  
 			/* Execute action */
@@ -126,10 +130,10 @@ class ThreadedRunner(process:Process) {
             case proc:CompositionProcess => {
               
             	val leftThread = new Thread() {
-            		override def run() { new ThreadedRunner(null) run (proc.left) }
+            		override def run() { new ThreadedRunner(proc.left) run }
             	}               
             	val rightThread = new Thread() {
-            		override def run() { new ThreadedRunner(null) run (proc.right) }
+            		override def run() { new ThreadedRunner(proc.right) run }
             	}
              
             	leftThread.start
