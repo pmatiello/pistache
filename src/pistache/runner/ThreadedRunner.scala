@@ -10,17 +10,29 @@ import pistache.picalculus._
 import scala.collection.mutable.HashMap
 import scala.collection.mutable.Map
 
+/** A centralized storage for stuff transmitted through links.
+ */
 private object LinkStorage {
-  
+
+	/** A concrete implementation of links.
+	 */
 	class LinkImplementation {
 		private var isFilled = false
 		private var value:Any = null
 		private var lock:AnyRef = new Object
 		
+		/** Make the thread wait until the given condition is satisfied.
+		 *
+		 *  @param cond the condition 
+		 */
 		private def waitUntil(cond : => Boolean) {
 			while (!cond) { lock.wait }
 		}
-  
+
+		/** Send (store) a value through the link.
+		 *
+		 *  @param value the value 
+		 */
 		def send(value:Any) {
 			lock.synchronized {
 				waitUntil (!isFilled)
@@ -29,7 +41,11 @@ private object LinkStorage {
 				lock.notifyAll
 			}
 		}
-   
+
+		/** Receive (retrieve) a value through the link.
+		 * 
+		 *  @return a previously sent value 
+		 */
 		def recv:Any = {
 			lock.synchronized {
 				waitUntil (isFilled)
@@ -43,21 +59,35 @@ private object LinkStorage {
   
 	var links:Map[Link[_], LinkImplementation] = null
   
+	/** Initialize the storage. 
+	 */
 	def initialize() {
 		links = new HashMap[Link[_], LinkImplementation]
 	}
-  
+
+	/** Associate a link to an implementation, if it's not yet associated. 
+	 */
 	private def ready[T](link:Link[T]) {
 		if (!links.keySet.contains(link)) {
 			links += link -> new LinkImplementation
 		}
 	}
- 
+
+	/** Send the given name through the given link.
+	 * 
+	 *  @param link the link
+	 *  @param name the name
+	 */
 	def send[T](link:Link[T], name:Name[T]) {
 		ready(link)
 		links(link).send(name.value)
 	}
- 
+
+	/** Receive a value from the given link and store it on the given name.
+	 * 
+	 *  @param link the link
+	 *  @param name the name
+	 */
 	def recv[T](link:Link[T], name:Name[T]) {
 		ready(link)
 		name := links(link).recv.asInstanceOf[T]
