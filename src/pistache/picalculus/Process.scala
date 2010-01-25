@@ -34,9 +34,9 @@ object Restriction {
 
 }
 
-/** A class representing pi-Calculus processes.
+/** A trait representing pi-Calculus processes.
  */
-protected[pistache] class Process {
+protected[pistache] trait Process {
   
 	/** Concatenation operator.
 	 *
@@ -55,10 +55,21 @@ protected[pistache] class Process {
   	def |(other: => Process) = new CompositionProcess(this, other)
 }
 
+/** A class representing pi-Calculus processes.
+ * 
+ *  @param P the process.
+ */
+protected[pistache] class Process0(P: => Process) extends Process {
+	
+	/** the process */
+	val process = P
+  
+}
+
 /** A class representing pi-Calculus processes with restricted
  *  names.
  * 
- *  @param process the process.
+ *  @param P the process.
  */
 protected[pistache] class Restriction(P: => Process) extends Process {
 	

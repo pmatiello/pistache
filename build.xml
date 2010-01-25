@@ -71,7 +71,7 @@
           target: test
          ================================= -->
     <target name="test" depends="compile-test" description="run tests">
-    	<java classname="SpecRunner" classpathref="project.classpath" />
+    	<java classname="pistache.testing.SpecRunner" classpathref="project.classpath" />
     </target>
 	
     <!-- =================================

@@ -6,6 +6,7 @@
 
 package pistache.picalculus
 
+import pistache.testing._
 import org.scalatest.Spec
 import org.scalatest.matchers.MustMatchers
 import org.scalatest.junit.JUnitRunner
@@ -15,9 +16,9 @@ import org.mockito.Mockito.mock
 @RunWith(classOf[JUnitRunner])
 class ProcessSpec extends Spec with MustMatchers {
   
-	val Q = new Process
-	val R = new Process
-	val S = new Process
+	val Q = new FakeProcess
+	val R = new FakeProcess
+	val S = new FakeProcess
 	
 	describe ("Process") {
   

@@ -1,3 +1,4 @@
+package pistache.testing;
 /* 
  * Copyright (c) 2009-2010 Pedro Matiello <pmatiello@gmail.com>
  * 

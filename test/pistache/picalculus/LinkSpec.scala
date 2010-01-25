@@ -6,6 +6,7 @@
 
 package pistache.picalculus
 
+import pistache.testing._
 import org.scalatest.Spec
 import org.scalatest.matchers.MustMatchers
 import org.scalatest.junit.JUnitRunner
@@ -15,7 +16,7 @@ import Name._
 @RunWith(classOf[JUnitRunner])
 class LinkSpec extends Spec with MustMatchers {
   
- 	val P = new Process
+ 	val P = new FakeProcess
   
 	describe ("Link") {
 	  
