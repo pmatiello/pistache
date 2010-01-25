@@ -23,7 +23,7 @@ class ProcessSpec extends Spec with MustMatchers {
 	describe ("Process") {
   
 		it ("should be written as a concatenation of Processes") {
-			val P = Process(Q * R * S)
+			val P = Q * R * S
 			P match {
 				case pp:ConcatenationProcess => {
 					pp.left match {
@@ -36,7 +36,7 @@ class ProcessSpec extends Spec with MustMatchers {
 		}
   
 		it ("should be self-embeddable") {
-			lazy val P:Process = Process(R*P)
+			lazy val P:Process = R*P
 			P match {
 				case pp:ConcatenationProcess => pp.left must equal(R)
 												pp.right must equal (P)
@@ -44,8 +44,8 @@ class ProcessSpec extends Spec with MustMatchers {
 		}
   
 		it ("should allow cyclic references") {
-			lazy val P:Process = Process(R*Q)
-			lazy val Q:Process = Process(P)
+			lazy val P:Process = R*Q
+			lazy val Q:Process = P
 			P match {
 				case pp:ConcatenationProcess => pp.left must equal(R)
 												pp.right must equal (Q)
@@ -53,7 +53,7 @@ class ProcessSpec extends Spec with MustMatchers {
 		}
   
   		it ("should have a composition operator") {
-			val P = Process(Q | R | S)
+			val P = Q | R | S
 
 			P match {
 				case pp:CompositionProcess => {
@@ -67,7 +67,7 @@ class ProcessSpec extends Spec with MustMatchers {
 		}
   
 		it ("should be so that concatenation has precedence over composition") {
-			val P:Process = Process(Q*R | Q*S)
+			val P:Process = Q*R | Q*S
 			
 			P match {
 				case pp:CompositionProcess => {
@@ -84,10 +84,10 @@ class ProcessSpec extends Spec with MustMatchers {
 		}
   
 		it ("should be possible to restrict names to process instances") {
-			val P = Restriction{
+			val P = Process{
 				val x = new Object();
 				val l = Link[Object]
-				Process(l~x)
+				l~x
 			}
 			val inst1 = P.process.apply
 			val inst2 = P.process.apply

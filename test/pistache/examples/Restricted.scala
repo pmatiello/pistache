@@ -11,7 +11,7 @@ import pistache.runner.ThreadedRunner
 
 object Restricted extends Application {
 
-	lazy val P:Process = Restriction{
+	lazy val P:Process = Process{
 		var x = 0;
 		val printX = Action{
 			println(x)

@@ -103,7 +103,7 @@ class ThreadedRunnerSpec extends Spec with MustMatchers {
 			var hasRan = false;
 			var finalValue = 0;
 			
-			lazy val process:Process = Restriction{
+			lazy val process:Process = Process{
 				var local = 0;
 				val action = Action{
 				  local = local+1

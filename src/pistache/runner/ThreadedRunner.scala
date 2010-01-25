@@ -118,6 +118,9 @@ class ThreadedRunner(process:Process) {
 	 */
 	private def run(process:Process) {
 		process match {
+
+			/* Execute processes */
+			case proc:Process0 => run(proc.process apply)
 		  
 			/* Execute action */
 			case proc:Action => proc.procedure apply
@@ -146,9 +149,6 @@ class ThreadedRunner(process:Process) {
             /* Execute processes conditionally */
 			case proc:IfProcess => if (proc.condition apply) run(proc then)
 			case proc:IfElseProcess => if (proc.condition apply) run(proc then) else run(proc elseThen)
-   
-			/* Execute processes with restricted names */
-			case proc:Restriction => run(proc.process apply)
    
 			/* Send and receive messages through links */
 			case proc:LinkProcess[_] => {

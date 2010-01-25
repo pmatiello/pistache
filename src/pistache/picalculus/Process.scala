@@ -16,21 +16,7 @@ object Process {
 	 *  @param process the process.
 	 *  @return the process. 
 	 */
-	def apply(process: => Process):Process = process
-
-}
-
-/** An object providing methods to create pi-Calculus
- *  processes with restricted names.
- */
-object Restriction {
-  
-	/** Create a process.
-	 *
-	 *  @param process the process with restricted names.
-	 *  @return the process with restricted names.
-	 */
-	def apply(process: => Process) = new Restriction(process)
+	def apply(process: => Process) = new Process0(process)
 
 }
 
@@ -60,18 +46,6 @@ protected[pistache] trait Process {
  *  @param P the process.
  */
 protected[pistache] class Process0(P: => Process) extends Process {
-	
-	/** the process */
-	val process = P
-  
-}
-
-/** A class representing pi-Calculus processes with restricted
- *  names.
- * 
- *  @param P the process.
- */
-protected[pistache] class Restriction(P: => Process) extends Process {
 	
 	/** the process */
 	val process = P _ 

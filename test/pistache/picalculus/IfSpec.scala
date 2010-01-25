@@ -23,7 +23,7 @@ class IfSpec extends Spec with MustMatchers {
 	describe ("If") {
 	  
 		it ("should express a conditional execution of a process") {
-			val P = Process(If (1 > 0) {Q}) 
+			val P = If (1 > 0) {Q}
 			P match {
 				case proc:IfProcess => proc.condition.apply must equal (true)
 																proc.then must equal (Q)
@@ -31,7 +31,7 @@ class IfSpec extends Spec with MustMatchers {
 		}
   
 		it ("should possible to express a conditional process as part of another process") {
-			val P = Process(Q * If (1 > 0) {R} * S)
+			val P = Q * If (1 > 0) {R} * S
 			
 			P match {
 				case pp:ConcatenationProcess => {
@@ -53,7 +53,7 @@ class IfSpec extends Spec with MustMatchers {
 	describe ("Else") {
 	  
 		it ("should express a conditional execution of a process") {
-			val P = Process(If (1 > 0) {Q} Else {R})  
+			val P = If (1 > 0) {Q} Else {R}
 			P match {
 				case proc:IfElseProcess =>
 								proc.condition.apply must equal (true)
@@ -63,7 +63,7 @@ class IfSpec extends Spec with MustMatchers {
 		}
   
 		it ("should possible to express a conditional process as part of another process") {
-			val P = Process(Q * (If (1 > 0) {R} Else {S}) * Q)
+			val P = Q * (If (1 > 0) {R} Else {S}) * Q
 			
 			P match {
 				case pp:ConcatenationProcess => {
