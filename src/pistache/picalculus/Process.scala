@@ -16,7 +16,7 @@ object Process {
 	 *  @param process the process.
 	 *  @return the process. 
 	 */
-	def apply(process: => Process) = new Process0(process)
+	def apply(process: => Process) = new RestrictedProcess(process)
 
 }
 
@@ -41,11 +41,12 @@ protected[pistache] trait Process {
   	def |(other: => Process) = new CompositionProcess(this, other)
 }
 
-/** A class representing pi-Calculus processes.
+/** A class representing pi-Calculus processes allowing restricted
+ *  names.
  * 
  *  @param P the process.
  */
-protected[pistache] class Process0(P: => Process) extends Process {
+protected[pistache] class RestrictedProcess(P: => Process) extends Process {
 	
 	/** the process */
 	val process = P _ 

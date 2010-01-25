@@ -119,8 +119,8 @@ class ThreadedRunner(process:Process) {
 	private def run(process:Process) {
 		process match {
 
-			/* Execute processes */
-			case proc:Process0 => run(proc.process apply)
+			/* Execute (restricted) processes */
+			case proc:RestrictedProcess => run(proc.process apply)
 		  
 			/* Execute action */
 			case proc:Action => proc.procedure apply
