@@ -71,7 +71,10 @@
           target: test
          ================================= -->
     <target name="test" depends="compile-test" description="run tests">
-    	<java classname="pistache.testing.SpecRunner" classpathref="project.classpath" />
+    	<taskdef name="scalatest" classname="org.scalatest.tools.ScalaTestAntTask">
+    	      <classpath refid="project.classpath"/>
+   	    </taskdef>
+    	<scalatest runpath="bin/" haltonfailure="true"/>
     </target>
 	
     <!-- =================================
