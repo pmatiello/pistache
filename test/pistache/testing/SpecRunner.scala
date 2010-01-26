@@ -1,9 +1,10 @@
-package pistache.testing;
 /* 
  * Copyright (c) 2009-2010 Pedro Matiello <pmatiello@gmail.com>
  * 
  * Spec runner.
  */
+
+package pistache.testing;
 
 import pistache.picalculus._
 import pistache.runner._
