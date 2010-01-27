@@ -6,12 +6,17 @@
 
 package pistache.testing;
 
+import pistache.integration._
 import pistache.picalculus._
 import pistache.runner._
 
 object SpecRunner extends Application {
 
+	new ActionSpec execute
+  
 	new IfSpec execute
+   
+	new IntegrationTests execute
   
 	new LinkSpec execute
     
@@ -19,8 +24,8 @@ object SpecRunner extends Application {
     
 	new ProcessSpec execute
    
-	new ActionSpec execute
-   
 	new ThreadedRunnerSpec execute
+   
+   
   
 }

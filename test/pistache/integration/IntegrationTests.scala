@@ -10,13 +10,13 @@ import org.junit.runner.RunWith
 @RunWith(classOf[JUnitRunner])
 class IntegrationTests extends Spec with MustMatchers {
   
-	describe ("ThreadedRunner") {
+	describe ("ThreadedRunner tests") {
 		
 		it ("Factorial") {
 			import Factorial._
 			n = 10
 			new ThreadedRunner(factorialCalculator).start
-			result must equal (3628800)
+			result must equal (10*9*8*7*6*5*4*3*2*1)
 		}
 	  
 	}
