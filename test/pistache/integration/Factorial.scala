@@ -1,7 +1,7 @@
 /* 
  * Copyright (c) 2009-2010 Pedro Matiello <pmatiello@gmail.com>
  * 
- * Test program for calculating factorials.
+ * Factorial calculator.
  */
 
 package pistache.integration

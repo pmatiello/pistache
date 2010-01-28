@@ -1,3 +1,13 @@
+/* 
+ * Copyright (c) 2010 Pedro Matiello <pmatiello@gmail.com>
+ * 
+ * Integration tests.
+ * 
+ * These tests aim for checking the interaction between different
+ * parts of the framework.
+ */
+
+
 package pistache.integration
 
 import pistache.runner.ThreadedRunner

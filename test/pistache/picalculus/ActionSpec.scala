@@ -1,7 +1,7 @@
 /* 
  * Copyright (c) 2009-2010 Pedro Matiello <pmatiello@gmail.com>
  * 
- * Spec for Transition class.
+ * Spec for Action class.
  */
 
 package pistache.picalculus
