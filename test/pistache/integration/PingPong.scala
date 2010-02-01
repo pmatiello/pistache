@@ -9,7 +9,7 @@ package pistache.integration
 import pistache.picalculus._
 import pistache.runner.ThreadedRunner
 
-object PingPong {
+class PingPong(max:Int) {
 
 	val pingT = Action{
 		result = result ::: n1.value :: Nil
@@ -27,8 +27,8 @@ object PingPong {
  
 	var result:List[Int] = Nil
 
-	lazy val Ping:Process = Process(pingT*link2~n1*link1(n1)*If (n1 < 1000) {Ping})
-	lazy val Pong:Process = Process(link2(n2)*pongT*link1~n2*If (n2 < 1000) {Pong})
-	val PingPong = Process(Ping | Pong)
+	lazy val Ping:Process = Process(pingT*link2~n1*link1(n1)*If (n1 < max) {Ping})
+	lazy val Pong:Process = Process(link2(n2)*pongT*link1~n2*If (n2 < max) {Pong})
+	val process = Process(Ping | Pong)
   
 }

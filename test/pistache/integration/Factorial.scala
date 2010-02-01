@@ -8,9 +8,9 @@ package pistache.integration
 
 import pistache.picalculus._
 
-object Factorial {
+class Factorial(value:Int) {
 
-	var n = 0
+	var n = value
 	var result = 1
   
 	val step = Action{
@@ -18,6 +18,6 @@ object Factorial {
 		n = n-1
 	}
 	
-	lazy val factorialCalculator:Process = Process(step*(If (n>1) {factorialCalculator}))
+	lazy val process:Process = Process(step*(If (n>1) {process}))
   
 }
