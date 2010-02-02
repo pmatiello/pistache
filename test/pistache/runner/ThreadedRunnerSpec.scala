@@ -130,6 +130,40 @@ class ThreadedRunnerSpec extends Spec with MustMatchers {
 			name2send.value must equal (name2recv.value)
 		}
   
+		it ("should work with executors") {
+			// See: Milner, R., Parrow, J., and Walker, D. 1992. A calculus of mobile processes, Part I, Chapter 4, example 5
+			val send = Link[Int]
+			val recv = Link[Int]
+			val value = Name(5)
+			def Exec(get:Link[Int], put:Link[Int]) = Process{
+				val x = Name[Int]
+				val action = Action{x := x.value+1}
+				get(x)*action*put~x
+			}
+			val process = Process(send~value*recv(value) | Exec(send, recv))
+			
+			new ThreadedRunner(process).start
+			
+			value.value must equal (6)
+		}
+  
+		it ("should work with executors conditionally") {
+			var exec1 = Name(false)
+			var exec2 = Name(false)
+			
+			def Exec(name:Name[Boolean]) = Process{
+				val action = Action{name := true}
+				action
+			}
+   
+			val process = Process(If (true) {Exec(exec1)} Else {Exec(exec2)})
+			
+			new ThreadedRunner(process).start
+			
+			exec1.value must equal (true)
+			exec2.value must equal (false)
+		}
+  
 	}
 
 }
