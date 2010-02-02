@@ -39,7 +39,7 @@ class IntegrationTests extends Spec with MustMatchers {
 		}
   
 		it ("Massive threading") {
-			val unsortedList = randomList(500) 
+			val unsortedList = randomList(1000) 
 			val qsort = new Quicksort(unsortedList)
 			new ThreadedRunner(qsort.process).start
 			qsort.result.value must equal (unsortedList.sort(_ < _))

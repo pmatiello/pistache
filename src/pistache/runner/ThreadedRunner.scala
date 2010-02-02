@@ -58,6 +58,7 @@ private object LinkStorage {
 	}
   
 	var links:Map[Link[_], LinkImplementation] = null
+	val lock:AnyRef = new Object
   
 	/** Initialize the storage. 
 	 */
@@ -68,8 +69,11 @@ private object LinkStorage {
 	/** Associate a link to an implementation, if it's not yet associated. 
 	 */
 	private def ready[T](link:Link[T]) {
-		if (!links.keySet.contains(link)) {
-			links += link -> new LinkImplementation
+		lock.synchronized {
+			if (!links.keySet.contains(link)) {
+				links += link -> new LinkImplementation
+			}
+			lock.notifyAll
 		}
 	}
 
