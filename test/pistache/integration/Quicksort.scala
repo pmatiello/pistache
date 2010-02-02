@@ -1,7 +1,7 @@
 /* 
  * Copyright (c) 2010 Pedro Matiello <pmatiello@gmail.com>
  * 
- * Test program for massive threading.
+ * Test program for executors and massive threading.
  */
 
 package pistache.integration

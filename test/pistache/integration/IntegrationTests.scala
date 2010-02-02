@@ -38,7 +38,7 @@ class IntegrationTests extends Spec with MustMatchers {
 			PingPong.result must equal (List.range(0,1000))
 		}
   
-		it ("Massive threading") {
+		it ("Executors and massive threading") {
 			val unsortedList = randomList(500) 
 			val qsort = new Quicksort(unsortedList)
 			new ThreadedRunner(qsort.process).start
