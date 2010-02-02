@@ -16,7 +16,7 @@
 	<property name="src.dir" value="src/" />
 	<property name="test.dir" value="test/" />
 	<property name="lib.dir" value="lib/" />
-	<property name="build.dir" value="bin/" />
+	<property name="compile.dir" value="bin/" />
 	<property name="docs.dir" value="docs/" />
 	<property name="scala.home" value="/usr/share/scala/" />
 	<property name="scala-compiler.jar" value="${scala.home}/lib/scala-compiler.jar"/>
@@ -29,11 +29,11 @@
 	
 	<path id="project.classpath">
 		<path refid="scala.classpath"/>
-		<pathelement location="${build.dir}"/>
+		<pathelement location="${compile.dir}"/>
 		<fileset dir="${lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
-		<fileset dir="${build.dir}">
+		<fileset dir="${compile.dir}">
 			<include name="**/*.class" />
 		</fileset>
 	</path>
@@ -52,8 +52,8 @@
           target: compile
          ================================= -->
     <target name="compile" description="compile source classes">
-		<mkdir dir="${build.dir}" />
-    	<scalac srcdir="${src.dir}" destdir="${build.dir}">
+		<mkdir dir="${compile.dir}" />
+    	<scalac srcdir="${src.dir}" destdir="${compile.dir}">
     		<include name="**/*.scala"/>
     	</scalac>
     </target>
@@ -62,7 +62,7 @@
           target: compile-test
          ================================= -->
     <target name="compile-test" depends="compile" description="compile test classes">
-    	<scalac srcdir="${test.dir}" destdir="${build.dir}" classpathref="project.classpath">
+    	<scalac srcdir="${test.dir}" destdir="${compile.dir}" classpathref="project.classpath">
     		<include name="**/*.scala"/>
     	</scalac>
     </target>
@@ -74,7 +74,7 @@
     	<taskdef name="scalatest" classname="org.scalatest.tools.ScalaTestAntTask">
     	      <classpath refid="project.classpath"/>
    	    </taskdef>
-    	<scalatest runpath="bin/" haltonfailure="true"/>
+    	<scalatest runpath="${compile.dir}" haltonfailure="true"/>
     </target>
 	
     <!-- =================================
@@ -107,7 +107,7 @@
           target: clean
          ================================= -->
     <target name="clean" description="compile test classes">
-    	<delete dir="${build.dir}" />
+    	<delete dir="${compile.dir}" />
     	<delete dir="${docs.dir}" />
     </target>
 	
