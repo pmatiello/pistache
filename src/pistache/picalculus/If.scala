@@ -22,7 +22,7 @@ object If {
 
 /** A class representing pi-Calculus conditional operator If.
  */
-protected[pistache] class IfProcess(cond: => Boolean, process:Process) extends Process {
+protected[pistache] class IfProcess(cond: => Boolean, process: => Process) extends Process {
 	
 	/** Condition. */
 	val condition = cond _
@@ -41,7 +41,7 @@ protected[pistache] class IfProcess(cond: => Boolean, process:Process) extends P
 /** A class representing pi-Calculus conditional operator If
  *  with an Else branch.
  */
-protected[pistache] class IfElseProcess(cond: => Boolean, yes:Process, no:Process) extends Process {
+protected[pistache] class IfElseProcess(cond: => Boolean, yes: => Process, no: => Process) extends Process {
 	
 	/** Condition. */
 	val condition = cond _
