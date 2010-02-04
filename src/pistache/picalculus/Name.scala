@@ -44,15 +44,19 @@ object Name {
  *  a reference to an arbitrary value and can be passed
  *  through links.
  */
-protected[pistache] class Name[T](valueObject:T) { 
+protected[pistache] class Name[T](initialValue:T) { 
 	
 	/** The value stored by the Name object.
 	 */
-	var value = valueObject
+	private var storage = initialValue
  
 	/** Update the stored value.
 	 *
 	 *  @param value the new stored value. 
 	 */
-	def :=(value:T) { this.value = value }
+	def :=(value:T) { this.storage = value }
+ 
+	/** Read the stored value.
+	 */
+	def value = storage
 }

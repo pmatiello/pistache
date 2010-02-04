@@ -61,7 +61,11 @@ protected[pistache] class RestrictedProcess(P: => Process) extends Process {
  *  @return the constructed process.
  */
 protected[pistache] class ConcatenationProcess(P: => Process, Q: => Process) extends Process {
+  
+	/** the first process */
 	lazy val left = P
+ 
+	/** the second process */
 	lazy val right = Q
 }
 
@@ -73,6 +77,10 @@ protected[pistache] class ConcatenationProcess(P: => Process, Q: => Process) ext
  *  @return the constructed process.
  */
 protected[pistache] class CompositionProcess(P: => Process, Q: => Process) extends Process {
+	
+	/** the first process */
 	lazy val left = P
+ 
+	/** the second process */
 	lazy val right = Q
 }

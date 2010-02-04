@@ -25,7 +25,7 @@ object Action {
  */
 protected[pistache] class Action(function: => Unit) extends Process {
 	
-	/** Action procedure. */
+	/** the action procedure. */
 	val procedure = function _;
  
 }

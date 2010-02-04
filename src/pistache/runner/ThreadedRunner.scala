@@ -57,8 +57,8 @@ private object LinkStorage {
 		}
 	}
   
-	var links:Map[Link[_], LinkImplementation] = null
-	val lock:AnyRef = new Object
+	private var links:Map[Link[_], LinkImplementation] = null
+	private val lock:AnyRef = new Object
   
 	/** Initialize the storage. 
 	 */
