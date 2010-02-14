@@ -6,8 +6,7 @@
 
 package pistache.picalculus
 
-/** An object providing methods to create pi-Calculus
- *  processes.
+/** An object providing methods to create pi-Calculus processes.
  */
 object Process {
   
@@ -27,22 +26,19 @@ protected[pistache] trait Process {
 	/** Concatenation operator.
 	 *
 	 *  @param the other Other process.
-	 *  @return the process constructed by concatenation of this
-	 *  process and the given process.
+	 *  @return the process constructed by concatenation of this process and the given process.
 	 */
 	def *(other: => Process) = new ConcatenationProcess(this, other)
  
  	/** Composition operator.
 	 *
 	 *  @param the other Other process.
-	 *  @return the process constructed by parallel composition of this
-	 *  process and the given process.
+	 *  @return the process constructed by parallel composition of this process and the given process.
 	 */
   	def |(other: => Process) = new CompositionProcess(this, other)
 }
 
-/** A class representing pi-Calculus processes allowing restricted
- *  names.
+/** A class representing pi-Calculus processes allowing restricted names.
  * 
  *  @param P the process.
  */
@@ -53,8 +49,7 @@ protected[pistache] class RestrictedProcess(P: => Process) extends Process {
   
 }
 
-/** A class representing a process constructed by the concatenation
- *  of two other processes.
+/** A class representing a process constructed by the concatenation of two other processes.
  * 
  *  @param P the first process.
  *  @param Q the second process.
@@ -69,8 +64,7 @@ protected[pistache] class ConcatenationProcess(P: => Process, Q: => Process) ext
 	lazy val right = Q
 }
 
-/** A class representing a process constructed by the composition
- *  of two other processes.
+/** A class representing a process constructed by the composition of two other processes.
  * 
  *  @param P the first process.
  *  @param Q the second process.

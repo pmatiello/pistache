@@ -6,8 +6,7 @@
 
 package pistache.picalculus
 
-/** An object providing methods to create pi-Calculus
- *  conditional processes.
+/** An object providing methods to create pi-Calculus conditional processes.
  */
 object If {
   
@@ -21,6 +20,9 @@ object If {
 }
 
 /** A class representing pi-Calculus conditional operator If.
+ * 
+ *  @param cond the condition.
+ *  @param process the process to be executed if <code>condition</code> evaluates to <code>true</code>.
  */
 protected[pistache] class IfProcess(cond: => Boolean, process: => Process) extends Process {
 	
@@ -38,8 +40,11 @@ protected[pistache] class IfProcess(cond: => Boolean, process: => Process) exten
 
 }
 
-/** A class representing pi-Calculus conditional operator If
- *  with an Else branch.
+/** A class representing pi-Calculus conditional operator If with an Else branch.
+ * 
+ *  @param cond the condition.
+ *  @param yes the process to be executed if <code>condition</code> evaluates to <code>true</code>.
+ *  @param no the process to be executed if <code>condition</code> evaluates to <code>false</code>.
  */
 protected[pistache] class IfElseProcess(cond: => Boolean, yes: => Process, no: => Process) extends Process {
 	

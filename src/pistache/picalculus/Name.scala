@@ -6,8 +6,7 @@
 
 package pistache.picalculus
 
-/** An object providing methods to create new names, and
- *  implicit conversions for autoboxing and autounboxing.
+/** An object providing methods to create new names, and implicit conversions for autoboxing and autounboxing.
  */
 object Name {
   
@@ -40,21 +39,18 @@ object Name {
   
 }
 
-/** A class representing a pi-Calculus name. Names store
- *  a reference to an arbitrary value and can be passed
+/** A class representing a pi-Calculus name. Names store a reference to an arbitrary value and can be passed
  *  through links.
+ * 
+ *	@param storage the value stored by the Name object.
  */
-protected[pistache] class Name[T](initialValue:T) { 
+protected[pistache] class Name[T](var storage:T) { 
 	
-	/** The value stored by the Name object.
-	 */
-	private var storage = initialValue
- 
 	/** Update the stored value.
 	 *
 	 *  @param value the new stored value. 
 	 */
-	def :=(value:T) { this.storage = value }
+	def :=(value:T) { storage = value }
  
 	/** Read the stored value.
 	 */

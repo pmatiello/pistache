@@ -103,7 +103,7 @@ private object LinkStorage {
  * 
  *  @param process the process to be executed.
  */
-class ThreadedRunner(process:Process) {
+class ThreadedRunner(val process:Process) {
   
 	/** Start the execution of the process.
 	 */

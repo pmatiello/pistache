@@ -14,13 +14,11 @@ object Link {
 
 	/** Create a link of the given type.
 	 * 
-	 *  @return the name containing the link for sending and
-	 *  receiving objects from type <code>T</code>.
+	 *  @return the name containing the link for sending and receiving objects from type <code>T</code>.
      */
 	def apply[T] = new Name(new Link[T])
  
-	/** Enumeration for representing the possible actions on a
-	 *  link: sending and receiving messages.
+	/** Enumeration for representing the possible actions on a link: sending and receiving messages.
      */
 	object ActionType extends Enumeration {
 		type ActionType = Value
@@ -28,8 +26,7 @@ object Link {
 	}
 }
 
-/** A class representing a pi-Calculus link. Links can be used
- *  to send names between processes.
+/** A class representing a pi-Calculus link. Links can be used to send names between processes.
  */
 protected[pistache] class Link[T] {
   
@@ -42,8 +39,7 @@ protected[pistache] class Link[T] {
 	
 	/** Receive a name through this link.
 	 * 
-	 *  @param name the name to be used as storage of the
-	 *  object received through the link.
+	 *  @param name the name to be used as storage of the object received through the link.
 	 *  @return the process representing this action.
      */
 	def apply(name:Name[T]) = new LinkProcess(this, Link.ActionType.Receive, name)
@@ -52,15 +48,10 @@ protected[pistache] class Link[T] {
 
 import Link.ActionType._
 
-/** A class representing an action over a link as an atomic
- *  pi-Calculus process.
+/** A class representing an action over a link as an atomic pi-Calculus process.
  * 
- *  @param linkObj the link where the action took place.
- *  @param actionType the type of action.
- *  @param nameObj the name involved in the transference.
+ *  @param link the link where the action took place.
+ *  @param action the type of action.
+ *  @param name the name involved in the transference.
  */
-protected[pistache] class LinkProcess[T](linkObj:Link[T], actionType:ActionType, nameObj:Name[T]) extends Process {
-	val link = linkObj;
-	val action = actionType
-	val name = nameObj
-}
+protected[pistache] class LinkProcess[T](val link:Link[T], val action:ActionType, val name:Name[T]) extends Process
