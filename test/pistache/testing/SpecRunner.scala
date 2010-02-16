@@ -25,7 +25,5 @@ object SpecRunner extends Application {
 	new AgentSpec execute
    
 	new ThreadedRunnerSpec execute
-   
-   
   
 }
