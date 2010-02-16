@@ -26,8 +26,8 @@ class ActionSpec extends Spec with MustMatchers {
 			executed must equal (1)
 		}
   
-		it ("should be a process") {
-			val process:Process = Action(
+		it ("should be a agent") {
+			val agent:Agent = Action(
 				fail()	// must not be run
 			)
 			assert(true)

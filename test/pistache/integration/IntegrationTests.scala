@@ -3,8 +3,7 @@
  * 
  * Integration tests.
  * 
- * These tests aim for checking the interaction between different
- * parts of the framework.
+ * These tests aim for checking the interaction between different parts of the framework.
  */
 
 
@@ -28,20 +27,20 @@ class IntegrationTests extends Spec with MustMatchers {
 		
 		it ("Actions, concatenation and recursion") {
 			val factorialCalculator = new Factorial(10)
-			new ThreadedRunner(factorialCalculator.process).start
+			new ThreadedRunner(factorialCalculator.agent).start
 			factorialCalculator.result must equal (10*9*8*7*6*5*4*3*2*1)
 		}
 		
 		it ("Message passing and parallel composition") {
 			val PingPong = new PingPong(1000)
-			new ThreadedRunner(PingPong.process).start
+			new ThreadedRunner(PingPong.agent).start
 			PingPong.result must equal (List.range(0,1000))
 		}
   
-		it ("Executors and massive threading") {
+		it ("Agents with arguments and massive threading") {
 			val unsortedList = randomList(500) 
 			val qsort = new Quicksort(unsortedList)
-			new ThreadedRunner(qsort.process).start
+			new ThreadedRunner(qsort.agent).start
 			qsort.result.value must equal (unsortedList.sort(_ < _))
 		}
 	  

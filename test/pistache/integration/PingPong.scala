@@ -27,8 +27,8 @@ class PingPong(max:Int) {
  
 	var result:List[Int] = Nil
 
-	lazy val Ping:Process = Process(pingT*link2~n1*link1(n1)*If (n1 < max) {Ping})
-	lazy val Pong:Process = Process(link2(n2)*pongT*link1~n2*If (n2 < max) {Pong})
-	val process = Process(Ping | Pong)
+	lazy val Ping:Agent = Agent(pingT*link2~n1*link1(n1)*If (n1 < max) {Ping})
+	lazy val Pong:Agent = Agent(link2(n2)*pongT*link1~n2*If (n2 < max) {Pong})
+	val agent = Agent(Ping | Pong)
   
 }

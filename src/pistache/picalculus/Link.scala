@@ -26,32 +26,32 @@ object Link {
 	}
 }
 
-/** A class representing a pi-Calculus link. Links can be used to send names between processes.
+/** A class representing a pi-Calculus link. Links can be used to send names between agents.
  */
 protected[pistache] class Link[T] {
   
 	/** Send a name through this link.
 	 * 
 	 *  @param name the name to be sent through the link.
-	 *  @return the process representing this action.
+	 *  @return the agent representing this action.
      */
-	def ~(name:Name[T]) = new LinkProcess(this, Link.ActionType.Send, name)
+	def ~(name:Name[T]) = new LinkAgent(this, Link.ActionType.Send, name)
 	
 	/** Receive a name through this link.
 	 * 
 	 *  @param name the name to be used as storage of the object received through the link.
-	 *  @return the process representing this action.
+	 *  @return the agent representing this action.
      */
-	def apply(name:Name[T]) = new LinkProcess(this, Link.ActionType.Receive, name)
+	def apply(name:Name[T]) = new LinkAgent(this, Link.ActionType.Receive, name)
 
 }
 
 import Link.ActionType._
 
-/** A class representing an action over a link as an atomic pi-Calculus process.
+/** A class representing an action over a link as an atomic pi-Calculus agent.
  * 
  *  @param link the link where the action took place.
  *  @param action the type of action.
  *  @param name the name involved in the transference.
  */
-protected[pistache] class LinkProcess[T](val link:Link[T], val action:ActionType, val name:Name[T]) extends Process
+protected[pistache] class LinkAgent[T](val link:Link[T], val action:ActionType, val name:Name[T]) extends Agent

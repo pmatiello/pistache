@@ -6,55 +6,55 @@
 
 package pistache.picalculus
 
-/** An object providing methods to create pi-Calculus conditional processes.
+/** An object providing methods to create pi-Calculus conditional agents.
  */
 object If {
   
-	 /** Create a conditional process.
+	 /** Create a conditional agent.
 	  * 
 	  *  @param condition the condition.
-	  *  @process the process.
+	  *  @agent the agent.
 	  */
-	 def apply(condition: => Boolean)(process: Process) = new IfProcess(condition, process)
+	 def apply(condition: => Boolean)(agent: Agent) = new IfAgent(condition, agent)
 
 }
 
 /** A class representing pi-Calculus conditional operator If.
  * 
  *  @param cond the condition.
- *  @param process the process to be executed if <code>condition</code> evaluates to <code>true</code>.
+ *  @param agent the agent to be executed if <code>condition</code> evaluates to <code>true</code>.
  */
-protected[pistache] class IfProcess(cond: => Boolean, process: => Process) extends Process {
+protected[pistache] class IfAgent(cond: => Boolean, agent: => Agent) extends Agent {
 	
 	/** Condition. */
 	val condition = cond _
  
-	/** Process to be executed if <code>condition</code> evaluates to <code>true</code>. */
-	val then = process	
+	/** Agent to be executed if <code>condition</code> evaluates to <code>true</code>. */
+	val then = agent	
 
-	/** Create another conditional process.
+	/** Create another conditional agent.
 	 * 
-	 *  @param process the process to be executed if <code>condition</code> evaluates to <code>false</code>. 
+	 *  @param agent the agent to be executed if <code>condition</code> evaluates to <code>false</code>. 
 	 */
-	def Else(process:Process) = new IfElseProcess(cond, then, process) 
+	def Else(agent:Agent) = new IfElseAgent(cond, then, agent) 
 
 }
 
 /** A class representing pi-Calculus conditional operator If with an Else branch.
  * 
  *  @param cond the condition.
- *  @param yes the process to be executed if <code>condition</code> evaluates to <code>true</code>.
- *  @param no the process to be executed if <code>condition</code> evaluates to <code>false</code>.
+ *  @param yes the agent to be executed if <code>condition</code> evaluates to <code>true</code>.
+ *  @param no the agent to be executed if <code>condition</code> evaluates to <code>false</code>.
  */
-protected[pistache] class IfElseProcess(cond: => Boolean, yes: => Process, no: => Process) extends Process {
+protected[pistache] class IfElseAgent(cond: => Boolean, yes: => Agent, no: => Agent) extends Agent {
 	
 	/** Condition. */
 	val condition = cond _
  
-	/** Process to be executed if <code>condition</code> evaluates to <code>true</code>. */
+	/** Agent to be executed if <code>condition</code> evaluates to <code>true</code>. */
 	val then = yes
  
-	/** Process to be executed if <code>condition</code> evaluates to <code>false</code>. */
+	/** Agent to be executed if <code>condition</code> evaluates to <code>false</code>. */
 	val elseThen = no
 
 }

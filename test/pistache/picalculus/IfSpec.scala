@@ -16,31 +16,31 @@ import org.mockito.Mockito.mock
 @RunWith(classOf[JUnitRunner])
 class IfSpec extends Spec with MustMatchers {
   
-	val Q = new FakeProcess
-	val R = new FakeProcess
-	val S = new FakeProcess
+	val Q = new FakeAgent
+	val R = new FakeAgent
+	val S = new FakeAgent
   
 	describe ("If") {
 	  
-		it ("should express a conditional execution of a process") {
+		it ("should express a conditional execution of a agent") {
 			val P = If (1 > 0) {Q}
 			P match {
-				case proc:IfProcess => proc.condition.apply must equal (true)
-																proc.then must equal (Q)
+				case proc:IfAgent => proc.condition.apply must equal (true)
+				proc.then must equal (Q)
 			}
 		}
   
-		it ("should possible to express a conditional process as part of another process") {
+		it ("should possible to express a conditional agent as part of another agent") {
 			val P = Q * If (1 > 0) {R} * S
 			
 			P match {
-				case pp:ConcatenationProcess => {
+				case pp:ConcatenationAgent => {
 					pp.left match {
-						case pl:ConcatenationProcess => {
+						case pl:ConcatenationAgent => {
 							pl.left must equal (Q)
 							pl.right match {
-								case pi:IfProcess => pi.condition.apply must equal (true)
-													 pi.then must equal (R)
+								case pi:IfAgent =>	pi.condition.apply must equal (true)
+													pi.then must equal (R)
 							}
 						}
 					}
@@ -52,27 +52,27 @@ class IfSpec extends Spec with MustMatchers {
 		
 	describe ("Else") {
 	  
-		it ("should express a conditional execution of a process") {
+		it ("should express a conditional execution of a agent") {
 			val P = If (1 > 0) {Q} Else {R}
 			P match {
-				case proc:IfElseProcess =>
+				case proc:IfElseAgent =>
 								proc.condition.apply must equal (true)
 								proc.then must equal (Q)
 								proc.elseThen must equal (R)
 			}	
 		}
   
-		it ("should possible to express a conditional process as part of another process") {
+		it ("should possible to express a conditional agent as part of another agent") {
 			val P = Q * (If (1 > 0) {R} Else {S}) * Q
 			
 			P match {
-				case pp:ConcatenationProcess => {
+				case pp:ConcatenationAgent => {
 					pp.left match {
-						case pl:ConcatenationProcess => {
+						case pl:ConcatenationAgent => {
 							pl.left must equal (Q)
 							pl.right match {
-								case pi:IfElseProcess => pi.condition.apply must equal (true)
-														 pi.then must equal (R)
+								case pi:IfElseAgent =>	pi.condition.apply must equal (true)
+														pi.then must equal (R)
 														 pi.elseThen must equal (S)
 							}
 						}

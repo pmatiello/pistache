@@ -18,6 +18,6 @@ class Factorial(value:Int) {
 		n = n-1
 	}
 	
-	lazy val process:Process = Process(step*(If (n>1) {process}))
+	lazy val agent:Agent = Agent(step*(If (n>1) {agent}))
   
 }

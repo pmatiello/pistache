@@ -24,7 +24,7 @@ class ThreadedRunnerSpec extends Spec with MustMatchers {
 			executed must be (true)
 		}
   
-		it ("should run concatenation processes") {
+		it ("should run concatenation agents") {
 			var execOrder = 1;
 			var executed1 = 0
 			val action1 = Action{executed1 = execOrder; execOrder += 1}
@@ -32,28 +32,28 @@ class ThreadedRunnerSpec extends Spec with MustMatchers {
 			val action2 = Action{executed2 = execOrder; execOrder += 1}
 			var executed3 = 0
 			val action3 = Action{executed3 = execOrder; execOrder += 1}
-			val process = Process(action1*action2*action3)
-			new ThreadedRunner(process).start
+			val agent = Agent(action1*action2*action3)
+			new ThreadedRunner(agent).start
 			executed1 must equal (1)
 			executed2 must equal (2)
 			executed3 must equal (3)
 		}
   
-		it ("should run parallel processes") {
+		it ("should run parallel agents") {
 			var executed1 = false
 			val action1 = Action{executed1 = true}
 			var executed2 = false
 			val action2 = Action{executed2 = true}
 			var executed3 = false
 			val action3 = Action{executed3 = true}
-			val process = Process(action1 | action2 | action3)
-			new ThreadedRunner(process).start
+			val agent = Agent(action1 | action2 | action3)
+			new ThreadedRunner(agent).start
 			executed1 must be (true)
 			executed2 must be (true)
 			executed3 must be (true)
 		}
   
-		it ("should wait for the parallel process to finish before running the next outter concatenated process") {
+		it ("should wait for the parallel agent to finish before running the next outter concatenated agent") {
 			var execOrder = 1;
 			var executed1 = 0
 			val action1 = Action{Thread.sleep(100); executed1 = execOrder; execOrder += 1}
@@ -61,25 +61,25 @@ class ThreadedRunnerSpec extends Spec with MustMatchers {
 			val action2 = Action{Thread.sleep(200); executed2 = execOrder; execOrder += 1}
 			var executed3 = 0
 			val action3 = Action{executed3 = execOrder; execOrder += 1}
-			val process = Process((action1|action2)*action3)
-			new ThreadedRunner(process).start
+			val agent = Agent((action1|action2)*action3)
+			new ThreadedRunner(agent).start
 			executed1 must equal (1)
 			executed2 must equal (2)
 			executed3 must equal (3)
 		}
   
-		it ("should run processes conditionally") {
+		it ("should run agents conditionally") {
 			var executed1 = false
 			var executed2 = false
 			var action1 = Action(executed1 = true)
 			var action2 = Action(executed2 = true)
-			val process = Process(If (true) {action1} * If (false) {action2})
-			new ThreadedRunner(process).start
+			val agent = Agent(If (true) {action1} * If (false) {action2})
+			new ThreadedRunner(agent).start
 			executed1 must be (true)
 			executed2 must be (false)
 		}
   
-		it ("should run an alternative process branch conditionally") {
+		it ("should run an alternative agent branch conditionally") {
 			var executedIf1 = false
 			var executedElse1 = false
 			var executedIf2 = false
@@ -90,8 +90,8 @@ class ThreadedRunnerSpec extends Spec with MustMatchers {
 			var actionIf2 = Action(executedIf2 = true)
 			var actionElse2 = Action(executedElse2 = true)
    
-			val process = Process((If (true) {actionIf1} Else {actionElse1}) * (If (false) {actionIf2} Else {actionElse2}))
-			new ThreadedRunner(process).start
+			val agent = Agent((If (true) {actionIf1} Else {actionElse1}) * (If (false) {actionIf2} Else {actionElse2}))
+			new ThreadedRunner(agent).start
 			
 			executedIf1 must be (true)
 			executedElse1 must be (false)
@@ -99,11 +99,11 @@ class ThreadedRunnerSpec extends Spec with MustMatchers {
 			executedElse2 must be (true)
 		}
   
-		it ("should run processes with restricted names") {
+		it ("should run agents with restricted names") {
 			var hasRan = false;
 			var finalValue = 0;
 			
-			lazy val process:Process = Process{
+			lazy val agent:Agent = Agent{
 				var local = 0;
 				val action = Action{
 				  local = local+1
@@ -111,10 +111,10 @@ class ThreadedRunnerSpec extends Spec with MustMatchers {
 				  hasRan = true
 				}
 				
-				Process(If (!hasRan) {action * process} Else {action})
+				Agent(If (!hasRan) {action * agent} Else {action})
 			}
    
-			new ThreadedRunner(process).start
+			new ThreadedRunner(agent).start
 			finalValue must equal (1)
 		}
   
@@ -123,26 +123,26 @@ class ThreadedRunnerSpec extends Spec with MustMatchers {
 			val name2recv = Name(false)
 			val link = Link[Boolean]
 			
-			val process = Process(link~name2send*link(name2recv))
+			val agent = Agent(link~name2send*link(name2recv))
    
-			new ThreadedRunner(process).start
+			new ThreadedRunner(agent).start
    
 			name2send.value must equal (name2recv.value)
 		}
   
-		it ("should work with executors") {
+		it ("should work with agents with arguments") {
 			// See: Milner, R., Parrow, J., and Walker, D. 1992. A calculus of mobile processes, Part I, Chapter 4, example 5
 			val send = Link[Int]
 			val recv = Link[Int]
 			val value = Name(5)
-			def Exec(get:Link[Int], put:Link[Int]) = Process{
+			def Exec(get:Link[Int], put:Link[Int]) = Agent{
 				val x = Name[Int]
 				val action = Action{x := x.value+1}
 				get(x)*action*put~x
 			}
-			val process = Process(send~value*recv(value) | Exec(send, recv))
+			val agent = Agent(send~value*recv(value) | Exec(send, recv))
 			
-			new ThreadedRunner(process).start
+			new ThreadedRunner(agent).start
 			
 			value.value must equal (6)
 		}
@@ -151,14 +151,14 @@ class ThreadedRunnerSpec extends Spec with MustMatchers {
 			var exec1 = Name(false)
 			var exec2 = Name(false)
 			
-			def Exec(name:Name[Boolean]) = Process{
+			def Exec(name:Name[Boolean]) = Agent{
 				val action = Action{name := true}
 				action
 			}
    
-			val process = Process(If (true) {Exec(exec1)} Else {Exec(exec2)})
+			val agent = Agent(If (true) {Exec(exec1)} Else {Exec(exec2)})
 			
-			new ThreadedRunner(process).start
+			new ThreadedRunner(agent).start
 			
 			exec1.value must equal (true)
 			exec2.value must equal (false)

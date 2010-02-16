@@ -99,42 +99,42 @@ private object LinkStorage {
   
 }
 
-/** A local, multithreaded runner for pi-Calculus processes.
+/** A local, multithreaded runner for pi-Calculus agents.
  * 
- *  @param process the process to be executed.
+ *  @param agent the agent to be executed.
  */
-class ThreadedRunner(val process:Process) {
+class ThreadedRunner(val agent:Agent) {
   
-	/** Start the execution of the process.
+	/** Start the execution of the agent.
 	 */
 	def start = {
 		LinkStorage.initialize
-		run(process)
+		run(agent)
 	}
  
-	/** Run the process.
+	/** Run the agent.
 	 */
-	private def run { run(process) }
+	private def run { run(agent) }
   
-	/** Run a given process.
+	/** Run a given agent.
 	 *
-	 *  @param process the process to be executed.
+	 *  @param agent the agent to be executed.
 	 */
-	private def run(process:Process) {
-		process match {
+	private def run(agent:Agent) {
+		agent match {
 
-			/* Execute (restricted) processes */
-			case proc:RestrictedProcess => run(proc.process apply)
+			/* Execute (restricted) agents */
+			case proc:RestrictedAgent => run(proc.agent apply)
 		  
 			/* Execute action */
 			case proc:Action => proc.procedure apply
 
-			/* Execute processes sequentially */
-			case proc:ConcatenationProcess => run(proc left)
+			/* Execute agents sequentially */
+			case proc:ConcatenationAgent => run(proc left)
 											  run(proc right)
             
-			/* Execute processes in parallel */
-            case proc:CompositionProcess => {
+			/* Execute agents in parallel */
+            case proc:CompositionAgent => {
               
             	val leftThread = new Thread() {
             		override def run() { new ThreadedRunner(proc.left) run }
@@ -150,12 +150,12 @@ class ThreadedRunner(val process:Process) {
                
             }
             
-            /* Execute processes conditionally */
-			case proc:IfProcess => if (proc.condition apply) run(proc then)
-			case proc:IfElseProcess => if (proc.condition apply) run(proc then) else run(proc elseThen)
+            /* Execute agents conditionally */
+			case proc:IfAgent => if (proc.condition apply) run(proc then)
+			case proc:IfElseAgent => if (proc.condition apply) run(proc then) else run(proc elseThen)
    
 			/* Send and receive messages through links */
-			case proc:LinkProcess[_] => {
+			case proc:LinkAgent[_] => {
 				proc.action match {
 					case Link.ActionType.Send => LinkStorage.send(proc.link, proc.name)
 					case Link.ActionType.Receive => LinkStorage.recv(proc.link, proc.name)

@@ -23,7 +23,7 @@ object Action {
  * 
  *  @param function the transition procedure.
  */
-protected[pistache] class Action(function: => Unit) extends Process {
+protected[pistache] class Action(function: => Unit) extends Agent {
 	
 	/** the action procedure. */
 	val procedure = function _;

@@ -16,7 +16,7 @@ import Name._
 @RunWith(classOf[JUnitRunner])
 class LinkSpec extends Spec with MustMatchers {
   
- 	val P = new FakeProcess
+ 	val P = new FakeAgent
   
 	describe ("Link") {
 	  
@@ -37,61 +37,61 @@ class LinkSpec extends Spec with MustMatchers {
 			assert(true)	// We're ok if no exceptions are reaised
 		}
   
-		it ("should return a Process when ~ (send) is called") {
+		it ("should return a Agent when ~ (send) is called") {
 			val link = Link[Int]
 			val name = Name(5)
-			val process:Process = link~name
-			process match {
-				case pp:LinkProcess[_] => pp.link must equal (link.value)
-										  pp.action must equal (Link.ActionType.Send)
-										  (pp.name == name) must equal (true)
+			val agent:Agent = link~name
+			agent match {
+				case pp:LinkAgent[_] =>	pp.link must equal (link.value)
+										pp.action must equal (Link.ActionType.Send)
+										(pp.name == name) must equal (true)
 			}
 		}
   
-  		it ("should return a Process when apply (receive) is called") {
+  		it ("should return a Agent when apply (receive) is called") {
 			val link = Link[Int]
 			val name = Name[Int]
-			val process:Process = link(name)
-			process match {
-				case pp:LinkProcess[_] => pp.link must equal (link.value)
-										  pp.action must equal (Link.ActionType.Receive)
-										  (pp.name == name) must equal (true)
+			val agent:Agent = link(name)
+			agent match {
+				case pp:LinkAgent[_] =>	pp.link must equal (link.value)
+										pp.action must equal (Link.ActionType.Receive)
+										(pp.name == name) must equal (true)
 			}
   		}
     
-  		it ("should be so that send has precedence over process concatenation") {
+  		it ("should be so that send has precedence over agent concatenation") {
   			val link = Link[Int]
   			val name = Name(5)
-			val process:Process = P * link~name * P
-			process match {
-				case p:ConcatenationProcess => {
+			val agent:Agent = P * link~name * P
+			agent match {
+				case p:ConcatenationAgent => {
 					p.left match {
-						case pp:ConcatenationProcess => pp.left must equal (P)
+						case pp:ConcatenationAgent =>	pp.left must equal (P)
 														pp.right match {
-															case pr:LinkProcess[_] => pr.link must equal (link.value)
-																					  pr.action must equal (Link.ActionType.Send)
-																					  (pr.name == name) must equal (true)
-															}
+															case pr:LinkAgent[_] =>	pr.link must equal (link.value)
+																					pr.action must equal (Link.ActionType.Send)
+																					(pr.name == name) must equal (true)
+														}
 					}
 					p.right must equal (P)
 				}
 			}
   		}
     
-  		it ("should be so that receive has precedence over process concatenation") {
+  		it ("should be so that receive has precedence over agent concatenation") {
   			val link = Link[Int]
   			val name = Name[Int]
-			val process:Process = P * link(name) * P
+			val agent:Agent = P * link(name) * P
    
-			process match {
-				case p:ConcatenationProcess => {
+			agent match {
+				case p:ConcatenationAgent => {
 					p.left match {
-						case pp:ConcatenationProcess => pp.left must equal (P)
+						case pp:ConcatenationAgent => pp.left must equal (P)
 														pp.right match {
-															case pr:LinkProcess[_] => pr.link must equal (link.value)
-																					  pr.action must equal (Link.ActionType.Receive)
-																					  (pr.name == name) must equal (true)
-															}
+															case pr:LinkAgent[_] =>	pr.link must equal (link.value)
+																					pr.action must equal (Link.ActionType.Receive)
+																					(pr.name == name) must equal (true)
+														}
 					}
 					p.right must equal (P)
 				}

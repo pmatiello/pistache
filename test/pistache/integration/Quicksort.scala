@@ -1,7 +1,7 @@
 /* 
  * Copyright (c) 2010 Pedro Matiello <pmatiello@gmail.com>
  * 
- * Test program for executors and massive threading.
+ * Test program for agents with arguments and massive threading.
  */
 
 package pistache.integration
@@ -10,7 +10,7 @@ import pistache.picalculus._
 
 class Quicksort(list:List[Int]) {
 
-	def qsort(replyLink:Link[List[Int]], list:List[Int]):Process = Process {
+	def qsort(replyLink:Link[List[Int]], list:List[Int]):Agent = Agent {
 		val leftLink = Link[List[Int]]
 		val leftList = Name[List[Int]]
 		val rightLink = Link[List[Int]]
@@ -30,5 +30,5 @@ class Quicksort(list:List[Int]) {
 	
 	val replyLink = Link[List[Int]] 
 	val result = Name[List[Int]]
-	val process = Process(qsort(replyLink, list) | replyLink(result))
+	val agent = Agent(qsort(replyLink, list) | replyLink(result))
 }
