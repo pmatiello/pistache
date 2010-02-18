@@ -43,6 +43,13 @@ class IntegrationTests extends Spec with MustMatchers {
 			new ThreadedRunner(qsort.agent).start
 			qsort.result.value must equal (unsortedList.sort(_ < _))
 		}
+  
+		it ("Deep recursion") {
+			val list = 1 to 100000 toList
+			val summation = new Summation(list)
+			new ThreadedRunner(summation.agent).start
+			summation.sum must equal (list.reduceLeft(_+_))
+		}
 	  
 	}
 
