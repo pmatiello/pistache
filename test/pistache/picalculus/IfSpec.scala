@@ -26,7 +26,7 @@ class IfSpec extends Spec with MustMatchers {
 			val P = If (1 > 0) {Q}
 			P match {
 				case proc:IfAgent => proc.condition.apply must equal (true)
-				proc.then must equal (Q)
+				proc.then.apply must equal (Q)
 			}
 		}
   
@@ -35,16 +35,16 @@ class IfSpec extends Spec with MustMatchers {
 			
 			P match {
 				case pp:ConcatenationAgent => {
-					pp.left match {
+					pp.left.apply match {
 						case pl:ConcatenationAgent => {
-							pl.left must equal (Q)
-							pl.right match {
+							pl.left.apply must equal (Q)
+							pl.right.apply match {
 								case pi:IfAgent =>	pi.condition.apply must equal (true)
-													pi.then must equal (R)
+													pi.then.apply must equal (R)
 							}
 						}
 					}
-					pp.right must equal (S)
+					pp.right.apply must equal (S)
 				}
 			}
    		}
@@ -57,8 +57,8 @@ class IfSpec extends Spec with MustMatchers {
 			P match {
 				case proc:IfElseAgent =>
 								proc.condition.apply must equal (true)
-								proc.then must equal (Q)
-								proc.elseThen must equal (R)
+								proc.then.apply must equal (Q)
+								proc.elseThen.apply must equal (R)
 			}	
 		}
   
@@ -67,17 +67,17 @@ class IfSpec extends Spec with MustMatchers {
 			
 			P match {
 				case pp:ConcatenationAgent => {
-					pp.left match {
+					pp.left.apply match {
 						case pl:ConcatenationAgent => {
-							pl.left must equal (Q)
-							pl.right match {
+							pl.left.apply must equal (Q)
+							pl.right.apply match {
 								case pi:IfElseAgent =>	pi.condition.apply must equal (true)
-														pi.then must equal (R)
-														 pi.elseThen must equal (S)
+														pi.then.apply must equal (R)
+														pi.elseThen.apply must equal (S)
 							}
 						}
 					}
-					pp.right must equal (Q)
+					pp.right.apply must equal (Q)
 				}
 			}
 		}

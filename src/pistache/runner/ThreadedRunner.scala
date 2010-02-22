@@ -130,17 +130,17 @@ class ThreadedRunner(val agent:Agent) {
 			case proc:Action => proc.procedure apply
 
 			/* Execute agents sequentially */
-			case proc:ConcatenationAgent => run(proc left)
-											  run(proc right)
+			case proc:ConcatenationAgent => run(proc.left apply)
+											  run(proc.right apply)
             
 			/* Execute agents in parallel */
             case proc:CompositionAgent => {
               
             	val leftThread = new Thread() {
-            		override def run() { new ThreadedRunner(proc.left) run }
+            		override def run() { new ThreadedRunner(proc.left apply) run }
             	}               
             	val rightThread = new Thread() {
-            		override def run() { new ThreadedRunner(proc.right) run }
+            		override def run() { new ThreadedRunner(proc.right apply) run }
             	}
              
             	leftThread.start
@@ -151,8 +151,8 @@ class ThreadedRunner(val agent:Agent) {
             }
             
             /* Execute agents conditionally */
-			case proc:IfAgent => if (proc.condition apply) run(proc then)
-			case proc:IfElseAgent => if (proc.condition apply) run(proc then) else run(proc elseThen)
+			case proc:IfAgent => if (proc.condition apply) run(proc.then apply)
+			case proc:IfElseAgent => if (proc.condition apply) run(proc.then apply) else run(proc.elseThen apply)
    
 			/* Send and receive messages through links */
 			case proc:LinkAgent[_] => {

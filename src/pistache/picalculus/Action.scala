@@ -15,7 +15,7 @@ object Action {
 	 *  @param function the transition procedure.
 	 *  @return the action. 
 	 */
-	def apply(function: => Unit) = new Action(function)
+	def apply(function: => Unit) = new Action(function _)
   
 }
 
@@ -23,9 +23,4 @@ object Action {
  * 
  *  @param function the transition procedure.
  */
-protected[pistache] class Action(function: => Unit) extends Agent {
-	
-	/** the action procedure. */
-	val procedure = function _;
- 
-}
+protected[pistache] class Action(val procedure: () => Unit) extends Agent

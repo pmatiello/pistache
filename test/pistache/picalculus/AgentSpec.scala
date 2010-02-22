@@ -26,11 +26,11 @@ class AgentSpec extends Spec with MustMatchers {
 			val P = Q * R * S
 			P match {
 				case pp:ConcatenationAgent => {
-					pp.left match {
-						case pl:ConcatenationAgent =>	pl.left must equal (Q)
-														pl.right must equal (R)
+					pp.left.apply match {
+						case pl:ConcatenationAgent =>	pl.left.apply must equal (Q)
+														pl.right.apply must equal (R)
 					}
-					pp.right must equal (S)
+					pp.right.apply must equal (S)
 				}
 			}
 		}
@@ -38,8 +38,8 @@ class AgentSpec extends Spec with MustMatchers {
 		it ("should be self-embeddable") {
 			lazy val P:Agent = R*P
 			P match {
-				case pp:ConcatenationAgent =>	pp.left must equal(R)
-												pp.right must equal (P)
+				case pp:ConcatenationAgent =>	pp.left.apply must equal(R)
+												pp.right.apply must equal (P)
 			}
 		}
   
@@ -47,8 +47,8 @@ class AgentSpec extends Spec with MustMatchers {
 			lazy val P:Agent = R*Q
 			lazy val Q:Agent = P
 			P match {
-				case pp:ConcatenationAgent =>	pp.left must equal(R)
-												pp.right must equal (Q)
+				case pp:ConcatenationAgent =>	pp.left.apply must equal(R)
+												pp.right.apply must equal (Q)
 			}
 		}
   
@@ -57,11 +57,11 @@ class AgentSpec extends Spec with MustMatchers {
 
 			P match {
 				case pp:CompositionAgent => {
-					pp.left match {
-						case pl:CompositionAgent =>	pl.left must equal (Q)
-													pl.right must equal (R)
+					pp.left.apply match {
+						case pl:CompositionAgent =>	pl.left.apply must equal (Q)
+													pl.right.apply must equal (R)
 					}
-					pp.right must equal (S)
+					pp.right.apply must equal (S)
 				}
 			}
 		}
@@ -71,13 +71,13 @@ class AgentSpec extends Spec with MustMatchers {
 			
 			P match {
 				case pp:CompositionAgent => {
-					pp.left match {
-						case pl:ConcatenationAgent =>	pl.left must be (Q)
-														pl.right must be (R)
+					pp.left.apply match {
+						case pl:ConcatenationAgent =>	pl.left.apply must be (Q)
+														pl.right.apply must be (R)
 					}
-					pp.right match {
-						case pr:ConcatenationAgent =>	pr.left must be (Q)
-														pr.right must be (S)
+					pp.right.apply match {
+						case pr:ConcatenationAgent =>	pr.left.apply must be (Q)
+														pr.right.apply must be (S)
 					}
 				}
 			}

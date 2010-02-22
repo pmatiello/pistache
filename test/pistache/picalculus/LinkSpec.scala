@@ -65,15 +65,15 @@ class LinkSpec extends Spec with MustMatchers {
 			val agent:Agent = P * link~name * P
 			agent match {
 				case p:ConcatenationAgent => {
-					p.left match {
-						case pp:ConcatenationAgent =>	pp.left must equal (P)
-														pp.right match {
+					p.left.apply match {
+						case pp:ConcatenationAgent =>	pp.left.apply must equal (P)
+														pp.right.apply match {
 															case pr:LinkAgent[_] =>	pr.link must equal (link.value)
 																					pr.action must equal (Link.ActionType.Send)
 																					(pr.name == name) must equal (true)
 														}
 					}
-					p.right must equal (P)
+					p.right.apply must equal (P)
 				}
 			}
   		}
@@ -85,15 +85,15 @@ class LinkSpec extends Spec with MustMatchers {
    
 			agent match {
 				case p:ConcatenationAgent => {
-					p.left match {
-						case pp:ConcatenationAgent => pp.left must equal (P)
-														pp.right match {
+					p.left.apply match {
+						case pp:ConcatenationAgent => pp.left.apply must equal (P)
+														pp.right.apply match {
 															case pr:LinkAgent[_] =>	pr.link must equal (link.value)
 																					pr.action must equal (Link.ActionType.Receive)
 																					(pr.name == name) must equal (true)
 														}
 					}
-					p.right must equal (P)
+					p.right.apply must equal (P)
 				}
 			}
   		}
