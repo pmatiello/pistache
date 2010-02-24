@@ -17,8 +17,7 @@ private object LinkStorage {
 	/** A concrete implementation of links.
 	 */
 	class LinkImplementation {
-		private var isFilled = false
-		private var value:Any = null
+		private var buffer:List[Any] = Nil
 		private var lock:AnyRef = new Object
 		
 		/** Make the thread wait until the given condition is satisfied.
@@ -35,9 +34,7 @@ private object LinkStorage {
 		 */
 		def send(value:Any) {
 			lock.synchronized {
-				waitUntil (!isFilled)
-				isFilled = true
-				this.value = value
+				buffer = buffer ::: List(value)
 				lock.notifyAll
 			}
 		}
@@ -48,9 +45,9 @@ private object LinkStorage {
 		 */
 		def recv:Any = {
 			lock.synchronized {
-				waitUntil (isFilled)
-				val temp = value
-				isFilled = false
+				waitUntil (!buffer.isEmpty)
+				val temp = buffer.head
+				buffer = buffer.tail
 				lock.notifyAll
 				temp
 			}
