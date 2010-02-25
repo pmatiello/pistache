@@ -53,7 +53,7 @@
          ================================= -->
     <target name="compile" description="compile source classes">
 		<mkdir dir="${compile.dir}" />
-    	<scalac srcdir="${src.dir}" destdir="${compile.dir}">
+    	<scalac srcdir="${src.dir}" destdir="${compile.dir}" classpathref="project.classpath">
     		<include name="**/*.scala"/>
     	</scalac>
     </target>
