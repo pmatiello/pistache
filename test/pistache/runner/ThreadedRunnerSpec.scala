@@ -103,31 +103,13 @@ class ThreadedRunnerSpec extends Spec with MustMatchers {
 			val name2recv = Name(false)
 			val link = Link[Boolean]
 			
-			val agent = Agent(link~name2send*link(name2recv))
+			val agent = Agent(link~name2send | link(name2recv))
    
 			new ThreadedRunner(agent).start
    
 			name2send.value must equal (name2recv.value)
 		}
-  
-		it ("should not block on sending messages") {
-			val link = Link[Int]
-			val agent = link~0*link~1*link~2
-			
-			new ThreadedRunner(agent).start
-		}
-  
-		it ("should store all messages sent through a link and retrieve them orderly") {
-			val link = Link[Int]
-			val name = Name[Int]
-			val check0 = Action { name.value must equal (0) }
-			val check1 = Action { name.value must equal (1) }
-			val check2 = Action { name.value must equal (2) }
-			val agent = link~0*link~1*link~2*link(name)*check0*link(name)*check1*link(name)*check2
-			
-			new ThreadedRunner(agent).start
-		}
-  
+		
 		it ("should work with agents with arguments") {
 			// See: Milner, R., Parrow, J., and Walker, D. 1992. A calculus of mobile processes, Part I, Chapter 4, example 5
 			val send = Link[Int]
