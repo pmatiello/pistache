@@ -149,8 +149,7 @@ class ThreadedRunner(val agent:Agent) {
             
             /* Execute agents conditionally */
 			case proc:IfAgent => if (proc.condition apply) run(proc.then apply)
-			case proc:IfElseAgent => if (proc.condition apply) run(proc.then apply) else run(proc.elseThen apply)
-   
+			
 			/* Send and receive messages through links */
 			case proc:LinkAgent[_] => {
 				proc.action match {

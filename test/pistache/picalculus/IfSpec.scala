@@ -49,39 +49,5 @@ class IfSpec extends Spec with MustMatchers {
 			}
    		}
 	}
-		
-	describe ("Else") {
-	  
-		it ("should express a conditional execution of a agent") {
-			val P = If (1 > 0) {Q} Else {R}
-			P match {
-				case proc:IfElseAgent =>
-								proc.condition.apply must equal (true)
-								proc.then.apply must equal (Q)
-								proc.elseThen.apply must equal (R)
-			}	
-		}
-  
-		it ("should possible to express a conditional agent as part of another agent") {
-			val P = Q * (If (1 > 0) {R} Else {S}) * Q
-			
-			P match {
-				case pp:ConcatenationAgent => {
-					pp.left.apply match {
-						case pl:ConcatenationAgent => {
-							pl.left.apply must equal (Q)
-							pl.right.apply match {
-								case pi:IfElseAgent =>	pi.condition.apply must equal (true)
-														pi.then.apply must equal (R)
-														pi.elseThen.apply must equal (S)
-							}
-						}
-					}
-					pp.right.apply must equal (Q)
-				}
-			}
-		}
-	  
-	}
 
 }

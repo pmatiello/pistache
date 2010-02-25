@@ -79,26 +79,6 @@ class ThreadedRunnerSpec extends Spec with MustMatchers {
 			executed2 must be (false)
 		}
   
-		it ("should run an alternative agent branch conditionally") {
-			var executedIf1 = false
-			var executedElse1 = false
-			var executedIf2 = false
-			var executedElse2 = false
-
-			var actionIf1 = Action(executedIf1 = true)
-			var actionElse1 = Action(executedElse1 = true)
-			var actionIf2 = Action(executedIf2 = true)
-			var actionElse2 = Action(executedElse2 = true)
-   
-			val agent = Agent((If (true) {actionIf1} Else {actionElse1}) * (If (false) {actionIf2} Else {actionElse2}))
-			new ThreadedRunner(agent).start
-			
-			executedIf1 must be (true)
-			executedElse1 must be (false)
-			executedIf2 must be (false)
-			executedElse2 must be (true)
-		}
-  
 		it ("should run agents with restricted names") {
 			var hasRan = false;
 			var finalValue = 0;
@@ -111,7 +91,7 @@ class ThreadedRunnerSpec extends Spec with MustMatchers {
 				  hasRan = true
 				}
 				
-				Agent(If (!hasRan) {action * agent} Else {action})
+				Agent(action * If (!hasRan) {agent})
 			}
    
 			new ThreadedRunner(agent).start
@@ -165,7 +145,7 @@ class ThreadedRunnerSpec extends Spec with MustMatchers {
 			value.value must equal (6)
 		}
   
-		it ("should work with executors conditionally") {
+		it ("should work with agents with arguments conditionally") {
 			var exec1 = Name(false)
 			var exec2 = Name(false)
 			
@@ -174,7 +154,7 @@ class ThreadedRunnerSpec extends Spec with MustMatchers {
 				action
 			}
    
-			val agent = Agent(If (true) {Exec(exec1)} Else {Exec(exec2)})
+			val agent = Agent(If (true) {Exec(exec1)} * If (false) {Exec(exec2)})
 			
 			new ThreadedRunner(agent).start
 			
