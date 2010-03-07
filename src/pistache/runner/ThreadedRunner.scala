@@ -125,23 +125,23 @@ class ThreadedRunner(val agent:Agent) {
 		agent match {
 
 			/* Execute (restricted) agents */
-			case proc:RestrictedAgent => run(proc.agent apply)
+			case RestrictedAgent(agent) => run(agent apply)
 		  
 			/* Execute action */
-			case proc:Action => proc.procedure apply
+			case ActionAgent(procedure) => procedure apply
 
 			/* Execute agents sequentially */
-			case proc:ConcatenationAgent => run(proc.left apply)
-											  run(proc.right apply)
+			case ConcatenationAgent(left, right) => run(left apply)
+											  		run(right apply)
             
 			/* Execute agents in parallel */
-            case proc:CompositionAgent => {
+            case CompositionAgent(left, right) => {
               
             	val leftThread = new Thread() {
-            		override def run() { new ThreadedRunner(proc.left apply) run }
+            		override def run() { new ThreadedRunner(left apply) run }
             	}               
             	val rightThread = new Thread() {
-            		override def run() { new ThreadedRunner(proc.right apply) run }
+            		override def run() { new ThreadedRunner(right apply) run }
             	}
              
             	leftThread.start
@@ -152,13 +152,13 @@ class ThreadedRunner(val agent:Agent) {
             }
             
             /* Execute agents conditionally */
-			case proc:IfAgent => if (proc.condition apply) run(proc.then apply)
+			case IfAgent(condition, then) => if (condition apply) run(then apply)
 			
 			/* Send and receive messages through links */
-			case proc:LinkAgent[_] => {
-				proc.action match {
-					case Link.ActionType.Send => LinkStorage.send(proc.link, proc.name)
-					case Link.ActionType.Receive => LinkStorage.recv(proc.link, proc.name)
+			case LinkAgent(link, action, name) => {
+				action match {
+					case Link.ActionType.Send => LinkStorage.send(link, name)
+					case Link.ActionType.Receive => LinkStorage.recv(link, name)
 				} 
 			}
 		}

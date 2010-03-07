@@ -25,8 +25,8 @@ class IfSpec extends Spec with MustMatchers {
 		it ("should express a conditional execution of a agent") {
 			val P = If (1 > 0) {Q}
 			P match {
-				case proc:IfAgent => proc.condition.apply must equal (true)
-				proc.then.apply must equal (Q)
+				case IfAgent(condition, then) =>	condition.apply must equal (true)
+													then.apply must equal (Q)
 			}
 		}
   
@@ -34,17 +34,17 @@ class IfSpec extends Spec with MustMatchers {
 			val P = Q * If (1 > 0) {R} * S
 			
 			P match {
-				case pp:ConcatenationAgent => {
-					pp.left.apply match {
-						case pl:ConcatenationAgent => {
-							pl.left.apply must equal (Q)
-							pl.right.apply match {
-								case pi:IfAgent =>	pi.condition.apply must equal (true)
-													pi.then.apply must equal (R)
+				case ConcatenationAgent(left, right) => {
+					left.apply match {
+						case ConcatenationAgent(left, right) => {
+							left.apply must equal (Q)
+							right.apply match {
+								case IfAgent(condition, then) =>	condition.apply must equal (true)
+																	then.apply must equal (R)
 							}
 						}
 					}
-					pp.right.apply must equal (S)
+					right.apply must equal (S)
 				}
 			}
    		}

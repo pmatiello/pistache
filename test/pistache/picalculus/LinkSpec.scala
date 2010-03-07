@@ -38,62 +38,62 @@ class LinkSpec extends Spec with MustMatchers {
 		}
   
 		it ("should return a Agent when ~ (send) is called") {
-			val link = Link[Int]
-			val name = Name(5)
-			val agent:Agent = link~name
+			val link1 = Link[Int]
+			val name1 = Name(5)
+			val agent:Agent = link1~name1
 			agent match {
-				case pp:LinkAgent[_] =>	pp.link must equal (link.value)
-										pp.action must equal (Link.ActionType.Send)
-										(pp.name == name) must equal (true)
+				case LinkAgent(link, action, name) =>	link must equal (link1.value)
+															action must equal (Link.ActionType.Send)
+															(name == name1) must equal (true)
 			}
 		}
   
   		it ("should return a Agent when apply (receive) is called") {
-			val link = Link[Int]
-			val name = Name[Int]
-			val agent:Agent = link(name)
+			val link1 = Link[Int]
+			val name1 = Name[Int]
+			val agent:Agent = link1(name1)
 			agent match {
-				case pp:LinkAgent[_] =>	pp.link must equal (link.value)
-										pp.action must equal (Link.ActionType.Receive)
-										(pp.name == name) must equal (true)
+				case LinkAgent(link, action, name) =>	link must equal (link1.value)
+														action must equal (Link.ActionType.Receive)
+														(name == name1) must equal (true)
 			}
   		}
     
   		it ("should be so that send has precedence over agent concatenation") {
-  			val link = Link[Int]
-  			val name = Name(5)
-			val agent:Agent = P * link~name * P
+  			val link1 = Link[Int]
+  			val name1 = Name(5)
+			val agent:Agent = P * link1~name1 * P
 			agent match {
-				case p:ConcatenationAgent => {
-					p.left.apply match {
-						case pp:ConcatenationAgent =>	pp.left.apply must equal (P)
-														pp.right.apply match {
-															case pr:LinkAgent[_] =>	pr.link must equal (link.value)
-																					pr.action must equal (Link.ActionType.Send)
-																					(pr.name == name) must equal (true)
+				case ConcatenationAgent(left, right) => {
+					left.apply match {
+						case ConcatenationAgent(left, right) =>	left.apply must equal (P)
+																right.apply match {
+																	case LinkAgent(link, action, name) =>	link must equal (link1.value)
+																											action must equal (Link.ActionType.Send)
+																											(name == name1) must equal (true)
 														}
 					}
-					p.right.apply must equal (P)
+					right.apply must equal (P)
 				}
 			}
   		}
     
   		it ("should be so that receive has precedence over agent concatenation") {
-  			val link = Link[Int]
-  			val name = Name[Int]
-			val agent:Agent = P * link(name) * P
+  			val link1 = Link[Int]
+  			val name1 = Name[Int]
+			val agent:Agent = P * link1(name1) * P
    
 			agent match {
-				case p:ConcatenationAgent => {
-					p.left.apply match {
-						case pp:ConcatenationAgent => pp.left.apply must equal (P)
-														pp.right.apply match {
-															case pr:LinkAgent[_] =>	pr.link must equal (link.value)
-																					pr.action must equal (Link.ActionType.Receive)
-																					(pr.name == name) must equal (true)
+				case ConcatenationAgent(left, right) => {
+					left.apply match {
+						case ConcatenationAgent(left, right) => left.apply must equal (P)
+																right.apply match {
+																	case LinkAgent(link, action, name) =>	link must equal (link1.value)
+																											action must equal (Link.ActionType.Receive)
+																											(name == name1) must equal (true)
 														}
 					}
-					p.right.apply must equal (P)
+					right.apply must equal (P)
 				}
 			}
   		}
