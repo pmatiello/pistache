@@ -155,12 +155,9 @@ class ThreadedRunner(val agent:Agent) {
 			case IfAgent(condition, then) => if (condition apply) run(then apply)
 			
 			/* Send and receive messages through links */
-			case LinkAgent(link, action, name) => {
-				action match {
-					case Link.ActionType.Send => LinkStorage.send(link, name)
-					case Link.ActionType.Receive => LinkStorage.recv(link, name)
-				} 
-			}
+			case LinkAgent(link, Link.ActionType.Send, name) => LinkStorage.send(link, name)
+			case LinkAgent(link, Link.ActionType.Receive, name) => LinkStorage.recv(link, name)
+			
 		}
 	}
   
