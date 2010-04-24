@@ -19,6 +19,7 @@ private object LinkStorage {
 	class LinkImplementation {
 		private var buffer:Any = null
 		private var isEmpty = true
+		private var isFree = true
 		private var lock:AnyRef = new Object
 		
 		/** Make the thread wait until the given condition is satisfied.
@@ -35,11 +36,14 @@ private object LinkStorage {
 		 */
 		def send(value:Any) {
 			lock.synchronized {
-				waitUntil(isEmpty)
+				waitUntil(isEmpty && isFree)
 				buffer = value
 				isEmpty = false
+				isFree = false
 				lock.notifyAll
 				waitUntil(isEmpty)
+				isFree = true
+				lock.notifyAll
 			}
 		}
 

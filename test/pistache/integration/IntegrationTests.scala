@@ -37,6 +37,11 @@ class IntegrationTests extends Spec with MustMatchers {
 			PingPong.result must equal (List.range(0,1000))
 		}
   
+		it ("Message passing, channel locking") {
+			val ProducerConsumer = new ProducerConsumer(100000)
+			new ThreadedRunner(ProducerConsumer.agent).start
+		}
+  
 		it ("Agents with arguments and massive threading") {
 			val unsortedList = randomList(500) 
 			val qsort = new Quicksort(unsortedList)
