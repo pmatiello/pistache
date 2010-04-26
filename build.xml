@@ -68,14 +68,39 @@
     </target>
 	
 	<!-- =================================
-          target: test
+          target: unit-tests
          ================================= -->
-    <target name="test" depends="compile-test" description="run tests">
+    <target name="unit-tests" depends="compile-test" description="run unit tests">
     	<taskdef name="scalatest" classname="org.scalatest.tools.ScalaTestAntTask">
     	      <classpath refid="project.classpath"/>
    	    </taskdef>
-    	<scalatest runpath="${compile.dir}" haltonfailure="true"/>
+    	<scalatest runpath="${compile.dir}" haltonfailure="true">
+    		<membersonly package="pistache.picalculus"/>
+    		<membersonly package="pistache.runner"/>
+    	</scalatest>
     </target>
+	
+	<!-- =================================
+	          target: integration-tests
+	         ================================= -->
+	    <target name="integration-tests" depends="compile-test" description="run integration tests">
+	    	<taskdef name="scalatest" classname="org.scalatest.tools.ScalaTestAntTask">
+	    	      <classpath refid="project.classpath"/>
+	   	    </taskdef>
+	    	<scalatest runpath="${compile.dir}" haltonfailure="true">
+	    		<membersonly package="pistache.integration"/>
+	    	</scalatest>
+	    </target>
+	
+	<!-- =================================
+	          target: all-tests
+	         ================================= -->
+	    <target name="all-tests" depends="unit-tests, integration-tests" description="run all tests" />
+	
+	<!-- =================================
+	          target: test
+	         ================================= -->
+	    <target name="test" depends="unit-tests" description="run unit tests" />
 	
     <!-- =================================
           target: docs
