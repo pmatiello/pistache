@@ -18,7 +18,7 @@ class IfSpec extends Spec with MustMatchers {
   
 	val Q = new FakeAgent
 	val R = new FakeAgent
-	val S = new FakeAgent
+	val S = new FakePrefix
   
 	describe ("If") {
 	  
@@ -31,20 +31,20 @@ class IfSpec extends Spec with MustMatchers {
 		}
   
 		it ("should possible to express a conditional agent as part of another agent") {
-			val P = Q * If (1 > 0) {R} * S
+			val P = S * If (1 > 0) {Q} * R
 			
 			P match {
 				case ConcatenationAgent(left, right) => {
 					left.apply match {
 						case ConcatenationAgent(left, right) => {
-							left.apply must equal (Q)
+							left.apply must equal (S)
 							right.apply match {
 								case IfAgent(condition, then) =>	condition.apply must equal (true)
-																	then.apply must equal (R)
+																	then.apply must equal (Q)
 							}
 						}
 					}
-					right.apply must equal (S)
+					right.apply must equal (R)
 				}
 			}
    		}

@@ -53,27 +53,12 @@ class ThreadedRunnerSpec extends Spec with MustMatchers {
 			executed3 must be (true)
 		}
   
-		it ("should wait for the parallel agent to finish before running the next outter concatenated agent") {
-			var execOrder = 1;
-			var executed1 = 0
-			val action1 = Action{Thread.sleep(100); executed1 = execOrder; execOrder += 1}
-			var executed2 = 0
-			val action2 = Action{Thread.sleep(200); executed2 = execOrder; execOrder += 1}
-			var executed3 = 0
-			val action3 = Action{executed3 = execOrder; execOrder += 1}
-			val agent = Agent((action1|action2)*action3)
-			new ThreadedRunner(agent).start
-			executed1 must equal (1)
-			executed2 must equal (2)
-			executed3 must equal (3)
-		}
-  
 		it ("should run agents conditionally") {
 			var executed1 = false
 			var executed2 = false
 			var action1 = Action(executed1 = true)
 			var action2 = Action(executed2 = true)
-			val agent = Agent(If (true) {action1} * If (false) {action2})
+			val agent = Agent(If (true) {action1} | If (false) {action2})
 			new ThreadedRunner(agent).start
 			executed1 must be (true)
 			executed2 must be (false)
@@ -136,7 +121,7 @@ class ThreadedRunnerSpec extends Spec with MustMatchers {
 				action
 			}
    
-			val agent = Agent(If (true) {Exec(exec1)} * If (false) {Exec(exec2)})
+			val agent = Agent(If (true) {Exec(exec1)} | If (false) {Exec(exec2)})
 			
 			new ThreadedRunner(agent).start
 			

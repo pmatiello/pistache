@@ -125,7 +125,7 @@ class ThreadedRunner(val agent:Agent) {
 	 *
 	 *  @param agent the agent to be executed.
 	 */
-	private def run(agent:Agent) {
+	private def run(agent:PiObject) {
 		agent match {
 
 			/* Execute (restricted) agents */

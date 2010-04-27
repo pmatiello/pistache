@@ -25,7 +25,7 @@ class Quicksort(list:List[Int]) {
 			qsort(rightLink, rightList.value) |
 			leftLink(leftList)*rightLink(rightList) *
 			replyLink~(leftList ::: list.head :: rightList))
-		} * If (list.size <= 1) {replyLink~list})
+		} | If (list.size <= 1) {replyLink~list})
 	}
 	
 	val replyLink = Link[List[Int]] 

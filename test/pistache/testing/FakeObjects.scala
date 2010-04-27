@@ -7,5 +7,8 @@
 package pistache.testing
 
 import pistache.picalculus.Agent
+import pistache.picalculus.Prefix
 
 class FakeAgent extends Agent
+class FakePrefix extends Prefix
+class FakePrefixAgent extends Agent with Prefix

@@ -21,14 +21,7 @@ object Agent {
 
 /** A trait representing pi-Calculus agents.
  */
-trait Agent {
-  
-	/** Concatenation operator.
-	 *
-	 *  @param other the other agent.
-	 *  @return the agent constructed by concatenation of this agent and the given agent.
-	 */
-	def *(other: => Agent) = ConcatenationAgent(() => this, other _)
+trait Agent extends PiObject {
  
  	/** Composition operator.
 	 *
@@ -50,7 +43,7 @@ case class RestrictedAgent(val agent: () => Agent) extends Agent
  *  @param right the second agent.
  *  @return the constructed agent.
  */
-case class ConcatenationAgent(val left: () => Agent, val right: () => Agent) extends Agent
+case class ConcatenationAgent(val left: () => Prefix, val right: () => Agent) extends Agent with Prefix
 
 /** A class representing a agent constructed by the composition of two other agents.
  * 

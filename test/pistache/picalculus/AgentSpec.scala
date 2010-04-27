@@ -16,13 +16,13 @@ import org.mockito.Mockito.mock
 @RunWith(classOf[JUnitRunner])
 class AgentSpec extends Spec with MustMatchers {
   
-	val Q = new FakeAgent
-	val R = new FakeAgent
-	val S = new FakeAgent
+	val Q = new FakePrefixAgent
+	val R = new FakePrefixAgent
+	val S = new FakePrefixAgent
 	
 	describe ("Agent") {
   
-		it ("should be written as a concatenation of agents") {
+		it ("should be written as a concatenation of prefixes") {
 			val P = Q * R * S
 			P match {
 				case ConcatenationAgent(left, right) => {
