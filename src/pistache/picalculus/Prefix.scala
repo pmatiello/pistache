@@ -9,8 +9,13 @@ package pistache.picalculus
 /** An object providing helper methods to pi-Calculus prefixes.
  */
 object Prefix {
-  
-	 implicit def PiObjectToAgent(piObject: PiObject) = PrefixAgent(piObject)
+
+	/** Concatenation operator.
+	 *
+	 *  @param prefix the prefix.
+	 *  @return the agent for this prefix.
+	 */
+	 implicit def PrefixToAgent(prefix: Prefix) = PrefixAgent(prefix)
   
 }
 
@@ -20,15 +25,15 @@ trait Prefix extends PiObject {
   
 	/** Concatenation operator.
 	 *
-	 *  @param other the other agent.
-	 *  @return the agent constructed by concatenation of this agent and the given agent.
+	 *  @param other the other prefix.
+	 *  @return the agent constructed by concatenation of this prefix and the given prefix.
 	 */
 	def *(other: => Prefix) = ConcatenationPrefix(() => this, other _)
  
 	/** Concatenation operator.
 	 *
-	 *  @param other the other agent.
-	 *  @return the agent constructed by concatenation of this agent and the given agent.
+	 *  @param other the agent.
+	 *  @return the agent constructed by concatenation of this prefix and the given agent.
 	 */
 	def *(other: => Agent) = ConcatenationAgent(() => this, other _)
 
