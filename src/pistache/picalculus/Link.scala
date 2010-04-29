@@ -54,4 +54,4 @@ import Link.ActionType._
  *  @param action the type of action.
  *  @param name the name involved in the transference.
  */
-protected[pistache] case class LinkAgent[T](val link:Link[T], val action:ActionType, val name:Name[T]) extends Agent with Prefix
+protected[pistache] case class LinkAgent[T](val link:Link[T], val action:ActionType, val name:Name[T]) extends Prefix

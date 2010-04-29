@@ -38,10 +38,10 @@ class LinkSpec extends Spec with MustMatchers {
 			assert(true)	// We're ok if no exceptions are reaised
 		}
   
-		it ("should return a Agent when ~ (send) is called") {
+		it ("should return a Prefix when ~ (send) is called") {
 			val link1 = Link[Int]
 			val name1 = Name(5)
-			val agent:Agent = link1~name1
+			val agent:Prefix = link1~name1
 			agent match {
 				case LinkAgent(link, action, name) =>	link must equal (link1.value)
 														action must equal (Link.ActionType.Send)
@@ -49,10 +49,10 @@ class LinkSpec extends Spec with MustMatchers {
 			}
 		}
   
-  		it ("should return a Agent when apply (receive) is called") {
+  		it ("should return a Prefix when apply (receive) is called") {
 			val link1 = Link[Int]
 			val name1 = Name[Int]
-			val agent:Agent = link1(name1)
+			val agent:Prefix = link1(name1)
 			agent match {
 				case LinkAgent(link, action, name) =>	link must equal (link1.value)
 														action must equal (Link.ActionType.Receive)
@@ -67,12 +67,12 @@ class LinkSpec extends Spec with MustMatchers {
 			agent match {
 				case ConcatenationAgent(left, right) => {
 					left.apply match {
-						case ConcatenationAgent(left, right) =>	left.apply must equal (Q)
-																right.apply match {
-																case LinkAgent(link, action, name) =>	link must equal (link1.value)
-																										action must equal (Link.ActionType.Send)
-																										(name == name1) must equal (true)
-																}
+						case ConcatenationPrefix(left, right) =>	left.apply must equal (Q)
+																	right.apply match {
+																	case LinkAgent(link, action, name) =>	link must equal (link1.value)
+																											action must equal (Link.ActionType.Send)
+																											(name == name1) must equal (true)
+																	}
 					}
 					right.apply must equal (P)
 				}
@@ -87,12 +87,12 @@ class LinkSpec extends Spec with MustMatchers {
 			agent match {
 				case ConcatenationAgent(left, right) => {
 					left.apply match {
-						case ConcatenationAgent(left, right) => left.apply must equal (Q)
-																right.apply match {
-																case LinkAgent(link, action, name) =>	link must equal (link1.value)
+						case ConcatenationPrefix(left, right) =>	left.apply must equal (Q)
+																	right.apply match {
+																	case LinkAgent(link, action, name) =>	link must equal (link1.value)
 																											action must equal (Link.ActionType.Receive)
 																											(name == name1) must equal (true)
-																}
+																	}
 					}
 					right.apply must equal (P)
 				}

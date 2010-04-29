@@ -29,25 +29,6 @@ class IfSpec extends Spec with MustMatchers {
 													then.apply must equal (Q)
 			}
 		}
-  
-		it ("should possible to express a conditional agent as part of another agent") {
-			val P = S * If (1 > 0) {Q} * R
-			
-			P match {
-				case ConcatenationAgent(left, right) => {
-					left.apply match {
-						case ConcatenationAgent(left, right) => {
-							left.apply must equal (S)
-							right.apply match {
-								case IfAgent(condition, then) =>	condition.apply must equal (true)
-																	then.apply must equal (Q)
-							}
-						}
-					}
-					right.apply must equal (R)
-				}
-			}
-   		}
 	}
 
 }

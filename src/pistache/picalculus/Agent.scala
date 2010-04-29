@@ -6,9 +6,13 @@
 
 package pistache.picalculus
 
+import Agent._
+
 /** An object providing methods to create pi-Calculus agents.
  */
 object Agent {
+  
+	implicit def prefixToAgent(prefix: Prefix) = PrefixAgent(prefix)
   
 	/** Create a agent.
 	 *
@@ -31,19 +35,26 @@ trait Agent extends PiObject {
   	def |(other: => Agent) = CompositionAgent(() => this, other _)
 }
 
+
+/** A class representing pi-Calculus prefixes as agents.
+ * 
+ *  @param agent the agent.
+ */
+case class PrefixAgent(val agent: Prefix) extends Agent
+
 /** A class representing pi-Calculus agents allowing restricted agents.
  * 
  *  @param agent the agent.
  */
 case class RestrictedAgent(val agent: () => Agent) extends Agent
 
-/** A class representing a agent constructed by the concatenation of two other agents.
+/** A class representing a agent constructed by the concatenation of a prefix and an agent.
  * 
- *  @param left the first agent.
- *  @param right the second agent.
+ *  @param left the prefix.
+ *  @param right the agent.
  *  @return the constructed agent.
  */
-case class ConcatenationAgent(val left: () => Prefix, val right: () => Agent) extends Agent with Prefix
+case class ConcatenationAgent(val left: () => Prefix, val right: () => Agent) extends Agent
 
 /** A class representing a agent constructed by the composition of two other agents.
  * 

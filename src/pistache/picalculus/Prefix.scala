@@ -15,6 +15,21 @@ trait Prefix extends PiObject {
 	 *  @param other the other agent.
 	 *  @return the agent constructed by concatenation of this agent and the given agent.
 	 */
+	def *(other: => Prefix) = ConcatenationPrefix(() => this, other _)
+ 
+	/** Concatenation operator.
+	 *
+	 *  @param other the other agent.
+	 *  @return the agent constructed by concatenation of this agent and the given agent.
+	 */
 	def *(other: => Agent) = ConcatenationAgent(() => this, other _)
 
 }
+
+/** A class representing a prefix constructed by the concatenation of two prefixes.
+ * 
+ *  @param left the first prefix.
+ *  @param right the second prefix.
+ *  @return the constructed prefix.
+ */
+case class ConcatenationPrefix(val left: () => Prefix, val right: () => Prefix) extends Prefix

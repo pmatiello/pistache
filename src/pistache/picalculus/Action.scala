@@ -23,4 +23,4 @@ object Action {
  * 
  *  @param function the transition procedure.
  */
-protected[pistache] case class ActionAgent(val procedure: () => Unit) extends Agent with Prefix
+protected[pistache] case class ActionAgent(val procedure: () => Unit) extends Prefix

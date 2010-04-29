@@ -127,6 +127,9 @@ class ThreadedRunner(val agent:Agent) {
 	 */
 	private def run(agent:PiObject) {
 		agent match {
+		  
+			/* Execute prefixes */
+			case PrefixAgent(agent) => run(agent)
 
 			/* Execute (restricted) agents */
 			case RestrictedAgent(agent) => run(agent apply)
@@ -134,6 +137,10 @@ class ThreadedRunner(val agent:Agent) {
 			/* Execute action */
 			case ActionAgent(procedure) => procedure apply
 
+			/* Execute prefixes sequentially */
+			case ConcatenationPrefix(left, right) => run(left apply)
+											  		 run(right apply)
+     
 			/* Execute agents sequentially */
 			case ConcatenationAgent(left, right) => run(left apply)
 											  		run(right apply)
