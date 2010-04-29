@@ -7,6 +7,7 @@
 package pistache.integration
 
 import pistache.picalculus._
+import pistache.picalculus.Implicits._
 
 class Quicksort(list:List[Int]) {
 
