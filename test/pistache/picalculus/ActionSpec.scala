@@ -32,13 +32,6 @@ class ActionSpec extends Spec with MustMatchers {
 			)
 			assert(true)
 		}
-  
-		it ("should be a agent") {
-			val agent:Agent = Action(
-				fail()	// must not be run
-			)
-			assert(true)
-		}
 	   
 	 }
   

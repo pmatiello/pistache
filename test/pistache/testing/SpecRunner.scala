@@ -13,6 +13,8 @@ import pistache.runner._
 object SpecRunner extends Application {
 
 	new ActionSpec execute
+   
+	new AgentSpec execute
   
 	new IfSpec execute
    
@@ -22,7 +24,7 @@ object SpecRunner extends Application {
     
 	new NameSpec execute
     
-	new AgentSpec execute
+	new PrefixSpec execute
    
 	new ThreadedRunnerSpec execute
   
