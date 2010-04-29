@@ -6,13 +6,11 @@
 
 package pistache.picalculus
 
-import Agent._
+import Implicits._
 
 /** An object providing methods to create pi-Calculus agents.
  */
 object Agent {
-  
-	implicit def prefixToAgent(prefix: Prefix) = PrefixAgent(prefix)
   
 	/** Create a agent.
 	 *
@@ -34,13 +32,6 @@ trait Agent extends PiObject {
 	 */
   	def |(other: => Agent) = CompositionAgent(() => this, other _)
 }
-
-
-/** A class representing pi-Calculus prefixes as agents.
- * 
- *  @param agent the agent.
- */
-case class PrefixAgent(val agent: Prefix) extends Agent
 
 /** A class representing pi-Calculus agents allowing restricted agents.
  * 

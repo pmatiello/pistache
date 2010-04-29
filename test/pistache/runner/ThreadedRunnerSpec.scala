@@ -11,7 +11,7 @@ import org.scalatest.matchers.MustMatchers
 import org.scalatest.junit.JUnitRunner
 import org.junit.runner.RunWith
 import pistache.picalculus._
-import pistache.picalculus.Agent._
+import pistache.picalculus.Implicits._
 
 @RunWith(classOf[JUnitRunner])
 class ThreadedRunnerSpec extends Spec with MustMatchers {

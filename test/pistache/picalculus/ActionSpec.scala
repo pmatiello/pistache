@@ -10,6 +10,7 @@ import org.scalatest.Spec
 import org.scalatest.matchers.MustMatchers
 import org.scalatest.junit.JUnitRunner
 import org.junit.runner.RunWith
+import pistache.picalculus.Implicits._
 
 @RunWith(classOf[JUnitRunner])
 class ActionSpec extends Spec with MustMatchers {
