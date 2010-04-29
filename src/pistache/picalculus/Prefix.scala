@@ -6,6 +6,14 @@
 
 package pistache.picalculus
 
+/** An object providing helper methods to pi-Calculus prefixes.
+ */
+object Prefix {
+  
+	 implicit def PiObjectToAgent(piObject: PiObject) = PrefixAgent(piObject)
+  
+}
+
 /** A trait representing pi-Calculus prefixes.
  */
 trait Prefix extends PiObject {
