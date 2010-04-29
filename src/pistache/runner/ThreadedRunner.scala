@@ -128,8 +128,8 @@ class ThreadedRunner(val agent:Agent) {
 	private def run(agent:PiObject) {
 		agent match {
 		  
-			/* Execute prefixes */
-			case PrefixAgent(agent) => run(agent)
+			/* Ignore NilAgent */
+			case NilAgent() => {}
 
 			/* Execute (restricted) agents */
 			case RestrictedAgent(agent) => run(agent apply)

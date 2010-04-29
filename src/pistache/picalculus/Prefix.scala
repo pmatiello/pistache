@@ -15,7 +15,7 @@ object Prefix {
 	 *  @param prefix the prefix.
 	 *  @return the agent for this prefix.
 	 */
-	 implicit def PrefixToAgent(prefix: Prefix) = PrefixAgent(prefix)
+	 implicit def PrefixToAgent(prefix: Prefix):Agent = ConcatenationAgent(() => prefix, NilAgent)
   
 }
 

@@ -38,7 +38,7 @@ class PrefixSpec extends Spec with MustMatchers {
 		it ("should be converted implicitly to Agent") {
 			val P:Agent = Q
 			P match {
-				case PrefixAgent(agent)	=> agent must equal (Q)
+				case ConcatenationAgent(agent, NilAgent)	=> agent.apply must equal (Q)
 			}
 		}
   

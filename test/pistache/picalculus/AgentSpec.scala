@@ -90,11 +90,15 @@ class AgentSpec extends Spec with MustMatchers {
 				val l = Link[Object]
 				l~x
 			}
-			val inst1 = P.agent.apply.asInstanceOf[PrefixAgent].agent
-			val inst2 = P.agent.apply.asInstanceOf[PrefixAgent].agent
-			inst1 must not be theSameInstanceAs (inst2)
-			inst1.asInstanceOf[LinkAgent[Object]].link must not be theSameInstanceAs (inst2.asInstanceOf[LinkAgent[Object]].link)
-			inst1.asInstanceOf[LinkAgent[Object]].name must not be theSameInstanceAs (inst2.asInstanceOf[LinkAgent[Object]].name) 
+   
+			(P.agent.apply, P.agent.apply) match {
+				case Tuple2(ConcatenationAgent(inst1, NilAgent), ConcatenationAgent(inst2, NilAgent)) =>
+					(inst1.apply, inst2.apply) match {
+						case Tuple2(LinkAgent(link1, _, name1), LinkAgent(link2, _, name2)) =>
+							link1 must not be theSameInstanceAs (link2)
+							name1 must not be theSameInstanceAs (name2)
+					}
+			}
 		}
 	}
 }

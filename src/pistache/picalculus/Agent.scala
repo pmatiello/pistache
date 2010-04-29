@@ -31,11 +31,9 @@ trait Agent extends PiObject {
   	def |(other: => Agent) = CompositionAgent(() => this, other _)
 }
 
-/** A class representing pi-Calculus prefixes as agents.
- * 
- *  @param agent the agent.
+/** A class representing the Null agent.
  */
-case class PrefixAgent(val agent: PiObject) extends Agent
+case class NilAgent() extends Agent
 
 /** A class representing pi-Calculus agents allowing restricted agents.
  * 
