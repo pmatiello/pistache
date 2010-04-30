@@ -43,7 +43,7 @@ class LinkSpec extends Spec with MustMatchers {
 			val name1 = Name(5)
 			val agent:Prefix = link1~name1
 			agent match {
-				case LinkAgent(link, action, name) =>	link must equal (link1.value)
+				case LinkPrefix(link, action, name) =>	link must equal (link1.value)
 														action must equal (Link.ActionType.Send)
 														(name == name1) must equal (true)
 			}
@@ -54,7 +54,7 @@ class LinkSpec extends Spec with MustMatchers {
 			val name1 = Name[Int]
 			val agent:Prefix = link1(name1)
 			agent match {
-				case LinkAgent(link, action, name) =>	link must equal (link1.value)
+				case LinkPrefix(link, action, name) =>	link must equal (link1.value)
 														action must equal (Link.ActionType.Receive)
 														(name == name1) must equal (true)
 			}
@@ -69,7 +69,7 @@ class LinkSpec extends Spec with MustMatchers {
 					left.apply match {
 						case ConcatenationPrefix(left, right) =>	left.apply must equal (Q)
 																	right.apply match {
-																	case LinkAgent(link, action, name) =>	link must equal (link1.value)
+																	case LinkPrefix(link, action, name) =>	link must equal (link1.value)
 																											action must equal (Link.ActionType.Send)
 																											(name == name1) must equal (true)
 																	}
@@ -89,7 +89,7 @@ class LinkSpec extends Spec with MustMatchers {
 					left.apply match {
 						case ConcatenationPrefix(left, right) =>	left.apply must equal (Q)
 																	right.apply match {
-																	case LinkAgent(link, action, name) =>	link must equal (link1.value)
+																	case LinkPrefix(link, action, name) =>	link must equal (link1.value)
 																											action must equal (Link.ActionType.Receive)
 																											(name == name1) must equal (true)
 																	}

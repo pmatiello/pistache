@@ -94,7 +94,7 @@ class AgentSpec extends Spec with MustMatchers {
 			(P.agent.apply, P.agent.apply) match {
 				case Tuple2(ConcatenationAgent(inst1, NilAgent), ConcatenationAgent(inst2, NilAgent)) =>
 					(inst1.apply, inst2.apply) match {
-						case Tuple2(LinkAgent(link1, _, name1), LinkAgent(link2, _, name2)) =>
+						case Tuple2(LinkPrefix(link1, _, name1), LinkPrefix(link2, _, name2)) =>
 							link1 must not be theSameInstanceAs (link2)
 							name1 must not be theSameInstanceAs (name2)
 					}

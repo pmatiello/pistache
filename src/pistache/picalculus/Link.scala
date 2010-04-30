@@ -35,14 +35,14 @@ protected[pistache] class Link[T] {
 	 *  @param name the name to be sent through the link.
 	 *  @return the agent representing this action.
      */
-	def ~(name:Name[T]) = new LinkAgent(this, Link.ActionType.Send, name)
+	def ~(name:Name[T]) = new LinkPrefix(this, Link.ActionType.Send, name)
 	
 	/** Receive a name through this link.
 	 * 
 	 *  @param name the name to be used as storage of the object received through the link.
 	 *  @return the agent representing this action.
      */
-	def apply(name:Name[T]) = new LinkAgent(this, Link.ActionType.Receive, name)
+	def apply(name:Name[T]) = new LinkPrefix(this, Link.ActionType.Receive, name)
 
 }
 
@@ -54,4 +54,4 @@ import Link.ActionType._
  *  @param action the type of action.
  *  @param name the name involved in the transference.
  */
-protected[pistache] case class LinkAgent[T](val link:Link[T], val action:ActionType, val name:Name[T]) extends Prefix
+case class LinkPrefix[T](val link:Link[T], val action:ActionType, val name:Name[T]) extends Prefix

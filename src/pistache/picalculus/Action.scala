@@ -23,4 +23,4 @@ object Action {
  * 
  *  @param function the transition procedure.
  */
-protected[pistache] case class ActionPrefix(val procedure: () => Unit) extends Prefix
+case class ActionPrefix(val procedure: () => Unit) extends Prefix
