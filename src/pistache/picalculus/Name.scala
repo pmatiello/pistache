@@ -44,7 +44,7 @@ object Name {
  * 
  *	@param storage the value stored by the Name object.
  */
-protected[pistache] class Name[T](var storage:T) { 
+class Name[T](var storage:T) { 
 	
 	/** Update the stored value.
 	 *
