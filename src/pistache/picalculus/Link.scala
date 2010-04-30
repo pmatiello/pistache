@@ -48,7 +48,7 @@ protected[pistache] class Link[T] {
 
 import Link.ActionType._
 
-/** A class representing an action over a link as an atomic pi-Calculus agent.
+/** A class representing an action over a link as an atomic pi-Calculus prefix.
  * 
  *  @param link the link where the action took place.
  *  @param action the type of action.

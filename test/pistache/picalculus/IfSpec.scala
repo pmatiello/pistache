@@ -25,7 +25,7 @@ class IfSpec extends Spec with MustMatchers {
 		it ("should express a conditional execution of a agent") {
 			val P = If (1 > 0) {Q}
 			P match {
-				case IfAgent(condition, then) =>	condition.apply must equal (true)
+				case MatchAgent(condition, then) =>	condition.apply must equal (true)
 													then.apply must equal (Q)
 			}
 		}

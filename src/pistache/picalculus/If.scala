@@ -15,7 +15,7 @@ object If {
 	  *  @param condition the condition.
 	  *  @agent the agent.
 	  */
-	 def apply(condition: => Boolean)(agent: => Agent) = new IfAgent(condition _, () => agent)
+	 def apply(condition: => Boolean)(agent: => Agent) = new MatchAgent(condition _, () => agent)
 
 }
 
@@ -24,4 +24,4 @@ object If {
  *  @param condition the condition.
  *  @param then the agent to be executed if <code>condition</code> evaluates to <code>true</code>.
  */
-protected[pistache] case class IfAgent(val condition: () => Boolean, val then: () => Agent) extends Agent
+protected[pistache] case class MatchAgent(val condition: () => Boolean, val then: () => Agent) extends Agent

@@ -135,7 +135,7 @@ class ThreadedRunner(val agent:Agent) {
 			case RestrictedAgent(agent) => run(agent apply)
 		  
 			/* Execute action */
-			case ActionAgent(procedure) => procedure apply
+			case ActionPrefix(procedure) => procedure apply
 
 			/* Execute prefixes sequentially */
 			case ConcatenationPrefix(left, right) => run(left apply)
@@ -163,7 +163,7 @@ class ThreadedRunner(val agent:Agent) {
             }
             
             /* Execute agents conditionally */
-			case IfAgent(condition, then) => if (condition apply) run(then apply)
+			case MatchAgent(condition, then) => if (condition apply) run(then apply)
 			
 			/* Send and receive messages through links */
 			case LinkAgent(link, Link.ActionType.Send, name) => LinkStorage.send(link, name)
