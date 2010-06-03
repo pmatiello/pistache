@@ -96,10 +96,9 @@ class ThreadedRunnerSpec extends Spec with MustMatchers {
 		}
   
   		it ("should send and receive empty messages") {
-			val name = Name[Any]
 			val link = Link[Any]
 			
-			val agent = Agent(link~null | link(name))
+			val agent = Agent(link~() | link())
    
 			new ThreadedRunner(agent).start   
 		}
