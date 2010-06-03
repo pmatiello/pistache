@@ -94,6 +94,15 @@ class ThreadedRunnerSpec extends Spec with MustMatchers {
    
 			name2send.value must equal (name2recv.value)
 		}
+  
+  		it ("should send and receive empty messages") {
+			val name = Name[Any]
+			val link = Link[Any]
+			
+			val agent = Agent(link~null | link(name))
+   
+			new ThreadedRunner(agent).start   
+		}
 		
 		it ("should work with agents with arguments") {
 			// See: Milner, R., Parrow, J., and Walker, D. 1992. A calculus of mobile processes, Part I, Chapter 4, example 5

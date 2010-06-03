@@ -89,7 +89,7 @@ private object LinkStorage {
 	 */
 	def send[T](link:Link[T], name:Name[T]) {
 		ready(link)
-		links(link).send(name.value)
+		links(link).send(if (name != null) name.value else null)
 	}
 
 	/** Receive a value from the given link and store it on the given name.
