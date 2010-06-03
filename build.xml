@@ -6,11 +6,11 @@
      ====================================================================== -->
 
 <project name="pistache" default="build">
-    <description>
+	<description>
         A pi-Calculus internal DSL for Scala
     </description>
 
-    <!-- ================================= 
+	<!-- ================================= 
           build configuration              
          ================================= -->
 	<property name="src.dir" value="src/" />
@@ -18,18 +18,20 @@
 	<property name="lib.dir" value="lib/" />
 	<property name="compile.dir" value="bin/" />
 	<property name="docs.dir" value="docs/" />
+	<property name="target.dir" value="target/" />
+	<property name="target.file" value="${target.dir}/pistache.jar" />
 	<property name="scala.home" value="/usr/share/scala/" />
-	<property name="scala-compiler.jar" value="${scala.home}/lib/scala-compiler.jar"/>
-	<property name="scala-library.jar" value="${scala.home}/lib/scala-library.jar"/>
-	
+	<property name="scala-compiler.jar" value="${scala.home}/lib/scala-compiler.jar" />
+	<property name="scala-library.jar" value="${scala.home}/lib/scala-library.jar" />
+
 	<path id="scala.classpath">
-		<pathelement location="${scala-compiler.jar}"/>
-		<pathelement location="${scala-library.jar}"/>
+		<pathelement location="${scala-compiler.jar}" />
+		<pathelement location="${scala-library.jar}" />
 	</path>
-	
+
 	<path id="project.classpath">
-		<path refid="scala.classpath"/>
-		<pathelement location="${compile.dir}"/>
+		<path refid="scala.classpath" />
+		<pathelement location="${compile.dir}" />
 		<fileset dir="${lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
@@ -37,103 +39,100 @@
 			<include name="**/*.class" />
 		</fileset>
 	</path>
-	
+
 	<taskdef resource="scala/tools/ant/antlib.xml">
-		<classpath refid="scala.classpath"/>
+		<classpath refid="scala.classpath" />
 	</taskdef>
-	
-    <!-- =================================
-          target: default
+
+	<!-- =================================
+          target: build
          ================================= -->
-    <target name="default" description="default target: do nothing" />
-	<target name="build" depends="compile" description="build distribution" />
-	
-    <!-- =================================
+	<target name="build" depends="clean, compile" description="build distribution">
+		<mkdir dir="${target.dir}" />
+		<jar destfile="${target.file}" basedir="${compile.dir}" includes="**/*.class" />
+	</target>
+
+	<!-- =================================
           target: compile
          ================================= -->
-    <target name="compile" description="compile source classes">
+	<target name="compile" description="compile source classes">
 		<mkdir dir="${compile.dir}" />
-    	<scalac srcdir="${src.dir}" destdir="${compile.dir}" classpathref="project.classpath">
-    		<include name="**/*.scala"/>
-    	</scalac>
-    </target>
-	
+		<scalac srcdir="${src.dir}" destdir="${compile.dir}" classpathref="project.classpath">
+			<include name="**/*.scala" />
+		</scalac>
+	</target>
+
 	<!-- =================================
           target: compile-test
          ================================= -->
-    <target name="compile-test" depends="compile" description="compile test classes">
-    	<scalac srcdir="${test.dir}" destdir="${compile.dir}" classpathref="project.classpath">
-    		<include name="**/*.scala"/>
-    	</scalac>
-    </target>
-	
+	<target name="compile-test" depends="compile" description="compile test classes">
+		<scalac srcdir="${test.dir}" destdir="${compile.dir}" classpathref="project.classpath">
+			<include name="**/*.scala" />
+		</scalac>
+	</target>
+
 	<!-- =================================
           target: unit-tests
          ================================= -->
-    <target name="unit-tests" depends="compile-test" description="run unit tests">
-    	<taskdef name="scalatest" classname="org.scalatest.tools.ScalaTestAntTask">
-    	      <classpath refid="project.classpath"/>
-   	    </taskdef>
-    	<scalatest runpath="${compile.dir}" haltonfailure="true">
-    		<membersonly package="pistache.picalculus"/>
-    		<membersonly package="pistache.runner"/>
-    	</scalatest>
-    </target>
-	
+	<target name="unit-tests" depends="compile-test" description="run unit tests">
+		<taskdef name="scalatest" classname="org.scalatest.tools.ScalaTestAntTask">
+			<classpath refid="project.classpath" />
+		</taskdef>
+		<scalatest runpath="${compile.dir}" haltonfailure="true">
+			<membersonly package="pistache.picalculus" />
+			<membersonly package="pistache.runner" />
+		</scalatest>
+	</target>
+
 	<!-- =================================
-	          target: integration-tests
-	         ================================= -->
-	    <target name="integration-tests" depends="compile-test" description="run integration tests">
-	    	<taskdef name="scalatest" classname="org.scalatest.tools.ScalaTestAntTask">
-	    	      <classpath refid="project.classpath"/>
-	   	    </taskdef>
-	    	<scalatest runpath="${compile.dir}" haltonfailure="true">
-	    		<membersonly package="pistache.integration"/>
-	    	</scalatest>
-	    </target>
-	
+	      target: integration-tests
+	     ================================= -->
+	<target name="integration-tests" depends="compile-test" description="run integration tests">
+		<taskdef name="scalatest" classname="org.scalatest.tools.ScalaTestAntTask">
+			<classpath refid="project.classpath" />
+		</taskdef>
+		<scalatest runpath="${compile.dir}" haltonfailure="true">
+			<membersonly package="pistache.integration" />
+		</scalatest>
+	</target>
+
 	<!-- =================================
-	          target: all-tests
-	         ================================= -->
-	    <target name="all-tests" depends="unit-tests, integration-tests" description="run all tests" />
-	
+	      target: all-tests
+	     ================================= -->
+	<target name="all-tests" depends="unit-tests, integration-tests" description="run all tests" />
+
 	<!-- =================================
-	          target: test
-	         ================================= -->
-	    <target name="test" depends="unit-tests" description="run unit tests" />
-	
-    <!-- =================================
+	      target: test
+	     ================================= -->
+	<target name="test" depends="unit-tests" description="run unit tests" />
+
+	<!-- =================================
           target: docs
          ================================= -->
-    <target name="docs" description="generate documentation (scaladoc)">
+	<target name="docs" description="generate documentation (scaladoc)">
 		<mkdir dir="${docs.dir}" />
-    	<scaladoc srcdir="${src.dir}" destdir="${docs.dir}"
-					deprecation="yes" unchecked="yes"
-					windowtitle="Pistache API Reference"
-					doctitle="&lt;div&gt;Pistache API Reference&lt;/div&gt;">
-    		<include name="**/*.scala"/>
-    	</scaladoc>
-    </target>
-	
+		<scaladoc srcdir="${src.dir}" destdir="${docs.dir}" deprecation="yes" unchecked="yes" windowtitle="Pistache API Reference" doctitle="&lt;div&gt;Pistache API Reference&lt;/div&gt;">
+			<include name="**/*.scala" />
+		</scaladoc>
+	</target>
+
 	<!-- =================================
           target: download-deps
          ================================= -->
-    <target name="download-deps" description="download dependencies">
-    	<mkdir dir="${lib.dir}" />
-    	<get src="http://sourceforge.net/projects/junit/files/junit/4.5/junit-4.5.jar/download"
-    		 dest="${lib.dir}/junit4.jar" />
-    	<get src="http://www.scala-tools.org/repo-releases/org/scalatest/scalatest/1.0/scalatest-1.0.jar"
-    	     dest="${lib.dir}/scalatest.jar" />
-    	<get src="http://mockito.googlecode.com/files/mockito-all-1.8.2.jar"
-    	   	 dest="${lib.dir}/mockito.jar" />
-    </target>
-	
+	<target name="download-deps" description="download dependencies">
+		<mkdir dir="${lib.dir}" />
+		<get src="http://sourceforge.net/projects/junit/files/junit/4.5/junit-4.5.jar/download" dest="${lib.dir}/junit4.jar" />
+		<get src="http://www.scala-tools.org/repo-releases/org/scalatest/scalatest/1.0/scalatest-1.0.jar" dest="${lib.dir}/scalatest.jar" />
+		<get src="http://mockito.googlecode.com/files/mockito-all-1.8.2.jar" dest="${lib.dir}/mockito.jar" />
+	</target>
+
 	<!-- =================================
           target: clean
          ================================= -->
-    <target name="clean" description="compile test classes">
-    	<delete dir="${compile.dir}" />
-    	<delete dir="${docs.dir}" />
-    </target>
-	
+	<target name="clean" description="compile test classes">
+		<delete dir="${compile.dir}" />
+		<delete dir="${docs.dir}" />
+		<delete dir="${target.dir}" />
+	</target>
+
 </project>
