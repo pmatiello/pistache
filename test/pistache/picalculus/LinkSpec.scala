@@ -31,6 +31,18 @@ class LinkSpec extends Spec with MustMatchers {
 			assert(true)	// We're ok if no exceptions are reaised
 		}
   
+		it ("should support sending empty messages") {
+			val link = Link[Int]
+			link~()
+			assert(true)	// We're ok if no exceptions are reaised
+		}
+  
+		it ("should support receiving empty messages") {
+			val link = Link[Int]
+			link()
+			assert(true)	// We're ok if no exceptions are reaised
+		}
+  
 		it ("should support receiving messages") {
 			val link = Link[Int]
 			val name = Name[Int]

@@ -36,6 +36,12 @@ class Link[T] {
 	 *  @return the agent representing this action.
      */
 	def ~(name:Name[T]) = new LinkPrefix(this, Link.ActionType.Send, name)
+ 
+	/** Send an empty message through this link.
+	 * 
+	 *  @return the agent representing this action.
+     */
+	def ~() = new LinkPrefix(this, Link.ActionType.Send, null)
 	
 	/** Receive a name through this link.
 	 * 
@@ -43,6 +49,13 @@ class Link[T] {
 	 *  @return the agent representing this action.
      */
 	def apply(name:Name[T]) = new LinkPrefix(this, Link.ActionType.Receive, name)
+ 
+	/** Receive an empty message through this link.
+	 * 
+	 *  @return the agent representing this action.
+     */
+	def apply() = new LinkPrefix(this, Link.ActionType.Receive, Name[T])
+
 
 }
 
