@@ -66,6 +66,27 @@ class AgentSpec extends Spec with MustMatchers {
 				}
 			}
 		}
+    
+		it ("should have a sum operator") {
+			val P = Q ++ R ++ R
+			P match {
+				case SummationAgent(left, right) => {
+					left.apply match {
+						case SummationAgent(left, right) => {
+							left.apply match {
+								case ConcatenationAgent(left, right) =>	left.apply must equal (Q)
+							}
+							right.apply match {
+								case ConcatenationAgent(left, right) =>	left.apply must equal (R)
+							}
+						}
+					}
+					right.apply match {
+						case ConcatenationAgent(left, right) =>	left.apply must equal (R)
+					}
+				}
+			}
+		}
   
 		it ("should be so that concatenation has precedence over composition") {
 			val P:Agent = Q*S | R*T
@@ -79,6 +100,22 @@ class AgentSpec extends Spec with MustMatchers {
 					right.apply match {
 						case ConcatenationAgent(left, right) =>	left.apply must be (R)
 																right.apply must be (T)
+					}
+				}
+			}
+		}
+  
+		it ("should be so that concatenation has precedence over summation") {
+			val P = Q*S ++ R*T
+			P match {
+				case SummationAgent(left, right) => {
+					left.apply match {
+						case ConcatenationAgent(left, right) =>	left.apply must equal (Q)
+																right.apply must equal (S)
+					}
+					right.apply match {
+						case ConcatenationAgent(left, right) =>	left.apply must equal (R)
+																right.apply must equal (T)
 					}
 				}
 			}

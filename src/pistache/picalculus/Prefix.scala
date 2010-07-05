@@ -15,7 +15,7 @@ object Prefix {
 	 *  @param prefix the prefix.
 	 *  @return the agent for this prefix.
 	 */
-	 implicit def PrefixToAgent(prefix: Prefix):Agent = ConcatenationAgent(() => prefix, NilAgent)
+	 implicit def PrefixToAgent(prefix: Prefix):ConcatenationAgent = ConcatenationAgent(() => prefix, NilAgent)
   
 }
 
@@ -36,7 +36,6 @@ trait Prefix extends PiObject {
 	 *  @return the agent constructed by concatenation of this prefix and the given agent.
 	 */
 	def *(other: => Agent) = ConcatenationAgent(() => this, other _)
-
 }
 
 /** A class representing a prefix constructed by the concatenation of two prefixes.
