@@ -37,15 +37,23 @@ private object LinkStorage {
 		def send(value:Any) {
 			lock.synchronized {
 				waitUntil(isEmpty && isFree)
-				buffer = value
-				isEmpty = false
-				isFree = false
-				lock.notifyAll
-				waitUntil(isEmpty)
-				isFree = true
-				lock.notifyAll
+				put(value)
 			}
 		}
+
+		/** Send (store) a value through the link, unconditionally.
+		 *
+		 *  @param value the value 
+		 */
+		private def put(value:Any) {
+			buffer = value
+			isEmpty = false
+			isFree = false
+			lock.notifyAll
+			waitUntil(isEmpty)
+			isFree = true
+			lock.notifyAll
+		} 
 
 		/** Receive (retrieve) a value through the link.
 		 * 
@@ -54,12 +62,21 @@ private object LinkStorage {
 		def recv:Any = {
 			lock.synchronized {
 				waitUntil (!isEmpty)
-				val temp = buffer
-				isEmpty = true
-				lock.notifyAll
-				temp
+				get
 			}
 		}
+  
+		/** Receive (retrieve) a value through the link, unconditionally.
+		 * 
+		 *  @return a previously sent value 
+		 */
+		private def get:Any = {
+			val temp = buffer
+			isEmpty = true
+			lock.notifyAll
+			temp
+		}
+  
 	}
   
 	private var links:Map[Link[_], LinkImplementation] = null
