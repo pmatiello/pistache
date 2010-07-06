@@ -179,6 +179,21 @@ class ThreadedRunner(val agent:Agent) {
                
             }
             
+			/* Execute one of many agents */
+            case SummationAgent(left, right) => {
+            	val agents = sumTerms(left apply) ::: sumTerms(right apply)
+            	var done = false
+            	agents.foreach { agent =>
+            	  	if (!done) {
+            	  		agent.left.apply match {
+	            	  		case ActionPrefix(procedure) =>	procedure.apply
+	            	  		done = true
+	            	  		run(agent.right.apply)
+            	  		}            	  	  
+            	  	}
+            	}
+            }
+            
             /* Execute agents conditionally */
 			case MatchAgent(condition, then) => if (condition apply) run(then apply)
 			
@@ -186,6 +201,14 @@ class ThreadedRunner(val agent:Agent) {
 			case LinkPrefix(link, Link.ActionType.Send, name) => LinkStorage.send(link, name)
 			case LinkPrefix(link, Link.ActionType.Receive, name) => LinkStorage.recv(link, name)
 			
+		}
+  
+	}
+ 
+	private def sumTerms(agent:Agent):List[GuardedAgent] = {
+		agent match {
+			case agent:GuardedAgent =>	agent :: Nil
+			case SummationAgent(left, right) =>	sumTerms(left apply) ::: sumTerms(right apply)
 		}
 	}
   
