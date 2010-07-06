@@ -21,7 +21,12 @@ object Prefix {
 
 /** A trait representing pi-Calculus prefixes.
  */
-trait Prefix extends PiObject {
+trait Prefix extends PiObject with Concatenation
+
+
+/* A trait providing the concatenation operator for pi-Calculus prefixes.
+ */
+trait Concatenation { this:Prefix =>
   
 	/** Concatenation operator.
 	 *
