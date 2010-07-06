@@ -39,6 +39,21 @@ class ThreadedRunnerSpec extends Spec with MustMatchers {
 			executed3 must equal (3)
 		}
   
+		it ("should execute guarded agents") {
+			var execOrder = 1;
+			var executed1 = 0
+			val action1 = Action{executed1 = execOrder; execOrder += 1}
+			var executed2 = 0
+			val action2 = Action{executed2 = execOrder; execOrder += 1}
+			var executed3 = 0
+			val action3 = Action{executed3 = execOrder; execOrder += 1}
+			val agent = Agent(action1::action2::action3)
+			new ThreadedRunner(agent).start
+			executed1 must equal (1)
+			executed2 must equal (2)
+			executed3 must equal (3)
+		}
+  
 		it ("should run parallel agents") {
 			var executed1 = false
 			val action1 = Action{executed1 = true}
@@ -51,16 +66,6 @@ class ThreadedRunnerSpec extends Spec with MustMatchers {
 			executed1 must be (true)
 			executed2 must be (true)
 			executed3 must be (true)
-		}
-  
-		it ("should execute guarded agents") {
-			var executed1 = false
-			val action1 = Action{executed1 = true}
-			var executed2 = false
-			val action2 = Action{executed2 = true}
-			new ThreadedRunner(action1::action2).start
-			executed1 must be (true)
-			executed2 must be (true)			
 		}
   
 		it ("should run summation agents guarded by silent actions") {
