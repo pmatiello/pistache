@@ -158,9 +158,14 @@ class ThreadedRunner(val agent:Agent) {
 			case ConcatenationPrefix(left, right) => run(left apply)
 											  		 run(right apply)
      
-			/* Execute agents sequentially */
-			case ConcatenationAgent(left, right) => run(left apply)
+			/* Execute prefix -- agent sequentially */
+			case ConcatenationAgent(left, right) =>	run(left apply)
 											  		run(right apply)
+            
+			/* Execute guard-prefix -- agent sequentially */
+			case GuardedAgent(left, right) => run(left apply)
+											  run(right apply)
+
             
 			/* Execute agents in parallel */
             case CompositionAgent(left, right) => {
