@@ -93,4 +93,10 @@ case class CompositionAgent(val left: () => Agent, val right: () => Agent) exten
  */
 case class SummationAgent(val left: () => Agent, val right: () => Agent) extends Agent with Summation
 
+/** A class representing guarded agents.
+ * 
+ *  @param left the guard prefix.
+ *  @param right the agent.
+ *  @return the constructed agent.
+ */
 case class GuardedAgent(val left: () => Prefix, val right: () => Agent) extends Agent with Summation

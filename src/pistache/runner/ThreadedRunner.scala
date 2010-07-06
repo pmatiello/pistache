@@ -205,6 +205,8 @@ class ThreadedRunner(val agent:Agent) {
   
 	}
  
+	/* Build a list of all agents in a summation.
+	 */
 	private def sumTerms(agent:Agent):List[GuardedAgent] = {
 		agent match {
 			case agent:GuardedAgent =>	agent :: Nil
