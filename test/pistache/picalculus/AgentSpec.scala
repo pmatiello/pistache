@@ -67,23 +67,28 @@ class AgentSpec extends Spec with MustMatchers {
 			}
 		}
     
+  		it ("should be guardable by a prefix") {
+  			val P = Q :: S
+  			P match {
+  				case GuardedAgent(left, right) =>	left.apply must equal (Q)
+  													right.apply must equal (S)
+  			}
+  		}
+    
 		it ("should have a sum operator") {
-			val P = Q ++ R ++ R
+			val G1 = Q::S
+			val G2 = R::T
+			val G3 = Q::R*T
+			val P = G1 + G2 + G3
 			P match {
 				case SummationAgent(left, right) => {
 					left.apply match {
 						case SummationAgent(left, right) => {
-							left.apply match {
-								case ConcatenationAgent(left, right) =>	left.apply must equal (Q)
-							}
-							right.apply match {
-								case ConcatenationAgent(left, right) =>	left.apply must equal (R)
-							}
+							left.apply must equal (G1)
+							right.apply must equal (G2)
 						}
 					}
-					right.apply match {
-						case ConcatenationAgent(left, right) =>	left.apply must equal (R)
-					}
+					right.apply must equal (G3)
 				}
 			}
 		}
@@ -104,23 +109,7 @@ class AgentSpec extends Spec with MustMatchers {
 				}
 			}
 		}
-  
-		it ("should be so that concatenation has precedence over summation") {
-			val P = Q*S ++ R*T
-			P match {
-				case SummationAgent(left, right) => {
-					left.apply match {
-						case ConcatenationAgent(left, right) =>	left.apply must equal (Q)
-																right.apply must equal (S)
-					}
-					right.apply match {
-						case ConcatenationAgent(left, right) =>	left.apply must equal (R)
-																right.apply must equal (T)
-					}
-				}
-			}
-		}
-  
+    
 		it ("should be possible to restrict names to agent instances") {
 			val P = Agent{
 				val x = new Object();

@@ -21,7 +21,7 @@ object Agent {
 
 /** A trait representing pi-Calculus agents.
  */
-trait Agent extends PiObject with Composition
+trait Agent extends PiObject with Composition with Guard
 
 /** A trait providing the composition operator for pi-Calculus agents.
  */
@@ -44,7 +44,19 @@ trait Summation { this: Agent =>
 	 *  @param other the other agent.
 	 *  @return the agent constructed by summation of this agent and the given agent.
 	 */
-  	def ++(other: => ConcatenationAgent) = SummationAgent(() => this, other _)
+  	def +(other: => GuardedAgent) = SummationAgent(() => this, other _)
+}
+
+/** A trait providing the guard operator for pi-Calculus agents.
+ */
+trait Guard { this: Agent =>
+  
+ 	/** Composition operator.
+	 *
+	 *  @param other the other agent.
+	 *  @return the agent constructed by parallel composition of this agent and the given agent.
+	 */
+  	def ::(other: => Prefix) = GuardedAgent(other _, () => this)
 }
 
 /** A class representing the Null agent.
@@ -63,7 +75,7 @@ case class RestrictedAgent(val agent: () => Agent) extends Agent
  *  @param right the agent.
  *  @return the constructed agent.
  */
-case class ConcatenationAgent(val left: () => Prefix, val right: () => Agent) extends Agent with Summation
+case class ConcatenationAgent(val left: () => Prefix, val right: () => Agent) extends Agent
 
 /** A class representing a agent constructed by the composition of two other agents.
  * 
@@ -80,3 +92,5 @@ case class CompositionAgent(val left: () => Agent, val right: () => Agent) exten
  *  @return the constructed agent.
  */
 case class SummationAgent(val left: () => Agent, val right: () => Agent) extends Agent with Summation
+
+case class GuardedAgent(val left: () => Prefix, val right: () => Agent) extends Agent with Summation
