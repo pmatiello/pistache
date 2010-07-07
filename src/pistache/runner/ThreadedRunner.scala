@@ -20,6 +20,7 @@ private object LinkStorage {
 		private var buffer:Any = null
 		private var isEmpty = true
 		private var isFree = true
+		private var wantRead = 0
 		private var lock:AnyRef = new Object
 		
 		/** Make the thread wait until the given condition is satisfied.
@@ -38,6 +39,24 @@ private object LinkStorage {
 			lock.synchronized {
 				waitUntil(isEmpty && isFree)
 				put(value)
+			}
+		}
+  
+		/** Send (store) a value through the link.
+		 *  
+		 *  This function will try only once.
+		 *
+		 *  @param value the value
+		 *  @return whether the sending was successful
+		 */
+		def attemptSend(value:Any) = {
+			lock.synchronized {
+				if (isEmpty && isFree && wantRead > 0) {
+					put(value)
+					true
+				} else {
+			    	false
+			    }
 			}
 		}
 
@@ -61,8 +80,26 @@ private object LinkStorage {
 		 */
 		def recv:Any = {
 			lock.synchronized {
+				wantRead = wantRead + 1
 				waitUntil (!isEmpty)
+				wantRead = wantRead - 1
 				get
+			}
+		}
+  
+		/** Receive (retrieve) a value through the link.
+		 *
+   		 *  This function will try only once.
+		 * 
+		 *  @return Tuple containing: (success status, a previously sent value) 
+		 */
+		def attemptRecv = {
+			lock.synchronized {
+				if (!isEmpty) {
+					(true, get)
+				} else {
+					(false, null)
+				}
 			}
 		}
   
@@ -108,6 +145,21 @@ private object LinkStorage {
 		ready(link)
 		links(link).send(if (name != null) name.value else null)
 	}
+ 
+	/** Send the given name through the given link.
+	 * 
+	 *  This function will try only once.
+	 *
+	 *  @param link the link
+	 *  @param name the name
+	 * 
+	 *  @return whether the sending was successful
+	 */
+	def attemptSend[T](link:Link[T], name:Name[T]) = {
+		ready(link)
+		links(link).attemptSend(if (name != null) name.value else null)
+	}
+
 
 	/** Receive a value from the given link and store it on the given name.
 	 * 
@@ -117,6 +169,22 @@ private object LinkStorage {
 	def recv[T](link:Link[T], name:Name[T]) {
 		ready(link)
 		name := links(link).recv.asInstanceOf[T]
+	}
+ 
+	/** Receive a value from the given link and store it on the given name.
+	 *
+	 *  This function will try only once.
+	 *
+	 *  @param link the link
+	 *  @param name the name
+	 * 
+	 *  @return whether the sending was successful
+	 */
+	def attemptRecv[T](link:Link[T], name:Name[T]):Boolean = {
+		ready(link)
+		val (success, value) = links(link).attemptRecv 
+		name := value.asInstanceOf[T]
+		success
 	}
   
 }
@@ -188,14 +256,25 @@ class ThreadedRunner(val agent:Agent) {
             case SummationAgent(left, right) => {
             	val agents = sumTerms(left apply) ::: sumTerms(right apply)
             	var done = false
-            	agents.foreach { agent =>
-            	  	if (!done) {
-            	  		agent.left.apply match {
-	            	  		case ActionPrefix(procedure) =>	procedure.apply
-	            	  		done = true
-	            	  		run(agent.right.apply)
-            	  		}            	  	  
-            	  	}
+            	while (!done) {
+            		agents.foreach { agent =>
+	            		if (!done) {
+	            			agent.left.apply match {
+		            			case ActionPrefix(procedure) =>
+		            				procedure.apply
+		            				done = true
+		            				run(agent.right.apply)
+		            				
+		            			case LinkPrefix(link, Link.ActionType.Send, name) =>
+		            				done = LinkStorage.attemptSend(link, name)
+		            				if (done) { run (agent.right.apply) }
+		            				
+		            			case LinkPrefix(link, Link.ActionType.Receive, name) =>
+		            			  	done = LinkStorage.attemptRecv(link, name)
+		            				if (done) { run (agent.right.apply) }
+	            			}
+	            		}
+            		}
             	}
             }
             

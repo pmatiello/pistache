@@ -85,6 +85,84 @@ class ThreadedRunnerSpec extends Spec with MustMatchers {
 			executedAgent must be (true)
 		}
   
+		it ("should run summation agents guarded by input prefixes") {
+			val link1 = Link[Any]
+			val link2 = Link[Any]
+			val link3 = Link[Any]
+			var executed1 = false
+			val action1 = Action{executed1 = true}
+			var executed2 = false
+			val action2 = Action{executed2 = true}
+			var executed3 = false
+			val action3 = Action{executed3 = true}
+			val agent = Agent((link1() :: action1) + (link2() :: action2) + (link3() :: action3))
+			new ThreadedRunner(agent | link3~()).start
+			executed1 must be (false)
+			executed2 must be (false)
+			executed3 must be (true)
+		}
+  
+		it ("should run summation agents guarded by output prefixes") {
+			val link1 = Link[Any]
+			val link2 = Link[Any]
+			val link3 = Link[Any]
+			var executed1 = false
+			val action1 = Action{executed1 = true}
+			var executed2 = false
+			val action2 = Action{executed2 = true}
+			var executed3 = false
+			val action3 = Action{executed3 = true}
+			val agent = Agent((link1~() :: action1) + (link2~() :: action2) + (link3~() :: action3))
+			new ThreadedRunner(agent | link3()).start
+			executed1 must be (false)
+			executed2 must be (false)
+			executed3 must be (true)
+		}
+  
+		it ("should not perform communication between two agents in a sum") {
+			val link1 = Link[Any]
+			val link2 = Link[Any]
+			var executed1 = false
+			val action1 = Action{executed1 = true}
+			var executed2 = false
+			val action2 = Action{executed2 = true}
+			var executed3 = false
+			val action3 = Action{executed3 = true}
+			val wait = Action { Thread.sleep(100) }
+			val agent = Agent((link1~() :: action1) + (link1() :: action2) + (link2~() :: action3))
+			new ThreadedRunner(agent | wait*link2()).start
+			executed1 must be (false)
+			executed2 must be (false)
+			executed3 must be (true)
+		}
+  
+		it ("should not pick more than one agent in a sum (output guarded)") {
+			val link = Link[Any]
+			var executed1 = false
+			val action1 = Action{executed1 = true}
+			var executed2 = false
+			val action2 = Action{executed2 = true}
+			val wait = Action { Thread.sleep(100) }
+			val agent = Agent((link~() :: wait * link~() * action1) + (link~() :: wait * link~() * action2))
+			new ThreadedRunner(agent | link()*link()).start
+			(executed1 && executed2) must be (false)
+			(executed1 || executed2) must be (true)
+		}
+  
+		it ("should not pick more than one agent in a sum (input guarded)") {
+			val link = Link[Any]
+			var executed1 = false
+			val action1 = Action{executed1 = true}
+			var executed2 = false
+			val action2 = Action{executed2 = true}
+			val wait = Action { Thread.sleep(100) }
+			val agent = Agent((link() :: wait * link() * action1) + (link() :: wait * link() * action2))
+			new ThreadedRunner(agent | link~()*link~()).start
+			(executed1 && executed2) must be (false)
+			(executed1 || executed2) must be (true)
+		}
+
+
 		it ("should run agents conditionally") {
 			var executed1 = false
 			var executed2 = false
