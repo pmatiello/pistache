@@ -19,9 +19,8 @@ private object LinkStorage {
 	class LinkImplementation {
 		private var buffer:Any = null
 		private var isEmpty = true
-		private var isFree = true
-		private var wantRead = 0
-		private var wantWrite:AnyRef = null
+		private var writer:AnyRef = null
+		private var reader:AnyRef = null
 		private var lock:AnyRef = new Object
 		
 		/** Make the thread wait until the given condition is satisfied.
@@ -38,7 +37,7 @@ private object LinkStorage {
 		 */
 		def send(value:Any) {
 			lock.synchronized {
-				waitUntil(isEmpty && isFree && wantWrite == null)
+				waitUntil(isEmpty && writer == null)
 				put(value)
 			}
 		}
@@ -52,10 +51,12 @@ private object LinkStorage {
 		 */
 		def attemptSend(value:Any) = {
 			lock.synchronized {
-				wantWrite = Thread.currentThread
-				if (isEmpty && isFree && wantRead > 0) {
+				if (writer == null) {
+					writer = Thread.currentThread
+				}
+				if (isEmpty && writer == Thread.currentThread && reader != null) {
 					put(value)
-					wantWrite = null
+					writer = null
 					true
 				} else {
 			    	false
@@ -70,10 +71,10 @@ private object LinkStorage {
 		private def put(value:Any) {
 			buffer = value
 			isEmpty = false
-			isFree = false
+			writer = Thread.currentThread
 			lock.notifyAll
 			waitUntil(isEmpty)
-			isFree = true
+			writer = null
 			lock.notifyAll
 		} 
 
@@ -83,9 +84,9 @@ private object LinkStorage {
 		 */
 		def recv:Any = {
 			lock.synchronized {
-				wantRead = wantRead + 1
+				reader = Thread.currentThread
 				waitUntil (!isEmpty)
-				wantRead = wantRead - 1
+				reader = null
 				get
 			}
 		}
@@ -100,7 +101,7 @@ private object LinkStorage {
 			lock.synchronized {
 				if (!isEmpty) {
 					(true, get)
-				} else if (wantWrite != null && wantWrite != Thread.currentThread) {
+				} else if (writer != null && writer != Thread.currentThread) {
 					(true, recv)
 				} else {
 					(false, null)
