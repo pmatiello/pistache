@@ -37,8 +37,14 @@ private object LinkStorage {
 		 */
 		def send(value:Any) {
 			lock.synchronized {
-				waitUntil(isEmpty && writer == null)
-				put(value)
+				waitUntil(isEmpty && (writer == null || writer == Thread.currentThread))
+				writer = Thread.currentThread
+				buffer = value
+				isEmpty = false
+				lock.notifyAll
+				waitUntil(isEmpty)
+				writer = null
+				lock.notifyAll
 			}
 		}
   
@@ -49,34 +55,19 @@ private object LinkStorage {
 		 *  @param value the value
 		 *  @return whether the sending was successful
 		 */
-		def attemptSend(value:Any) = {
+		def guardedSend(value:Any) = {
 			lock.synchronized {
 				if (writer == null) {
 					writer = Thread.currentThread
 				}
-				if (isEmpty && writer == Thread.currentThread && reader != null) {
-					put(value)
-					writer = null
+				if (isEmpty && writer == Thread.currentThread && (reader != null && reader != Thread.currentThread)) {
+					send(value)
 					true
 				} else {
 			    	false
 			    }
 			}
 		}
-
-		/** Send (store) a value through the link, unconditionally.
-		 *
-		 *  @param value the value 
-		 */
-		private def put(value:Any) {
-			buffer = value
-			isEmpty = false
-			writer = Thread.currentThread
-			lock.notifyAll
-			waitUntil(isEmpty)
-			writer = null
-			lock.notifyAll
-		} 
 
 		/** Receive (retrieve) a value through the link.
 		 * 
@@ -86,8 +77,11 @@ private object LinkStorage {
 			lock.synchronized {
 				reader = Thread.currentThread
 				waitUntil (!isEmpty)
+				val temp = buffer
+				isEmpty = true
 				reader = null
-				get
+				lock.notifyAll
+				temp
 			}
 		}
   
@@ -97,27 +91,14 @@ private object LinkStorage {
 		 * 
 		 *  @return Tuple containing: (success status, a previously sent value) 
 		 */
-		def attemptRecv = {
+		def guardedRecv = {
 			lock.synchronized {
-				if (!isEmpty) {
-					(true, get)
-				} else if (writer != null && writer != Thread.currentThread) {
+				if (writer != null && writer != Thread.currentThread) {
 					(true, recv)
 				} else {
 					(false, null)
 				}
 			}
-		}
-  
-		/** Receive (retrieve) a value through the link, unconditionally.
-		 * 
-		 *  @return a previously sent value 
-		 */
-		private def get:Any = {
-			val temp = buffer
-			isEmpty = true
-			lock.notifyAll
-			temp
 		}
   
 	}
@@ -161,9 +142,9 @@ private object LinkStorage {
 	 * 
 	 *  @return whether the sending was successful
 	 */
-	def attemptSend[T](link:Link[T], name:Name[T]) = {
+	def guardedSend[T](link:Link[T], name:Name[T]) = {
 		ready(link)
-		links(link).attemptSend(if (name != null) name.value else null)
+		links(link).guardedSend(if (name != null) name.value else null)
 	}
 
 
@@ -186,9 +167,9 @@ private object LinkStorage {
 	 * 
 	 *  @return whether the sending was successful
 	 */
-	def attemptRecv[T](link:Link[T], name:Name[T]):Boolean = {
+	def guardedRecv[T](link:Link[T], name:Name[T]):Boolean = {
 		ready(link)
-		val (success, value) = links(link).attemptRecv 
+		val (success, value) = links(link).guardedRecv 
 		name := value.asInstanceOf[T]
 		success
 	}
@@ -273,11 +254,11 @@ class ThreadedRunner(val agent:Agent) {
 		            				continue = agent.right.apply
 		            				
 		            			case LinkPrefix(link, Link.ActionType.Send, name) =>
-		            				done = LinkStorage.attemptSend(link, name)
+		            				done = LinkStorage.guardedSend(link, name)
 		            				if (done) { continue = agent.right.apply }
 		            				
 		            			case LinkPrefix(link, Link.ActionType.Receive, name) =>
-		            			  	done = LinkStorage.attemptRecv(link, name)
+		            			  	done = LinkStorage.guardedRecv(link, name)
 		            				if (done) { continue = agent.right.apply }
 	            			}
 	            		}
