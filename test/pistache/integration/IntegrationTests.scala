@@ -43,7 +43,7 @@ class IntegrationTests extends Spec with MustMatchers {
 		}
   
 		it ("Message passing, complementary sums") {
-			val ProducerConsumer = new ProducerConsumerWithSums(100)
+			val ProducerConsumer = new ProducerConsumerWithSums(100000)
 			new ThreadedRunner(ProducerConsumer.agent).start
 		}
   
