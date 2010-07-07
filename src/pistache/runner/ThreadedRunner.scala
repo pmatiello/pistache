@@ -261,6 +261,7 @@ class ThreadedRunner(val agent:Agent) {
             case SummationAgent(left, right) => {
             	val agents = sumTerms(left apply) ::: sumTerms(right apply)
             	var done = false
+            	var continue:Agent = null
             	while (!done) {
             		agents.foreach { agent =>
 	            		if (!done) {
@@ -268,19 +269,20 @@ class ThreadedRunner(val agent:Agent) {
 		            			case ActionPrefix(procedure) =>
 		            				procedure.apply
 		            				done = true
-		            				run(agent.right.apply)
+		            				continue = agent.right.apply
 		            				
 		            			case LinkPrefix(link, Link.ActionType.Send, name) =>
 		            				done = LinkStorage.attemptSend(link, name)
-		            				if (done) { run (agent.right.apply) }
+		            				if (done) { continue = agent.right.apply }
 		            				
 		            			case LinkPrefix(link, Link.ActionType.Receive, name) =>
 		            			  	done = LinkStorage.attemptRecv(link, name)
-		            				if (done) { run (agent.right.apply) }
+		            				if (done) { continue = agent.right.apply }
 	            			}
 	            		}
             		}
             	}
+            	run(continue)
             }
             
             /* Execute agents conditionally */

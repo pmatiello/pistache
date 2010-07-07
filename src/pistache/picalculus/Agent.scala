@@ -61,7 +61,7 @@ trait Guard { this: Agent =>
 
 /** A class representing the Null agent.
  */
-case class NilAgent() extends Agent
+case class NilAgent() extends Agent with Guard
 
 /** A class representing pi-Calculus agents allowing restricted agents.
  * 

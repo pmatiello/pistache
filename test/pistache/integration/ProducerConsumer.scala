@@ -33,3 +33,23 @@ class ProducerConsumer(limit:Int) {
   
 	 val agent = Agent(P | P | Q)
 }
+
+class ProducerConsumerWithSums(limit:Int) {
+
+	 private val link = Link[Any]
+	 private var finished = false
+	 private var lock:AnyRef = new Object
+	 private var count = 0
+  
+	 val act = Action {
+		 lock.synchronized {
+			 count = count + 1
+		 }
+	 }
+  
+	 lazy val outSum:Agent = (link~() :: If (count < limit) {outSum}) + (link~() :: If (count < limit) {outSum})
+	 lazy val inSum:Agent = (link() :: act * If (count < limit) {inSum}) + (link() :: act * If (count < limit) {inSum})
+  
+  
+	 val agent = Agent(outSum | inSum)
+}
