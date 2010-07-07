@@ -136,6 +136,19 @@ class ThreadedRunnerSpec extends Spec with MustMatchers {
 			executed3 must be (true)
 		}
   
+  
+		it ("should perform communication between two agents in a different sums") {
+			val link1 = Link[Any]
+			val link2 = Link[Any]
+			var executed1 = false
+			val action1 = Action{executed1 = true}
+			var executed2 = false
+			val action2 = Action{executed2 = true}
+			val sum1 = Agent((link1~() :: action1) + (link2~() :: action2))
+			val sum2 = Agent((link1() :: action1) + (link2() :: action2))
+			new ThreadedRunner(sum1 | sum2).start
+		}
+  
 		it ("should not pick more than one agent in a sum (output guarded)") {
 			val link = Link[Any]
 			var executed1 = false
