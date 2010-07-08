@@ -111,7 +111,7 @@
          ================================= -->
 	<target name="docs" description="generate documentation (scaladoc)">
 		<mkdir dir="${docs.dir}" />
-		<scaladoc srcdir="${src.dir}" destdir="${docs.dir}" deprecation="yes" unchecked="yes" windowtitle="Pistache API Reference" doctitle="&lt;div&gt;Pistache API Reference&lt;/div&gt;">
+		<scaladoc srcdir="${src.dir}" destdir="${docs.dir}" deprecation="yes" unchecked="yes" windowtitle="Pistache API Reference" doctitle="&lt;div&gt;Pistache API Reference&lt;/div&gt;" classpathref="project.classpath">
 			<include name="**/*.scala" />
 		</scaladoc>
 	</target>
