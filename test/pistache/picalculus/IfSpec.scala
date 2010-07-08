@@ -11,7 +11,6 @@ import org.scalatest.Spec
 import org.scalatest.matchers.MustMatchers
 import org.scalatest.junit.JUnitRunner
 import org.junit.runner.RunWith
-import org.mockito.Mockito.mock
 
 @RunWith(classOf[JUnitRunner])
 class IfSpec extends Spec with MustMatchers {
