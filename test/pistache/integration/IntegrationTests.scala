@@ -38,22 +38,22 @@ class IntegrationTests extends Spec with MustMatchers {
 		}
   
 		it ("Message passing and channel locking") {
-			val ProducerConsumer = new ProducerConsumer(200000)
+			val ProducerConsumer = new ProducerConsumer(500000)
 			new ThreadedRunner(ProducerConsumer.agent).start
 		}
   
 		it ("Message passing and complementary sums") {
-			val ProducerConsumer = new ProducerConsumerWithComplementarySums(200000)
+			val ProducerConsumer = new ProducerConsumerWithComplementarySums(500000)
 			new ThreadedRunner(ProducerConsumer.agent).start
 		}
   
 		it ("Message passing and input guarded sums") {
-			val ProducerConsumer = new ProducerConsumerWithInputSums(200000)
+			val ProducerConsumer = new ProducerConsumerWithInputSums(500000)
 			new ThreadedRunner(ProducerConsumer.agent).start
 		}
   
 		it ("Message passing and output guarded sums") {
-			val ProducerConsumer = new ProducerConsumerWithOutputSums(200000)
+			val ProducerConsumer = new ProducerConsumerWithOutputSums(500000)
 			new ThreadedRunner(ProducerConsumer.agent).start
 		}
   

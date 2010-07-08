@@ -36,7 +36,8 @@ class ProducerConsumer(limit:Int) {
 
 class ProducerConsumerWithComplementarySums(limit:Int) {
 
-	 private val link = Link[Any]
+	 private val link1 = Link[Any]
+	 private val link2 = Link[Any]
 	 private var lock:AnyRef = new Object
 	 private var count = 0
   
@@ -46,11 +47,12 @@ class ProducerConsumerWithComplementarySums(limit:Int) {
 		 }
 	 }
   
-	 lazy val outSum:Agent = (link~() :: If (count < limit) {outSum}) + (link~() :: If (count < limit) {outSum})
-	 lazy val inSum:Agent = (link() :: act * If (count < limit) {inSum}) + (link() :: act * If (count < limit) {inSum})
+	 lazy val outSum1:Agent = (link1~() :: If (count < limit) {outSum2}) + (link2~() :: If (count < limit) {outSum2})
+	 lazy val outSum2:Agent = (link2~() :: If (count < limit) {outSum1}) + (link1~() :: If (count < limit) {outSum1})
+	 lazy val inSum:Agent = (link1() :: act * If (count < limit) {inSum}) + (link2() :: act * If (count < limit) {inSum})
   
   
-	 val agent = Agent(outSum | inSum)
+	 val agent = Agent(outSum1 | inSum)
 }
 
 class ProducerConsumerWithInputSums(limit:Int) {
