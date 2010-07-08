@@ -52,6 +52,11 @@ class IntegrationTests extends Spec with MustMatchers {
 			new ThreadedRunner(ProducerConsumer.agent).start
 		}
   
+		it ("Message passing and output guarded sums") {
+			val ProducerConsumer = new ProducerConsumerWithOutputSums(200000)
+			new ThreadedRunner(ProducerConsumer.agent).start
+		}
+  
 		it ("Agents with arguments and massive threading") {
 			val unsortedList = randomList(300) 
 			val qsort = new Quicksort(unsortedList)

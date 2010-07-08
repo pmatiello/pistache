@@ -73,3 +73,24 @@ class ProducerConsumerWithInputSums(limit:Int) {
   
 	 val agent = Agent(producer1 | inSum)
 }
+
+class ProducerConsumerWithOutputSums(limit:Int) {
+
+	 private val link1 = Link[Any]
+	 private val link2 = Link[Any]
+	 private var lock:AnyRef = new Object
+	 private var count = 0
+  
+	 val act = Action {
+		 lock.synchronized {
+			 count = count + 1
+		 }
+	 }
+  
+	 val consumer1:Agent = link1() * If (count < limit) {consumer2}
+	 val consumer2:Agent = link2() * If (count < limit) {consumer1}
+	 lazy val outSum:Agent = (link1~() :: act * If (count <= limit) {outSum}) + (link2~() :: act * If (count <= limit) {outSum})
+  
+  
+	 val agent = Agent(consumer1 | outSum)
+}
