@@ -37,13 +37,18 @@ class IntegrationTests extends Spec with MustMatchers {
 			PingPong.result must equal (List.range(0,1000))
 		}
   
-		it ("Message passing, channel locking") {
-			val ProducerConsumer = new ProducerConsumer(100000)
+		it ("Message passing and channel locking") {
+			val ProducerConsumer = new ProducerConsumer(200000)
 			new ThreadedRunner(ProducerConsumer.agent).start
 		}
   
-		it ("Message passing, complementary sums") {
-			val ProducerConsumer = new ProducerConsumerWithSums(100000)
+		it ("Message passing and complementary sums") {
+			val ProducerConsumer = new ProducerConsumerWithComplementarySums(200000)
+			new ThreadedRunner(ProducerConsumer.agent).start
+		}
+  
+		it ("Message passing and input guarded sums") {
+			val ProducerConsumer = new ProducerConsumerWithInputSums(200000)
 			new ThreadedRunner(ProducerConsumer.agent).start
 		}
   

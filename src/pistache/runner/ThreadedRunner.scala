@@ -18,7 +18,8 @@ private object LinkStorage {
 	 */
 	class LinkImplementation {
 		private var buffer:Any = null
-		private var isEmpty = true
+		private var empty = true
+		private var blocked = false
 		private var writer:AnyRef = null
 		private var reader:AnyRef = null
 		private var lock:AnyRef = new Object
@@ -37,13 +38,14 @@ private object LinkStorage {
 		 */
 		def send(value:Any) {
 			lock.synchronized {
-				waitUntil(isEmpty && (writer == null || writer == Thread.currentThread))
+				waitUntil(empty && (writer == null || writer == Thread.currentThread))
 				writer = Thread.currentThread
 				buffer = value
-				isEmpty = false
+				empty = false
 				lock.notifyAll
-				waitUntil(isEmpty)
+				waitUntil(empty)
 				writer = null
+				blocked = false
 				lock.notifyAll
 			}
 		}
@@ -60,7 +62,7 @@ private object LinkStorage {
 				if (writer == null) {
 					writer = Thread.currentThread
 				}
-				if (isEmpty && writer == Thread.currentThread && (reader != null && reader != Thread.currentThread)) {
+				if (empty && writer == Thread.currentThread && (reader != null && reader != Thread.currentThread)) {
 					send(value)
 					true
 				} else {
@@ -76,10 +78,11 @@ private object LinkStorage {
 		def recv:Any = {
 			lock.synchronized {
 				reader = Thread.currentThread
-				waitUntil (!isEmpty)
+				waitUntil (!empty)
 				val temp = buffer
-				isEmpty = true
+				empty = true
 				reader = null
+				blocked = true
 				lock.notifyAll
 				temp
 			}
@@ -93,7 +96,7 @@ private object LinkStorage {
 		 */
 		def guardedRecv = {
 			lock.synchronized {
-				if (writer != null && writer != Thread.currentThread) {
+				if (!blocked && writer != null && writer != Thread.currentThread) {
 					(true, recv)
 				} else {
 					(false, null)

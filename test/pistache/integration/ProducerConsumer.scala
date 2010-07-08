@@ -34,10 +34,9 @@ class ProducerConsumer(limit:Int) {
 	 val agent = Agent(P | P | Q)
 }
 
-class ProducerConsumerWithSums(limit:Int) {
+class ProducerConsumerWithComplementarySums(limit:Int) {
 
 	 private val link = Link[Any]
-	 private var finished = false
 	 private var lock:AnyRef = new Object
 	 private var count = 0
   
@@ -52,4 +51,25 @@ class ProducerConsumerWithSums(limit:Int) {
   
   
 	 val agent = Agent(outSum | inSum)
+}
+
+class ProducerConsumerWithInputSums(limit:Int) {
+
+	 private val link1 = Link[Any]
+	 private val link2 = Link[Any]
+	 private var lock:AnyRef = new Object
+	 private var count = 0
+  
+	 val act = Action {
+		 lock.synchronized {
+			 count = count + 1
+		 }
+	 }
+  
+	 val producer1:Agent = link1~() * If (count < limit) {producer2}
+	 val producer2:Agent = link2~() * If (count < limit) {producer1}
+	 lazy val inSum:Agent = (link1() :: act * If (count < limit) {inSum}) + (link2() :: act * If (count < limit) {inSum})
+  
+  
+	 val agent = Agent(producer1 | inSum)
 }
