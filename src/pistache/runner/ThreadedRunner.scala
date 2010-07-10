@@ -59,7 +59,7 @@ private object LinkStorage {
 		 */
 		def guardedSend(value:Any) = {
 			lock.synchronized {
-				if (writer == null) {
+				if (writer == null || empty) {
 					writer = Thread.currentThread
 				}
 				if (empty && writer == Thread.currentThread && (reader != null && reader != Thread.currentThread)) {
@@ -97,7 +97,12 @@ private object LinkStorage {
 		def guardedRecv = {
 			lock.synchronized {
 				if (!blocked && writer != null && writer != Thread.currentThread) {
-					(true, recv)
+					if (!empty) {
+						(true, recv)  
+					} else {
+						reader = Thread.currentThread
+						(false, null)
+					}
 				} else {
 					(false, null)
 				}

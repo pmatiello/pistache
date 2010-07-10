@@ -176,6 +176,24 @@ class ThreadedRunnerSpec extends Spec with MustMatchers {
 		}
 
 
+		it ("should not mislead agents into reading from channels that won't be written") {
+			val link1 = Link[Any]
+			val link2 = Link[Any]
+			val wait = Action { Thread.sleep(100) }
+			val agent1 = Agent((link1~() :: link2~() ) + (link2~() :: link1~()))
+			val agent2 = Agent((link1() :: NilAgent()) + (link2() :: NilAgent()))
+			new ThreadedRunner(agent1 | wait*agent2 | wait*agent2).start
+		}
+  
+		it ("should not mislead agents into not writting to channels that can be written") {
+			val link1 = Link[Any]
+			val link2 = Link[Any]
+			val wait = Action { Thread.sleep(100) }
+			val agent1 = Agent((link1() :: link2() ) + (link2() :: link1()))
+			val agent2 = Agent((link1~() :: NilAgent()) + (link2~() :: NilAgent()))
+			new ThreadedRunner(agent1 | wait*agent2 | wait*agent2).start
+		}
+  
 		it ("should run agents conditionally") {
 			var executed1 = false
 			var executed2 = false
