@@ -25,13 +25,13 @@ class IntegrationTests extends Spec with MustMatchers {
   
 	describe ("ThreadedRunner tests") {
 		
-		it ("Actions, concatenation and recursion") {
+		it ("Actions and concatenation") {
 			val factorialCalculator = new Factorial(10)
 			new ThreadedRunner(factorialCalculator.agent).start
 			factorialCalculator.result must equal (10*9*8*7*6*5*4*3*2*1)
 		}
 		
-		it ("Message passing and parallel composition") {
+		it ("Message passing, parallel composition and recursion") {
 			val PingPong = new PingPong(1000)
 			new ThreadedRunner(PingPong.agent).start
 			PingPong.result must equal (List.range(0,1000))

@@ -201,18 +201,28 @@ class ThreadedRunner(val agent:Agent) {
 		run(agent)
 		waitAllThreads
 	}
- 
+
+ 	/** Continue the execution of agent on a new thread.
+ 	 *  
+     *  @param parentRunner The first runner instatiated in this execution.
+	 */
 	private def continue(parentRunner:ThreadedRunner) {
 		parent = parentRunner
 		run(agent)
 	}
  
+ 	/** Register a thread running an instance of this class.
+ 	 *  
+     *  @param thread The thread.
+	 */
 	private def waitThread(thread:Thread) {
 		lock.synchronized {
 			threadList = thread :: threadList
 		}
 	}
  
+ 	/** Wait for all registered threads to finish their execution.
+	 */
 	private def waitAllThreads() {
 		var thread:Thread = null
 		while (true) {
