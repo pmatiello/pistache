@@ -190,16 +190,43 @@ private object LinkStorage {
  */
 class ThreadedRunner(val agent:Agent) {
   
+	private var parent = this
+	private var lock = new Object
+	private var threadList = List[Thread]()
+  
 	/** Start the execution of the agent.
 	 */
-	def start = {
+	def start {
 		LinkStorage.initialize
+		run(agent)
+		waitAllThreads
+	}
+ 
+	private def continue(parentRunner:ThreadedRunner) {
+		parent = parentRunner
 		run(agent)
 	}
  
-	/** Run the agent.
-	 */
-	private def run { run(agent) }
+	private def waitThread(thread:Thread) {
+		lock.synchronized {
+			threadList = thread :: threadList
+		}
+	}
+ 
+	private def waitAllThreads() {
+		var thread:Thread = null
+		while (true) {
+			lock.synchronized {
+				if (threadList.size > 0) {
+					thread = threadList.head
+					threadList = threadList.tail
+				} else {
+					return
+				}
+			}
+			thread.join
+		}
+	}
   
 	/** Run a given agent.
 	 *
@@ -234,17 +261,16 @@ class ThreadedRunner(val agent:Agent) {
             case CompositionAgent(left, right) => {
               
             	val leftThread = new Thread() {
-            		override def run() { new ThreadedRunner(left apply) run }
+            		override def run() { new ThreadedRunner(left apply) continue(parent) }
             	}               
             	val rightThread = new Thread() {
-            		override def run() { new ThreadedRunner(right apply) run }
+            		override def run() { new ThreadedRunner(right apply) continue(parent) }
             	}
              
             	leftThread.start
             	rightThread.start
-            	leftThread.join
-            	rightThread.join
-               
+            	parent.waitThread(leftThread)
+            	parent.waitThread(rightThread)               
             }
             
 			/* Execute one of many agents */
