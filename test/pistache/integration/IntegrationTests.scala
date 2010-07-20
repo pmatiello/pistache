@@ -25,13 +25,13 @@ class IntegrationTests extends Spec with MustMatchers {
   
 	describe ("ThreadedRunner tests") {
 		
-		it ("Actions and concatenation") {
+		it ("Actions, concatenation and recursion") {
 			val factorialCalculator = new Factorial(10)
 			new ThreadedRunner(factorialCalculator.agent).start
 			factorialCalculator.result must equal (10*9*8*7*6*5*4*3*2*1)
 		}
 		
-		it ("Message passing, parallel composition and recursion") {
+		it ("Message passing and parallel composition") {
 			val PingPong = new PingPong(1000)
 			new ThreadedRunner(PingPong.agent).start
 			PingPong.result must equal (List.range(0,1000))
@@ -64,9 +64,16 @@ class IntegrationTests extends Spec with MustMatchers {
 			qsort.result.value must equal (unsortedList.sort(_ < _))
 		}
   
-		it ("Deep recursion") {
+		it ("Deep recursion by concatenation") {
 			val list = 1 to 100000 toList
 			val summation = new Summation(list)
+			new ThreadedRunner(summation.agent).start
+			summation.sum must equal (list.reduceLeft(_+_))
+		}
+  
+		it ("Deep recursion by composition") {
+			val list = 1 to 10000 toList
+			val summation = new CompositionSummation(list)
 			new ThreadedRunner(summation.agent).start
 			summation.sum must equal (list.reduceLeft(_+_))
 		}
