@@ -191,7 +191,6 @@ private object LinkStorage {
 class ThreadedRunner(val agent:Agent) {
   
 	private var parent = this
-	private var lock = new Object
 	private var threadList = List[Thread]()
   
 	/** Start the execution of the agent.
@@ -216,7 +215,7 @@ class ThreadedRunner(val agent:Agent) {
      *  @param thread The thread.
 	 */
 	private def waitThread(thread:Thread) {
-		lock.synchronized {
+		synchronized {
 			threadList = thread :: threadList
 		}
 	}
@@ -226,7 +225,7 @@ class ThreadedRunner(val agent:Agent) {
 	private def waitAllThreads() {
 		var thread:Thread = null
 		while (true) {
-			lock.synchronized {
+			synchronized {
 				if (threadList.size > 0) {
 					thread = threadList.head
 					threadList = threadList.tail
