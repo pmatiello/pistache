@@ -187,11 +187,17 @@ private object LinkStorage {
 /** A local, multithreaded runner for pi-Calculus agents.
  * 
  *  @param agent the agent to be executed.
+ *  @param parent the main runner in the computation 
  */
-class ThreadedRunner(val agent:Agent) {
+class ThreadedRunner private (val agent:Agent, val parent:ThreadedRunner) {
   
-	private var parent = this
 	private var threadList = List[Thread]()
+
+	/** Public constructor for this class.
+	 * 
+	 *  @param agent the agent to be executed.
+	 */
+	def this(agent:Agent) = this(agent, null)
   
 	/** Start the execution of the agent.
 	 */
@@ -205,9 +211,14 @@ class ThreadedRunner(val agent:Agent) {
  	 *  
      *  @param parentRunner The first runner instatiated in this execution.
 	 */
-	private def continue(parentRunner:ThreadedRunner) {
-		parent = parentRunner
+	private def continue {
 		run(agent)
+	}
+ 
+ 	/** The parent runner for this computation.
+	 */
+	private def parentRunner = {
+		if (parent != null) parent else this
 	}
  
  	/** Register a thread running an instance of this class.
@@ -270,16 +281,17 @@ class ThreadedRunner(val agent:Agent) {
             case CompositionAgent(left, right) => {
               
             	val leftThread = new Thread() {
-            		override def run() { new ThreadedRunner(left apply) continue(parent) }
+            		override def run() { new ThreadedRunner(left apply, parentRunner) continue }
             	}               
             	val rightThread = new Thread() {
-            		override def run() { new ThreadedRunner(right apply) continue(parent) }
+            		override def run() { new ThreadedRunner(right apply, parentRunner) continue }
             	}
              
             	leftThread.start
             	rightThread.start
-            	parent.waitThread(leftThread)
-            	parent.waitThread(rightThread)               
+             
+            	parentRunner.waitThread(leftThread)
+            	parentRunner.waitThread(rightThread)               
             }
             
 			/* Execute one of many agents */
