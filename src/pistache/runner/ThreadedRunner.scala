@@ -212,8 +212,9 @@ class ThreadedRunner (val agent:Agent) {
 			override def run() { execute(agent) }
 		}
 
+		thread.start
+		
 		synchronized {
-			thread.start
 			threads = thread :: threads
 		}
 	}
