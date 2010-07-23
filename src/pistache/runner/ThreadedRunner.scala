@@ -198,14 +198,22 @@ class ThreadedRunner (val agent:Agent) {
 	def start {
 		LinkStorage.initialize
   
+		executeInNewThread(agent)
+		
+		waitAllThreads
+	}
+ 
+	/** Execute a given agent in a new thread.
+	 *
+	 *  @param agent the agent to be executed.
+	 */
+	private def executeInNewThread(agent:PiObject) {
 		val thread = new Thread() {
 			override def run() { execute(agent) }
 		}
 
 		waitThread(thread)
-		thread.start
-		
-		waitAllThreads
+		thread.start		
 	}
  
  	/** Register a thread running an instance of this class.
@@ -238,7 +246,7 @@ class ThreadedRunner (val agent:Agent) {
 		}
 	}
   
-	/** Run a given agent.
+	/** Execute a given agent.
 	 *
 	 *  @param agent the agent to be executed.
 	 */
@@ -268,22 +276,9 @@ class ThreadedRunner (val agent:Agent) {
 
             
 			/* Execute agents in parallel */
-            case CompositionAgent(left, right) => {
-              
-            	val leftThread = new Thread() {
-            		override def run() { execute(left apply) }
-            	}               
-            	val rightThread = new Thread() {
-            		override def run() { execute(right apply) }
-            	}
-                          
-            	waitThread(leftThread)
-            	waitThread(rightThread)
-             
-            	leftThread.start
-            	rightThread.start
-            }
-            
+            case CompositionAgent(left, right) => executeInNewThread(left apply)
+            									  executeInNewThread(right apply)
+                         
 			/* Execute one of many agents */
             case SummationAgent(left, right) => {
             	val agents = sumTerms(left apply) ::: sumTerms(right apply)
