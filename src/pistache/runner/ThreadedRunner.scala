@@ -189,15 +189,9 @@ private object LinkStorage {
  *  @param agent the agent to be executed.
  *  @param parent the main runner in the computation 
  */
-class ThreadedRunner private (val agent:Agent, val parent:ThreadedRunner) {
+class ThreadedRunner (val agent:Agent) {
   
 	private var threadList = List[Thread]()
-
-	/** Public constructor for this class.
-	 * 
-	 *  @param agent the agent to be executed.
-	 */
-	def this(agent:Agent) = this(agent, null)
   
 	/** Start the execution of the agent.
 	 */
@@ -205,27 +199,13 @@ class ThreadedRunner private (val agent:Agent, val parent:ThreadedRunner) {
 		LinkStorage.initialize
   
 		val thread = new Thread() {
-			override def run() { new ThreadedRunner(agent, parentRunner) continue }
+			override def run() { execute(agent) }
 		}
 
 		waitThread(thread)
 		thread.start
 		
 		waitAllThreads
-	}
-
- 	/** Continue the execution of agent on a new thread.
- 	 *  
-     *  @param parentRunner The first runner instatiated in this execution.
-	 */
-	private def continue {
-		run(agent)
-	}
- 
- 	/** The parent runner for this computation.
-	 */
-	private def parentRunner = {
-		if (parent != null) parent else this
 	}
  
  	/** Register a thread running an instance of this class.
@@ -262,43 +242,43 @@ class ThreadedRunner private (val agent:Agent, val parent:ThreadedRunner) {
 	 *
 	 *  @param agent the agent to be executed.
 	 */
-	private def run(agent:PiObject) {
+	private def execute(agent:PiObject) {
 		agent match {
 		  
 			/* Ignore NilAgent */
 			case NilAgent() => {}
 
 			/* Execute (restricted) agents */
-			case RestrictedAgent(agent) => run(agent apply)
+			case RestrictedAgent(agent) => execute(agent apply)
 		  
 			/* Execute action */
 			case ActionPrefix(procedure) => procedure apply
 
 			/* Execute prefixes sequentially */
-			case ConcatenationPrefix(left, right) => run(left apply)
-											  		 run(right apply)
+			case ConcatenationPrefix(left, right) => execute(left apply)
+											  		 execute(right apply)
      
 			/* Execute prefix -- agent sequentially */
-			case ConcatenationAgent(left, right) =>	run(left apply)
-											  		run(right apply)
+			case ConcatenationAgent(left, right) =>	execute(left apply)
+											  		execute(right apply)
             
 			/* Execute guard-prefix -- agent sequentially */
-			case GuardedAgent(left, right) => run(left apply)
-											  run(right apply)
+			case GuardedAgent(left, right) => execute(left apply)
+											  execute(right apply)
 
             
 			/* Execute agents in parallel */
             case CompositionAgent(left, right) => {
               
             	val leftThread = new Thread() {
-            		override def run() { new ThreadedRunner(left apply, parentRunner) continue }
+            		override def run() { execute(left apply) }
             	}               
             	val rightThread = new Thread() {
-            		override def run() { new ThreadedRunner(right apply, parentRunner) continue }
+            		override def run() { execute(right apply) }
             	}
                           
-            	parentRunner.waitThread(leftThread)
-            	parentRunner.waitThread(rightThread)
+            	waitThread(leftThread)
+            	waitThread(rightThread)
              
             	leftThread.start
             	rightThread.start
@@ -329,11 +309,11 @@ class ThreadedRunner private (val agent:Agent, val parent:ThreadedRunner) {
 	            		}
             		}
             	}
-            	run(continue)
+            	execute(continue)
             }
             
             /* Execute agents conditionally */
-			case MatchAgent(condition, then) => if (condition apply) run(then apply)
+			case MatchAgent(condition, then) => if (condition apply) execute(then apply)
 			
 			/* Send and receive messages through links */
 			case LinkPrefix(link, Link.ActionType.Send, name) => LinkStorage.send(link, name)
