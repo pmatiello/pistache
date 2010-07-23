@@ -191,7 +191,7 @@ private object LinkStorage {
  */
 class ThreadedRunner (val agent:Agent) {
   
-	private var threadList = List[Thread]()
+	private var threads = List[Thread]()
   
 	/** Start the execution of the agent.
 	 */
@@ -212,37 +212,29 @@ class ThreadedRunner (val agent:Agent) {
 			override def run() { execute(agent) }
 		}
 
-		waitThread(thread)
-		thread.start		
-	}
- 
- 	/** Register a thread running an instance of this class.
- 	 *  
-     *  @param thread The thread.
-	 */
-	private def waitThread(thread:Thread) {
 		synchronized {
-			threadList = thread :: threadList
+			thread.start
+			threads = thread :: threads
 		}
 	}
- 
+  
  	/** Wait for all registered threads to finish their execution.
 	 */
 	private def waitAllThreads() {
  		var active:List[Thread] = null
 		while (true) {
 			synchronized {
-				if (threadList.size > 0) {
+				if (threads.size > 0) {
 					active = Nil
-					threadList.foreach { thread =>
+					threads.foreach { thread =>
 						if (thread.isAlive) active = thread :: active
 					}
-					threadList = active
+					threads = active
 				} else {
 					return
 				}
 			}
-			Thread.sleep(100 * threadList.size)
+			Thread.sleep(50 * threads.size)
 		}
 	}
   
