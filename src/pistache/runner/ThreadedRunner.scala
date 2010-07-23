@@ -203,7 +203,14 @@ class ThreadedRunner private (val agent:Agent, val parent:ThreadedRunner) {
 	 */
 	def start {
 		LinkStorage.initialize
-		run(agent)
+  
+		val thread = new Thread() {
+			override def run() { new ThreadedRunner(agent, parentRunner) continue }
+		}
+
+		waitThread(thread)
+		thread.start
+		
 		waitAllThreads
 	}
 
@@ -234,17 +241,20 @@ class ThreadedRunner private (val agent:Agent, val parent:ThreadedRunner) {
  	/** Wait for all registered threads to finish their execution.
 	 */
 	private def waitAllThreads() {
-		var thread:Thread = null
+ 		var active:List[Thread] = null
 		while (true) {
 			synchronized {
 				if (threadList.size > 0) {
-					thread = threadList.head
-					threadList = threadList.tail
+					active = Nil
+					threadList.foreach { thread =>
+						if (thread.isAlive) active = thread :: active
+					}
+					threadList = active
 				} else {
 					return
 				}
 			}
-			thread.join
+			Thread.sleep(100 * threadList.size)
 		}
 	}
   
@@ -286,12 +296,12 @@ class ThreadedRunner private (val agent:Agent, val parent:ThreadedRunner) {
             	val rightThread = new Thread() {
             		override def run() { new ThreadedRunner(right apply, parentRunner) continue }
             	}
+                          
+            	parentRunner.waitThread(leftThread)
+            	parentRunner.waitThread(rightThread)
              
             	leftThread.start
             	rightThread.start
-             
-            	parentRunner.waitThread(leftThread)
-            	parentRunner.waitThread(rightThread)               
             }
             
 			/* Execute one of many agents */
