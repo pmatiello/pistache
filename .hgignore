@@ -2,3 +2,4 @@ bin/
 docs/
 lib/
 .manager/
+.scala_dependencies

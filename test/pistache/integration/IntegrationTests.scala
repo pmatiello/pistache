@@ -61,7 +61,7 @@ class IntegrationTests extends Spec with MustMatchers {
 			val unsortedList = randomList(300) 
 			val qsort = new Quicksort(unsortedList)
 			new ThreadedRunner(qsort.agent).start
-			qsort.result.value must equal (unsortedList.sort(_ < _))
+			qsort.result.value must equal (unsortedList.sortWith(_ < _))
 		}
   
 		it ("Deep recursion by concatenation") {
