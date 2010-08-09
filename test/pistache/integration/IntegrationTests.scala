@@ -9,7 +9,7 @@
 
 package pistache.integration
 
-import pistache.runner.ThreadedRunner
+import pistache.runner.threaded.ThreadedRunner
 
 import org.scalatest.Spec
 import org.scalatest.matchers.MustMatchers

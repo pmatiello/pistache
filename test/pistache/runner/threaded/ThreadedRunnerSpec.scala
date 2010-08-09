@@ -4,7 +4,7 @@
  * Spec for ThreadedRunner.
  */
 
-package pistache.runner
+package pistache.runner.threaded
 
 import org.scalatest.Spec
 import org.scalatest.matchers.MustMatchers

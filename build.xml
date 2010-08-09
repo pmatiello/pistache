@@ -80,7 +80,7 @@
 		</taskdef>
 		<scalatest runpath="${compile.dir}" haltonfailure="true">
 			<membersonly package="pistache.picalculus" />
-			<membersonly package="pistache.runner" />
+			<membersonly package="pistache.runner.threaded" />
 		</scalatest>
 	</target>
 

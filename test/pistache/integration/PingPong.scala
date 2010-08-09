@@ -7,7 +7,6 @@
 package pistache.integration
 
 import pistache.picalculus._
-import pistache.runner.ThreadedRunner
 
 class PingPong(max:Int) {
 

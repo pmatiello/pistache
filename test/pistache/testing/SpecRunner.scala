@@ -8,7 +8,7 @@ package pistache.testing;
 
 import pistache.integration._
 import pistache.picalculus._
-import pistache.runner._
+import pistache.runner.threaded._
 
 object SpecRunner extends Application {
 
