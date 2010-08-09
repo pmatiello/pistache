@@ -13,7 +13,7 @@ object If {
 	 /** Create a conditional agent.
 	  * 
 	  *  @param condition the condition.
-	  *  @agent the agent.
+	  *  @param agent the agent.
 	  */
 	 def apply(condition: => Boolean)(agent: => Agent) = new MatchAgent(condition _, () => agent)
 
