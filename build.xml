@@ -20,7 +20,7 @@
 	<property name="docs.dir" value="docs/" />
 	<property name="target.dir" value="target/" />
 	<property name="target.file" value="${target.dir}/pistache.jar" />
-	<property name="scala.home" value="${user.home}/.local/scala/" />
+	<property name="scala.home" value="/usr/share/scala/" />
 	<property name="scala-compiler.jar" value="${scala.home}/lib/scala-compiler.jar" />
 	<property name="scala-library.jar" value="${scala.home}/lib/scala-library.jar" />
 
