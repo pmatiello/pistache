@@ -7,6 +7,7 @@
 package pistache.runner.threaded
 
 import pistache.picalculus._
+import java.util.concurrent.Executors
 
 /** A local, multithreaded runner for pi-Calculus agents.
  * 
@@ -15,7 +16,8 @@ import pistache.picalculus._
  */
 class ThreadedRunner (val agent:Agent) {
   
-	private var threads = List[Thread]()
+	private var executor = Executors.newCachedThreadPool
+	private var threadCount = 0
   
 	/** Start the execution of the agent.
 	 */
@@ -32,34 +34,36 @@ class ThreadedRunner (val agent:Agent) {
 	 *  @param agent the agent to be executed.
 	 */
 	private def executeInNewThread(agent:PiObject) {
-		val thread = new Thread() {
-			override def run() { execute(agent) }
+		
+		increaseThreadCount()
+		
+		val runnable = new Runnable() {
+			override def run() { execute(agent); decreaseThreadCount() }
 		}
 
-		thread.start
-		
-		synchronized {
-			threads = thread :: threads
-		}
+		executor.execute(runnable)
 	}
   
  	/** Wait for all registered threads to finish their execution.
 	 */
 	private def waitAllThreads() {
- 		var active:List[Thread] = null
 		while (true) {
 			synchronized {
-				if (threads.size > 0) {
-					active = Nil
-					threads.foreach { thread =>
-						if (thread.isAlive) active = thread :: active
-					}
-					threads = active
-				} else {
-					return
-				}
+				if (threadCount == 0) return;
 			}
-			Thread.sleep(50 * threads.size)
+			Thread.sleep(50 * threadCount);
+		}
+	}
+	
+	private def increaseThreadCount() {
+		synchronized {
+			threadCount += 1
+		}
+	}
+	
+	private def decreaseThreadCount() {
+		synchronized {
+			threadCount -= 1
 		}
 	}
   
