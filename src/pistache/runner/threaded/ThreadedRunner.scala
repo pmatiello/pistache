@@ -6,6 +6,7 @@
 
 package pistache.runner.threaded
 
+import java.util.concurrent.ExecutorService
 import pistache.picalculus._
 import java.util.concurrent.Executors
 
@@ -16,17 +17,19 @@ import java.util.concurrent.Executors
  */
 class ThreadedRunner (val agent:Agent) {
   
-	private var executor = Executors.newCachedThreadPool
+	private var executor:ExecutorService = null
 	private var threadCount = 0
   
 	/** Start the execution of the agent.
 	 */
 	def start {
 		LinkStorage.initialize
+		executor = Executors.newCachedThreadPool
   
 		executeInNewThread(agent)
-		
+
 		waitAllThreads
+		executor.shutdown
 	}
  
 	/** Execute a given agent in a new thread.
@@ -51,7 +54,7 @@ class ThreadedRunner (val agent:Agent) {
 			synchronized {
 				if (threadCount == 0) return;
 			}
-			Thread.sleep(50 * threadCount);
+			Thread.sleep(50);
 		}
 	}
 	
