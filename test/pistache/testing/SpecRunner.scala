@@ -10,22 +10,26 @@ import pistache.integration._
 import pistache.picalculus._
 import pistache.runner.threaded._
 
-object SpecRunner extends Application {
+object SpecRunner {
 
-	new ActionSpec execute
-   
-	new AgentSpec execute
-  
-	new IfSpec execute
-   
-	new IntegrationTests execute
-  
-	new LinkSpec execute
-    
-	new NameSpec execute
-    
-	new PrefixSpec execute
-   
-	new ThreadedRunnerSpec execute
-  
+    def main(args: Array[String]) {
+
+        new ActionSpec execute
+
+        new AgentSpec execute
+
+        new IfSpec execute
+
+        new LinkSpec execute
+
+        new NameSpec execute
+
+        new PrefixSpec execute
+
+        new ThreadedRunnerSpec execute
+
+        new IntegrationTests execute
+        
+    }
+
 }
