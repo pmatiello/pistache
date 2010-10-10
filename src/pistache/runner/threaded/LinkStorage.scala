@@ -88,17 +88,17 @@ protected object LinkStorage {
 		 * 
 		 *  @return Tuple containing: (success status, a previously sent value) 
 		 */
-		def guardedRecv = {
+		def guardedRecv:Option[Any] = {
 			lock.synchronized {
 				if (!blocked && writer != null && writer != Thread.currentThread) {
 					if (!empty) {
-						(true, recv)  
+						Some(recv)  
 					} else {
 						reader = Thread.currentThread
-						(false, null)
+						None
 					}
 				} else {
-					(false, null)
+					None
 				}
 			}
 		}
@@ -171,9 +171,10 @@ protected object LinkStorage {
 	 */
 	def guardedRecv[T](link:Link[T], name:Name[T]):Boolean = {
 		ready(link)
-		val (success, value) = links(link).guardedRecv 
-		name := value.asInstanceOf[T]
-		success
+		links(link).guardedRecv match {
+			case Some(value)	=> name := value.asInstanceOf[T]; true
+			case None			=> false
+		}
 	}
   
 }
