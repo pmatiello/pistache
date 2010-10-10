@@ -30,7 +30,7 @@ protected object LinkStorage {
 		 *
 		 *  @param value the value 
 		 */
-		def send(value:Any) {
+		def send(value:Any):Boolean = {
 			lock.synchronized {
 				waitUntil(empty && (writer == null || writer == Thread.currentThread))
 				writer = Thread.currentThread
@@ -42,6 +42,7 @@ protected object LinkStorage {
 				blocked = false
 				lock.notifyAll
 			}
+			true
 		}
   
 		/** Send (store) a value through the link.
@@ -51,18 +52,15 @@ protected object LinkStorage {
 		 *  @param value the value
 		 *  @return whether the sending was successful
 		 */
-		def guardedSend(value:Any) = {
+		def guardedSend(value:Any):Boolean = {
 			lock.synchronized {
-				if (writer == null || empty) {
+				if (writer == null || empty)
 					writer = Thread.currentThread
-				}
-				if (empty && writer == Thread.currentThread && (reader != null && reader != Thread.currentThread)) {
-					send(value)
-					true
-				} else {
-			    	false
-			    }
+				if (empty && writer == Thread.currentThread &&
+					(reader != null && reader != Thread.currentThread))
+					return send(value)
 			}
+			return false
 		}
 
 		/** Receive (retrieve) a value through the link.
@@ -91,16 +89,11 @@ protected object LinkStorage {
 		def guardedRecv:Option[Any] = {
 			lock.synchronized {
 				if (!blocked && writer != null && writer != Thread.currentThread) {
-					if (!empty) {
-						Some(recv)  
-					} else {
-						reader = Thread.currentThread
-						None
-					}
-				} else {
-					None
+					if (!empty)	return Some(recv)  
+					else reader = Thread.currentThread
 				}
 			}
+			return None
 		}
   
 	}
