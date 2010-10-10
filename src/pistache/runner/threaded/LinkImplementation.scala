@@ -6,8 +6,8 @@ protected class LinkImplementation {
     private var buffer: Any = null
     private var empty = true
     private var blocked = false
-    private var writer: AnyRef = null
-    private var reader: AnyRef = null
+    private var writer:Thread = null
+    private var reader:Thread = null
     private var lock: AnyRef = new Object
 
     /** Make the thread wait until the given condition is satisfied.
@@ -75,7 +75,7 @@ protected class LinkImplementation {
      *
      *  This function will try only once.
      * 
-     *  @return Tuple containing: (success status, a previously sent value) 
+     *  @return a previously sent value 
      */
     def guardedRecv: Option[Any] = {
         lock.synchronized {
