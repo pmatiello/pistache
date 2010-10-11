@@ -13,7 +13,6 @@ import java.util.concurrent.Executors
 /** A local, multithreaded runner for pi-Calculus agents.
  * 
  *  @param agent the agent to be executed.
- *  @param parent the main runner in the computation 
  */
 class ThreadedRunner (val agent:Agent) {
   
