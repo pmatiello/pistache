@@ -49,23 +49,22 @@ class ThreadedRunner (val agent:Agent) {
  	/** Wait for all registered threads to finish their execution.
 	 */
 	private def waitAllThreads() {
-		while (true) {
-			synchronized {
-				if (threadCount == 0) return;
-			}
-			Thread.sleep(50);
+		synchronized {
+			while (threadCount != 0) wait;
 		}
 	}
 	
 	private def increaseThreadCount() {
 		synchronized {
 			threadCount += 1
+			notify
 		}
 	}
 	
 	private def decreaseThreadCount() {
 		synchronized {
 			threadCount -= 1
+			notify
 		}
 	}
   
