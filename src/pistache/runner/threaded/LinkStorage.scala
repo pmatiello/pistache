@@ -9,7 +9,6 @@ import scala.collection.mutable.Map
 protected object LinkStorage {
   
 	private var links:Map[Link[_], LinkImplementation] = null
-	private val lock:AnyRef = new Object
   
 	/** Initialize the storage. 
 	 */
@@ -20,11 +19,10 @@ protected object LinkStorage {
 	/** Associate a link to an implementation, if it's not yet associated. 
 	 */
 	private def ready[T](link:Link[T]) {
-		lock.synchronized {
+		synchronized {
 			if (!links.keySet.contains(link)) {
 				links += link -> new LinkImplementation
 			}
-			lock.notifyAll
 		}
 	}
 
