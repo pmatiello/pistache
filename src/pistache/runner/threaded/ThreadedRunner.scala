@@ -87,49 +87,47 @@ class ThreadedRunner (val agent:Agent) {
 			/* Execute prefixes sequentially */
 			case ConcatenationPrefix(left, right) => execute(left apply)
 											  		 execute(right apply)
-     
+	 
 			/* Execute prefix -- agent sequentially */
 			case ConcatenationAgent(left, right) =>	execute(left apply)
 											  		execute(right apply)
-            
+			
 			/* Execute guard-prefix -- agent sequentially */
 			case GuardedAgent(left, right) => execute(left apply)
 											  execute(right apply)
 
-            
+			
 			/* Execute agents in parallel */
-            case CompositionAgent(left, right) => executeInNewThread(left apply)
-            									  executeInNewThread(right apply)
-                         
+			case CompositionAgent(left, right) => executeInNewThread(left apply)
+												  executeInNewThread(right apply)
+						 
 			/* Execute one of many agents */
-            case SummationAgent(left, right) => {
-            	val agents = sumTerms(left apply) ::: sumTerms(right apply)
-            	var done = false
-            	var continue:Agent = null
-            	while (!done) {
-            		agents.foreach { agent =>
-	            		if (!done) {
-	            			agent.left.apply match {
-		            			case ActionPrefix(procedure) =>
-		            				procedure.apply
-		            				done = true
-		            				continue = agent.right.apply
-		            				
-		            			case LinkPrefix(link, Link.ActionType.Send, name) =>
-		            				done = LinkStorage.guardedSend(link, name)
-		            				if (done) { continue = agent.right.apply }
-		            				
-		            			case LinkPrefix(link, Link.ActionType.Receive, name) =>
-		            			  	done = LinkStorage.guardedRecv(link, name)
-		            				if (done) { continue = agent.right.apply }
-	            			}
-	            		}
-            		}
-            	}
-            	execute(continue)
-            }
-            
-            /* Execute agents conditionally */
+			case SummationAgent(left, right) => {
+				val agents = sumTerms(left apply) ::: sumTerms(right apply)
+				var continue:Agent = null
+				while (continue == null) {
+					agents.foreach { agent =>
+						if (continue == null) {
+							continue = agent.left.apply match {
+								case ActionPrefix(procedure) =>
+									procedure.apply
+									agent.right.apply
+									
+								case LinkPrefix(link, Link.ActionType.Send, name) =>
+									if (LinkStorage.guardedSend(link, name)) agent.right.apply
+									else null
+									
+								case LinkPrefix(link, Link.ActionType.Receive, name) =>
+								  	if (LinkStorage.guardedRecv(link, name)) agent.right.apply
+								  	else null
+							}
+						}
+					}
+				}
+				execute(continue)
+			}
+			
+			/* Execute agents conditionally */
 			case MatchAgent(condition, then) => if (condition apply) execute(then apply)
 			
 			/* Send and receive messages through links */
