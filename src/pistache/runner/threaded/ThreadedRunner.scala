@@ -9,6 +9,7 @@ package pistache.runner.threaded
 import java.util.concurrent.ExecutorService
 import pistache.picalculus._
 import java.util.concurrent.Executors
+import scala.util.Random.shuffle
 
 /** A local, multithreaded runner for pi-Calculus agents.
  * 
@@ -103,7 +104,7 @@ class ThreadedRunner (val agent:Agent) {
 						 
 			/* Execute one of many agents */
 			case SummationAgent(left, right) => {
-				val agents = sumTerms(left apply) ::: sumTerms(right apply)
+				val agents = shuffle(sumTerms(left apply) ::: sumTerms(right apply))
 				var continue:Agent = null
 				while (continue == null) {
 					agents.foreach { agent =>
