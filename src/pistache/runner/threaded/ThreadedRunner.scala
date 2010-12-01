@@ -55,6 +55,8 @@ class ThreadedRunner (val agent:Agent) {
 		}
 	}
 	
+ 	/** Register a thread/agent.
+	 */
 	private def increaseThreadCount() {
 		synchronized {
 			threadCount += 1
@@ -62,6 +64,8 @@ class ThreadedRunner (val agent:Agent) {
 		}
 	}
 	
+	 /** Notify the termination of a registered thread/agent.
+	 */
 	private def decreaseThreadCount() {
 		synchronized {
 			threadCount -= 1
