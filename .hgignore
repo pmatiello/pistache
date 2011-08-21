@@ -2,5 +2,7 @@ bin/
 target/
 docs/
 lib/
+build.xml
+.DS_Store
 .manager/
 .scala_dependencies

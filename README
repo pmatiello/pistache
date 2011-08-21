@@ -16,12 +16,12 @@ Tested with version 4.5.
 
 scalatest
 http://www.scalatest.org/
-Tested with version 1.2.
+Tested with version 1.6.1.
 
 These dependencies can be downloaded automatically by running:
 	ant download-deps
 
-The Scala language, version 2.8, is also required.
+The Scala language, version 2.9, is also required.
 http://www.scala-lang.org/
 
 BUILDING
