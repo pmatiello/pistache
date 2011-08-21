@@ -20,7 +20,7 @@
 	<property name="docs.dir" value="docs/" />
 	<property name="target.dir" value="target/" />
 	<property name="target.file" value="${target.dir}/pistache.jar" />
-	<property name="scala.home" value="/usr/share/scala/" />
+	<property name="scala.home" value="/usr/local/Cellar/scala/2.9.0.1/libexec/" />
 	<property name="scala-compiler.jar" value="${scala.home}/lib/scala-compiler.jar" />
 	<property name="scala-library.jar" value="${scala.home}/lib/scala-library.jar" />
 
@@ -122,7 +122,7 @@
 	<target name="download-deps" description="download dependencies">
 		<mkdir dir="${lib.dir}" />
 		<get src="http://sourceforge.net/projects/junit/files/junit/4.5/junit-4.5.jar/download" dest="${lib.dir}/junit4.jar" />
-		<get src="http://scala-tools.org/repo-snapshots/org/scalatest/scalatest/1.2-for-scala-2.8.0.final-SNAPSHOT/scalatest-1.2-for-scala-2.8.0.final-SNAPSHOT.jar" dest="${lib.dir}/scalatest.jar" />
+		<get src="http://repo1.maven.org/maven2/org/scalatest/scalatest_2.9.0/1.6.1/scalatest_2.9.0-1.6.1.jar" dest="${lib.dir}/scalatest.jar" />
 	</target>
 
 	<!-- =================================
