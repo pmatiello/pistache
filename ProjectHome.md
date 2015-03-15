@@ -1,0 +1,3 @@
+Pistache is a [pi-Calculus](http://en.wikipedia.org/wiki/Pi-calculus) internal DSL for Scala. It enables developers to write concurrent applications using a pi-Calculus-ish notation.
+
+This software was developed as a course final project at [IME-USP](http://www.ime.usp.br/). The [associated monograph](http://code.google.com/p/pistache/downloads/detail?name=monograph.pdf) can be used as documentation.
